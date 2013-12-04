@@ -1,0 +1,22 @@
+<% expands('layouts/admin_base') %>
+
+<% start('main') %>
+	<% implement('admin/topbar') %>
+	<% implement('admin/sidebar') %>
+	<div id="content">
+		<div id="content-header">
+			<h1><% assign('title') %></h1>
+		</div>
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				
+				<div class="span12">
+					<div id="error"></div>
+					<% assign('admin-main') %>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+<% end('main') %>

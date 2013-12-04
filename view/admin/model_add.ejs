@@ -1,0 +1,35 @@
+<% expands('layouts/admin_body') %>
+
+<% start('admin-main') %>
+<div class="adminActionHead">
+  <span class="title" id="mainTitle"><%= modelName %>: Add record</span>
+  <div class="clear"></div>
+</div>
+
+<div class="error"></div>
+
+<% form.create(modelName, {prefix: '/admin'}) %>
+	<table class="table table-striped table-bordered">
+		<% for (var field in blueprint) { %>
+		
+		<tr>
+			<td><%= field %></td>
+			<td><% form.blueprintField(field, {blueprint: blueprint[field]}) %></td>
+		</tr>
+		<% } %>
+	</table>
+<% form.end('save') %>
+
+<button class="btn btn-primary" id="saveAdd" data-model="<%= modelName %>">Old Add record</button>
+
+<script>
+	$(document).ready(function() {
+
+		//$entries   = $('div[data-ofinput="' + fieldName + '"] div[data-of-entry]');
+
+
+
+
+	});
+</script>
+<% end('admin-main') %>
