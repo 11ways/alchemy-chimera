@@ -1,0 +1,38 @@
+<% expands(store('chimera-view-setting').bodylayout);
+
+// Always add the bootstrap js files
+asset.script([
+	'bootstrap3.0/affix',
+	'bootstrap3.0/alert',
+	'bootstrap3.0/button',
+	'bootstrap3.0/carousel',
+	'bootstrap3.0/collapse',
+	'bootstrap3.0/dropdown',
+	'bootstrap3.0/modal',
+	'bootstrap3.0/popover',
+	'bootstrap3.0/scrollspy',
+	'bootstrap3.0/tab',
+	'bootstrap3.0/tooltip',
+	'bootstrap3.0/transition',
+	], {block: 'head'});
+
+// Always add the admin less files
+asset.style('chimera', {block: 'head'});
+
+start(store('chimera-view-setting').mainblock) %>
+	<div id="wrapper">
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<% implement('admin/sidebar') %>
+		</nav>
+	
+		<div id="page-wrapper">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1><% assign('title') %></h1>
+					<div id="error"></div>
+					<% assign(store('chimera-view-setting').contentblock) %>
+				</div>
+			</div>
+		</div>
+	</div>
+<% end(store('chimera-view-setting').mainblock) %>

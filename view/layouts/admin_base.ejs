@@ -1,33 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title></title>
-    <% script('/public/admin/js/jquery.min.js', {destination: 'top'}) -%>
-
-		<% script('/public/admin/js/jquery-ui.js', {destination: 'top'}) -%>
-    <% script('/public/admin/js/history.js', {destination: 'top'}) -%>
-    <% script('/public/admin/js/jquery.jsonify.js') -%>
-		<% script('/public/admin/js/jquery.jScrollPane.js') -%>
-        <% script('/public/admin/js/admin.js') -%>
-		
-		<% style('/public/stylesheets/style.css') -%>
-		<% style('/public/stylesheets/admin.css') -%>
-		<% style('/public/admin/js/jquery-ui.css') -%>
-		
-    <% script('/public/js/bootstrap/bootstrap-transition.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-alert.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-modal.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-dropdown.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-scrollspy.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-tab.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-tooltip.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-popover.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-button.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-collapse.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-carousel.js') -%>
-    <% script('/public/js/bootstrap/bootstrap-typeahead.js') -%>
-  </head>
-  <body>
-    <% assign('main') %>
-  </body>
+	<head>
+		<title></title>
+	</head>
+	<body>
+		<% assign(store('chimera-view-setting').bodyblock) %>
+	</body>
 </html>

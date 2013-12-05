@@ -1,10 +1,21 @@
 <% matchIns = {class: 'active', parent: {class: 'active'}} -%>
+<div class="navbar-header">
+	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+		<span class="sr-only">Toggle navigation</span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+	</button>
+	<a class="navbar-brand" href="/">Alchemy Admin</a>
+</div>
 
-<div id="sidebar">
-	<div class="wrapper">
-		<ul>
-			<li><% add_link('/admin', {title: 'Dashboard', content: '<i class="icon icon-dashboard"></i> <span>Dashboard</span>', match: {parent: {class: 'active'}}}) %></li>
-			 <% print_element('admin/elements/menulinks', {variables: {links: adminLinks, match: matchIns}}) %>
-		</ul>
-	</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse">
+	<ul class="nav navbar-nav side-nav">
+		<li><% add_link('/admin', {title: 'Dashboard', content: '<i class="icon icon-dashboard"></i> <span>Dashboard</span>', match: {parent: {class: 'active'}}}) %></li>
+		<% print_element('admin/elements/menulinks', {variables: {links: adminLinks, match: matchIns}}) %>
+	</ul>
+
+	<ul class="nav navbar-nav navbar-right navbar-user">
+		<% implement('admin/topbar') %>
+	</ul>
 </div>

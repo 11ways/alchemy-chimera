@@ -1,6 +1,6 @@
-<% expands('layouts/admin_body') %>
+<% expands('layouts/admin_main') %>
 
-<% start('admin-main') %>
+<% start(store('chimera-view-setting').contentblock) %>
 <div class="adminActionHead">
   <span class="title" id="mainTitle"><%= modelName %>: Add record</span>
   <div class="clear"></div>
@@ -32,4 +32,4 @@
 
 	});
 </script>
-<% end('admin-main') %>
+<% end(store('chimera-view-setting').contentblock) %>

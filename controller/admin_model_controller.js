@@ -263,7 +263,7 @@ BaseClass.extend('AdminController', function AdminModelController (){
 	
 });
 
-Plugin.admin.getController = function getAdminController(controllerName) {
+Plugin.chimera.getController = function getAdminController(controllerName) {
 
 	// Make sure the controller name ends with 'Admin'
 	if (!controllerName.endsWith('Admin')) controllerName += 'Admin';

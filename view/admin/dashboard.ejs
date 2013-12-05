@@ -1,6 +1,6 @@
-<% expands('layouts/admin_body') %>
+<% expands('layouts/admin_main') %>
 
-<% start('admin-main') %>
+<% start(store('chimera-view-setting').contentblock) %>
 <p>This is the admin main!</p>
 <% __('default', 'key.test') %>
 <% flowtest('replacethis') %>
@@ -20,4 +20,4 @@ console.time('dashtest')
 
 <% form.input('testname', {}, {zever: 1, option: 'test', data: {facebook: 1}}) %>
 
-<% end('admin-main') %>
+<% end(store('chimera-view-setting').contentblock) %>

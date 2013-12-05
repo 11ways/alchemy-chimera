@@ -1,28 +1,30 @@
-<% if (links !== undefined) { %>
-	
-	<% for (var i in links) { %>
-		<% var link = clone({}, links[i]) %>
-		<% if (!link.options) link.options = {} %>
-		<% if (!link.options.match) link.options.match = match %>
-		<% if (!link.options.prepend) link.options.prepend = [] %>
-		<% if (link.options.icon) link.options.prepend.push('<i class="icon icon-' + link.options.icon + '"></i>') %>
-		<% link.options.content = '<span>' + link.options.title + '</span>' %>
-	
-		<% if (link.children) { %>
+<%
+var i, link;
+
+if (links !== undefined) {
+	for (i in links) {
+		link = clone({}, links[i]);
+		
+		if (!link.options) link.options = {};
+		if (!link.options.match) link.options.match = match;
+		if (!link.options.prepend) link.options.prepend = [];
+		if (link.options.icon) link.options.prepend.push('<i class="icon icon-' + link.options.icon + '"></i>');
+
+		link.options.content = '<span>' + link.options.title + '</span>';
+		
+		if (link.children) { %>
 			<li class="submenu">
 		<% } else { %>
 			<li>
-		<% } %>
+		<% }
 		
-		<% add_link(link.href, link.options) %>
+		add_link(link.href, link.options);
 		
-		<% if (link.children) { %>
+		if (link.children) { %>
 			<ul>
 				<% print_element('admin/elements/menulinks', {variables: {links: link.children}}) %>
 			</ul>
 		<% } %>
-		
 		</li>
-	<% } %>
-	
-<% } %>
+	<% }
+} %>
