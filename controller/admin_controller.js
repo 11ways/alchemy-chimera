@@ -10,6 +10,8 @@
  */
 var AdminController = Controller._extend(function AdminController (){
 
+	this.types = alchemy.shared('Chimera.types');
+
 	/**
 	 * Pre-init constructor, for properties
 	 *
@@ -32,6 +34,25 @@ var AdminController = Controller._extend(function AdminController (){
 	this.init = function init () {
 		this.parent();
 	}
+
+	this.chimera_dispatch = function chimera_dispatch(render) {
+		
+		var params   = render.req.route.params,
+		    route    = render.req.alchemyRoute,
+		    body     = render.req.body,
+		    chimera  = this.types[route.options.chimeraType];
+
+		// augment the chimera instance
+		chimera = alchemy.augment(chimera, this.__augment__);
+
+		if (chimera && chimera[route.options.chimeraAction]) {
+			chimera[route.options.chimeraAction](render);
+		} else {
+			// @todo: redirect error
+			render();
+		}
+		
+	};
 	
 	/**
 	 * Runs before any action
