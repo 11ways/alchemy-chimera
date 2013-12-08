@@ -10,10 +10,7 @@
 </div>
 
 <div class="collapse navbar-collapse navbar-ex1-collapse">
-	<ul class="nav navbar-nav side-nav">
-		<li><% add_link('/admin', {title: 'Dashboard', content: '<i class="icon icon-dashboard"></i> <span>Dashboard</span>', match: {parent: {class: 'active'}}}) %></li>
-		<% print_element('admin/elements/menulinks', {variables: {links: adminLinks, match: matchIns}}) %>
-	</ul>
+	<% sb.menu('test') %>
 
 	<ul class="nav navbar-nav navbar-right navbar-user">
 		<% implement('admin/topbar') %>

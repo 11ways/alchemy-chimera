@@ -1,3 +1,5 @@
+alchemy.requirePlugin(['styleboost', 'acl']);
+
 // Define the default options
 var options = {
 
