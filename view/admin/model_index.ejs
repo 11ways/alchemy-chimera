@@ -2,31 +2,34 @@
 
 <% start(store('chimera-view-setting').contentblock) %>
 <div class="adminActionHead">
-  <span class="title" id="mainTitle"><%= modelName %>: Index</span>
-  <div class="buttons">
-    <% add_link('/admin/:modelname/add', {title: 'Add new', class: 'btn btn-primary', prepend: '<i class="icon-plus"></i> ', urlvars: {modelname: modelName.underscore()}}) %>
-  </div>
-  <div class="clear"></div>
+	<span class="title" id="mainTitle"><%= modelName %>: Index</span>
+	<div class="buttons">
+		<% add_link('/admin/:modelname/add', {title: 'Add new', class: 'btn btn-primary', prepend: '<i class="icon-plus"></i> ', urlvars: {modelname: modelName.underscore()}}) %>
+	</div>
+	<div class="clear"></div>
 </div>
 <table class="table table-striped table-bordered">
-  <tr>
-    <% for (var i in fields) { %>
-    <th><% Paginate.sort({field: fields[i], parentClass: 'activesort'}) %></th>
-    <% } %>
-    <th>Actions</th>
-  </tr>
- <% for (var i in items) { %>
-  <% var item = items[i][modelName] %>
-  <% if (!item) continue %>
-  <tr>
-    <% for (var f in fields) { %>
-    <td><% if(item && fields) { %> <%= item[fields[f]] %> <% } %></td>
-    <% } %>
-    <td>
-      <% add_link('/admin/:modelname/edit/:id', {title: 'Edit', class: 'btn btn-small editButton', content: '<i class="icon-pencil"></i> ', urlvars: {modelname: modelName.underscore(), id: item._id}}) %>
-    </td>
-  </tr>
-  <% } %>
+	<tr>
+		<% for (var i in fields) { %>
+		<th><% Paginate.sort({field: fields[i], parentClass: 'activesort'}) %></th>
+		<% } %>
+		<th>Actions</th>
+	</tr>
+	<% console.log('>>> ITEMS <<< ' + modelName) %>
+
+	<% console.log(items) %>
+	<% for (var i in items) { %>
+		<% var item = items[i][modelName] %>
+		<% if (!item) continue %>
+		<tr>
+			<% for (var f in fields) { %>
+			<td><% if(item && fields) { %> <%= item[fields[f]] %> <% } %></td>
+			<% } %>
+			<td>
+				<% add_link('/admin/:modelname/edit/:id', {title: 'Edit', class: 'btn btn-small editButton', content: '<i class="icon-pencil"></i> ', urlvars: {modelname: modelName.underscore(), id: item._id}}) %>
+			</td>
+		</tr>
+	<% } %>
 </table>
 
 <% Paginate.show() %>
