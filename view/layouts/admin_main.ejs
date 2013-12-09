@@ -14,11 +14,12 @@ asset.script([
 	'bootstrap3.0/tab',
 	'bootstrap3.0/tooltip',
 	'bootstrap3.0/transition',
-	'chimera-admin'
+	'chimera-admin',
+	'jsoneditor2.3/jsoneditor'
 	], {block: 'head'});
 
 // Always add the admin less files
-asset.style('chimera', {block: 'head'});
+asset.style(['chimera', 'jsoneditor2.3/jsoneditor'], {block: 'head'});
 
 start(store('chimera-view-setting').mainblock) %>
 	<div id="wrapper">

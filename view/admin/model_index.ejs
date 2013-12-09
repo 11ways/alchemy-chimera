@@ -1,10 +1,17 @@
-<% expands('layouts/admin_main') %>
+<%
+expands('layouts/admin_main');
+
+if (typeof editconnection === 'undefined') {
+	var editconnection = '/admin/:modelname/edit/:id';
+}
+
+%>
 
 <% start(store('chimera-view-setting').contentblock) %>
 <div class="adminActionHead">
 	<span class="title" id="mainTitle"><%= modelName %>: Index</span>
 	<div class="buttons">
-		<% add_link('/admin/:modelname/add', {title: 'Add new', class: 'btn btn-primary', prepend: '<i class="icon-plus"></i> ', urlvars: {modelname: modelName.underscore()}}) %>
+		<% add_link('/admin/:modelname/add', {title: 'Add new', class: 'btn btn-primary', prepend: '<i class="fa fa-plus"></i> ', urlvars: {modelname: modelName.underscore()}}) %>
 	</div>
 	<div class="clear"></div>
 </div>
@@ -15,9 +22,7 @@
 		<% } %>
 		<th>Actions</th>
 	</tr>
-	<% console.log('>>> ITEMS <<< ' + modelName) %>
 
-	<% console.log(items) %>
 	<% for (var i in items) { %>
 		<% var item = items[i][modelName] %>
 		<% if (!item) continue %>
@@ -26,7 +31,17 @@
 			<td><% if(item && fields) { %> <%= item[fields[f]] %> <% } %></td>
 			<% } %>
 			<td>
-				<% add_link('/admin/:modelname/edit/:id', {title: 'Edit', class: 'btn btn-small editButton', content: '<i class="icon-pencil"></i> ', urlvars: {modelname: modelName.underscore(), id: item._id}}) %>
+				<%
+					add_link(editconnection, {
+						title: 'Edit',
+						'class': 'btn btn-small editButton',
+						content: '<i class="fa fa-pencil"></i> ',
+						urlvars: {
+							modelname: modelName.underscore(),
+							id: item._id
+							}
+					})
+				%>
 			</td>
 		</tr>
 	<% } %>
