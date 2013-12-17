@@ -30,7 +30,7 @@ start(store('chimera-view-setting').mainblock) %>
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-12">
-					<h1><% assign('title') %></h1>
+					<% assign('chimera-page-title') %>
 					<div id="error"></div>
 					<% assign(store('chimera-view-setting').contentblock) %>
 				</div>

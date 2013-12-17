@@ -5,16 +5,26 @@ if (typeof editconnection === 'undefined') {
 	var editconnection = '/admin/:modelname/edit/:id';
 }
 
-%>
-
-<% start(store('chimera-view-setting').contentblock) %>
+start('chimera-page-title'); -%>
 <div class="adminActionHead">
 	<span class="title" id="mainTitle"><%= modelName %>: Index</span>
 	<div class="buttons">
-		<% add_link('/admin/:modelname/add', {title: 'Add new', class: 'btn btn-primary', prepend: '<i class="fa fa-plus"></i> ', urlvars: {modelname: modelName.underscore()}}) %>
+		<%
+			add_link('/admin/:modelname/add', {
+				title: 'Add new',
+				'class': 'btn btn-primary',
+				prepend: '<i class="fa fa-plus"></i> ',
+				urlvars: {
+					modelname: modelName.underscore()
+				}
+			})
+		%>
 	</div>
 	<div class="clear"></div>
 </div>
+<% end('chimera-page-title');
+
+start(store('chimera-view-setting').contentblock) -%>
 <table class="table table-striped table-bordered">
 	<tr>
 		<% for (var i in fields) { %>
