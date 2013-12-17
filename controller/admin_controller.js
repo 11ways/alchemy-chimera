@@ -10,7 +10,7 @@
  */
 var AdminController = Controller._extend(function AdminController (){
 
-	this.types = alchemy.shared('Chimera.types');
+	this.modules = alchemy.shared('Chimera.modules');
 
 	/**
 	 * Pre-init constructor, for properties
@@ -35,23 +35,32 @@ var AdminController = Controller._extend(function AdminController (){
 		this.parent();
 	}
 
+	/**
+	 * Handle Chimera Module Actions
+	 *
+	 * @author        Jelle De Loecker   <jelle@kipdola.be>
+	 * @since         0.0.1
+	 * @version       0.0.1
+	 *
+	 * @param   {renderCallback}   render
+	 */
 	this.chimera_dispatch = function chimera_dispatch(render) {
 		
 		var params   = render.req.route.params,
 		    route    = render.req.alchemyRoute,
 		    body     = render.req.body,
-		    chimera  = this.types[route.options.chimeraType];
+		    module   = this.modules[route.options.chimeraModule];
 
-		// augment the chimera instance
-		chimera = alchemy.augment(chimera, this.__augment__);
+		// Augment the module instance
+		module = alchemy.augment(module, this.__augment__);
 
-		if (chimera && chimera[route.options.chimeraAction]) {
-			chimera[route.options.chimeraAction](render);
+		// If a module was found, and the action exists, execute it
+		if (module && module[route.options.chimeraAction]) {
+			module[route.options.chimeraAction](render);
 		} else {
 			// @todo: redirect error
 			render();
 		}
-		
 	};
 	
 	/**
