@@ -8,17 +8,8 @@ if (typeof editconnection === 'undefined') {
 start('chimera-page-title'); -%>
 <div class="adminActionHead">
 	<span class="title" id="mainTitle"><%= modelName %>: Index</span>
-	<div class="buttons">
-		<%
-			add_link('/admin/:modelname/add', {
-				title: 'Add new',
-				'class': 'btn btn-primary',
-				prepend: '<i class="fa fa-plus"></i> ',
-				urlvars: {
-					modelname: modelName.underscore()
-				}
-			})
-		%>
+	<div class="actions paginate-actions">
+		<% chimera.actions('paginate') %>
 	</div>
 	<div class="clear"></div>
 </div>
@@ -38,20 +29,20 @@ start(store('chimera-view-setting').contentblock) -%>
 		<% if (!item) continue %>
 		<tr>
 			<% for (var f in fields) { %>
-			<td><% if(item && fields) { %> <%= item[fields[f]] %> <% } %></td>
+				<td><% chimera.field(item, fields[f]) %></td>
 			<% } %>
 			<td>
+				<div class="actions record-actions">
 				<%
-					add_link(editconnection, {
-						title: 'Edit',
-						'class': 'btn btn-small editButton',
-						content: '<i class="fa fa-pencil"></i> ',
-						urlvars: {
-							modelname: modelName.underscore(),
+					chimera.actions('record', {
+						'class': 'btn btn-xs',
+						routeVars: {
 							id: item._id
-							}
-					})
+						},
+						content: false
+					});
 				%>
+				</div>
 			</td>
 		</tr>
 	<% } %>

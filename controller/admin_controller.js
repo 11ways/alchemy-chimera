@@ -56,7 +56,11 @@ var AdminController = Controller._extend(function AdminController (){
 
 		// If a module was found, and the action exists, execute it
 		if (module && module[route.options.chimeraAction]) {
-			module[route.options.chimeraAction](render);
+
+			// Call the beforeAction method
+			module.beforeAction(function afterBeforeAction() {
+				module[route.options.chimeraAction](render);
+			}, render);
 		} else {
 			// @todo: redirect error
 			render();
