@@ -2,7 +2,7 @@
 
 start('chimera-page-title'); -%>
 <div class="adminActionHead">
-	<span class="title" id="mainTitle"><%= modelName %>: Edit record <%= item._id %></span>
+	<span class="title" id="mainTitle"><%= modelName %>: Add new record</span>
 	<div class="actions paginate-actions">
 		<% chimera.actions('paginate') %>
 	</div>
@@ -14,17 +14,16 @@ start(store('chimera-view-setting').contentblock) %>
 
 <div class="error"></div>
 <div id="jsoneditor"></div>
-<button class="btn btn-primary" id="saveEdit" data-model="<%= modelName %>" data-id="<%= item._id %>">Save record</button>
+<button class="btn btn-primary" id="saveAdd">Add record</button>
 
 <script>
 (function() {
-var item      = <% echo(JSON.stringify(item)) %>,
-    container = document.getElementById('jsoneditor'),
+var container = document.getElementById('jsoneditor'),
     editor    = new jsoneditor.JSONEditor(container);
 
-    editor.set(item[<% echo(JSON.stringify(modelName)) %>]);
+    editor.set({test: 'text'});
 
-$('#saveEdit').click(function(e) {
+$('#saveAdd').click(function(e) {
 	e.preventDefault();
 	
 	var postUrl = <% echo(JSON.stringify(postUrl)) %>;
