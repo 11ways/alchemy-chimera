@@ -12,6 +12,8 @@
 
 </div>
 
+<button class="btn btn-primary" id="saveEdit" data-model="<%= modelName %>" data-id="<%= item._id %>">Save record</button>
+
 <script>
 (function() {
 var item      = <% echo(JSON.stringify(item)) %>,
@@ -19,9 +21,16 @@ var item      = <% echo(JSON.stringify(item)) %>,
     editor    = new jsoneditor.JSONEditor(container);
 
     editor.set(item[<% echo(JSON.stringify(modelName)) %>]);
+
+$('#saveEdit').click(function(e) {
+	e.preventDefault();
+	
+	var postUrl = <% echo(JSON.stringify(postUrl)) %>;
+
+	hawkejs.goToAjaxViewWithHistory(postUrl, null, {data: editor.get()});
+});
+
 }());
 </script>
-
-<button class="btn btn-primary" id="saveEdit" data-model="<%= modelName %>" data-id="<%= item._id %>">Save record</button>
 
 <% end(store('chimera-view-setting').contentblock) %>
