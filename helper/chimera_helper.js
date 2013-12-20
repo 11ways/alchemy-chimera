@@ -14,9 +14,20 @@ module.exports = function chimeraHelpers(hawkejs) {
 	 * @version       0.0.1
 	 */
 	chimera.actions = function actions(actionListName, options) {
+
+		var i;
 		
 		if (!options) {
 			options = {};
+		}
+
+		if (Array.isArray(actionListName)) {
+
+			for (i = 0; i < actionListName.length; i++) {
+				this.chimera.actions(actionListName[i], options);
+			}
+
+			return;
 		}
 
 		var routeVars   = {},
@@ -78,7 +89,11 @@ module.exports = function chimeraHelpers(hawkejs) {
 						content: content,
 						'class': cssClass,
 						prepend: prepend,
-						urlvars: routeVars
+						urlvars: routeVars,
+						match: {
+							'class': 'active',
+							greedy: true
+						}
 					});
 				}
 			}
