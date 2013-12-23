@@ -32,9 +32,9 @@ start(store('chimera-view-setting').contentblock) %>
 		</ul>
 	</div>
 	<div class="panel panel-default">
+		<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
 		<div class="panel-body">
 			<div class="tab-content">
-			<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
 	<%
 		active = 'active';
 		for (groupName in __groups) {
@@ -58,16 +58,16 @@ start(store('chimera-view-setting').contentblock) %>
 			echo('</div>');
 		}
 	%>
-			</form>
 			</div>
 		</div>
 		<div class="panel-footer">
 			<% if (typeof showSaveButton == 'undefined' || showSaveButton) { %>
-				<button class="btn btn-primary" id="saveEdit"><%= saveButton %></button>
+				<% form.submit(saveButton, {'class': 'btn btn-primary'}) %>
 			<% } %>
 		</div>
 
 	</div>
+	<% form.end() %>
 </div>
 
 <% end(store('chimera-view-setting').contentblock) %>
