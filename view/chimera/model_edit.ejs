@@ -20,49 +20,54 @@ start(store('chimera-view-setting').contentblock) %>
 
 <div class="error"><% errors() %></div>
 
-<div class="panel panel-default">
-	<div class="panel-heading">
+<div class="editform">
+	<div class="grouptabs">
 		<ul class="nav nav-tabs">
 		<% for (groupName in __groups) { %>
-			<li><a href="#chitab-<%= groupName %>" data-toggle="tab"><%= __groups[groupName].title %></a></li>
-		<% } %>
+			<li class="<%= active %>"><a href="#chitab-<%= groupName %>" data-toggle="tab"><%= __groups[groupName].title %></a></li>
+		<%
+			active = '';
+		}
+		%>
 		</ul>
 	</div>
-	<div class="panel-body">
-		<div class="tab-content">
-		<form class="form-horizontal" role="form">
-<%
-	for (groupName in __groups) {
-%>
-			<div class="tab-pane <%= active %>" id="chitab-<%= groupName %>">
-<%
-		active = '';
-		group = __groups[groupName];
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="tab-content">
+			<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
+	<%
+		active = 'active';
+		for (groupName in __groups) {
+	%>
+				<div class="tab-pane <%= active %>" id="chitab-<%= groupName %>">
+	<%
+			active = '';
+			group = __groups[groupName];
 
-		for (i = 0; i < group.fields.length; i++) {
+			for (i = 0; i < group.fields.length; i++) {
 
-			item = group.fields[i];
+				item = group.fields[i];
 
-			print_element('chimera_fields/' + item.view + '_field', {
-				variables: {
-					title: item.field,
-					name: item.field,
-					value: item.value
-				}
-			});
+				print_element('chimera_fields/' + item.view + '_field', {
+					variables: {
+						item: item
+					}
+				});
+			}
+
+			echo('</div>');
 		}
-
-		echo('</div>');
-	}
-%>
-		</form>
+	%>
+			</form>
+			</div>
 		</div>
+		<div class="panel-footer">
+			<% if (typeof showSaveButton == 'undefined' || showSaveButton) { %>
+				<button class="btn btn-primary" id="saveEdit"><%= saveButton %></button>
+			<% } %>
+		</div>
+
 	</div>
-
 </div>
-
-<% if (typeof showSaveButton == 'undefined' || showSaveButton) { %>
-	<button class="btn btn-primary" id="saveEdit"><%= saveButton %></button>
-<% } %>
 
 <% end(store('chimera-view-setting').contentblock) %>

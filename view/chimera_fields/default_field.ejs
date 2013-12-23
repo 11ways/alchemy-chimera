@@ -1,6 +1,6 @@
 <div class="form-group">
-	<label for="AdminField<%= name %>" class="col-sm-2 control-label"><%= title %></label>
+	<label for="AdminField-<%= item.name %>" class="col-sm-2 control-label"><%= item.title %></label>
 	<div class="col-sm-10 controls">
-		<input name="data[Product][<% name %>]" class="form-control" value="<%= value %>" id="AdminField<%= name %>" type="text">
+		<input name="data[<%= modelName %>][<%= item.name %>]" class="form-control" value="<%= item.value %>" id="AdminField-<%= item.name %>" type="text">
 	</div>
 </div>
