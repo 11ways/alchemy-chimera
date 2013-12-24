@@ -12,7 +12,7 @@ start('chimera-page-title'); -%>
 
 start(store('chimera-view-setting').contentblock) %>
 
-<div class="error"><% errors() %></div>
+<% errors() %>
 <div id="jsoneditor"></div>
 
 <% if (typeof showSaveButton == 'undefined' || showSaveButton) { %>
