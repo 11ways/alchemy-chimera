@@ -24,7 +24,7 @@ start(store('chimera-view-setting').contentblock) %>
 	<div class="grouptabs">
 		<ul class="nav nav-tabs">
 		<% for (groupName in __groups) { %>
-			<li class="<%= active %>"><a href="#chitab-<%= groupName %>" data-toggle="tab"><%= __groups[groupName].title %></a></li>
+			<li class="<%= active %>"><a href="#chitab-<%= groupName %>" data-toggle="tab"><%= __groups[groupName].title || groupName.humanize() %></a></li>
 		<%
 			active = '';
 		}
