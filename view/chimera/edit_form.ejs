@@ -1,0 +1,79 @@
+<%
+
+var groupName,
+    active = 'active',
+    group,
+    item,
+    i;
+
+if (typeof options !== 'object') {
+	options = {};
+}
+
+if (typeof options.formName === 'undefined') {
+	if (typeof modelName !== 'undefined') {
+		options.formName = modelName;
+	} else {
+		options.formName = false;
+	}
+}
+
+if (typeof options.saveButton === 'undefined') {
+	if (typeof saveButton !== 'undefined') {
+		options.saveButton = saveButton;
+	} else {
+		options.saveButton = __('chimera', 'Save');
+	}
+}
+
+errors()
+%>
+<div class="editform">
+	<div class="grouptabs">
+		<ul class="nav nav-tabs">
+		<% for (groupName in options.groups) { %>
+			<li class="<%= active %>"><a href="#chitab-<%= groupName %>" data-toggle="tab"><%= options.groups[groupName].title || groupName.humanize() %></a></li>
+		<%
+			active = '';
+		}
+		%>
+		</ul>
+	</div>
+	<div class="panel panel-default">
+		<% form.create(options.formName, {action: 'here', 'class': 'form-horizontal'}) %>
+		<div class="panel-body">
+			<div class="tab-content">
+	<%
+		active = 'active';
+		for (groupName in options.groups) {
+	%>
+				<div class="tab-pane <%= active %>" id="chitab-<%= groupName %>">
+	<%
+			active = '';
+			group = options.groups[groupName];
+
+			for (i = 0; i < group.fields.length; i++) {
+
+				item = group.fields[i];
+
+				print_element('chimera_fields/' + item.view + '_field', {
+					variables: {
+						item: item
+					}
+				});
+			}
+
+			echo('</div>');
+		}
+	%>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<% if (typeof options.showSaveButton == 'undefined' || options.showSaveButton) { %>
+				<% form.submit(options.saveButton, {'class': 'btn btn-primary'}) %>
+			<% } %>
+		</div>
+
+	</div>
+	<% form.end() %>
+</div>
