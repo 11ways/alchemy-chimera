@@ -1,0 +1,7 @@
+<div class="form-group">
+	<label for="<%= item.id %>" class="col-sm-2 control-label"><%= item.title %></label>
+	<div class="col-sm-10 controls">
+		<input id="<%= item.id %>-hidden" type="hidden">
+		<input name="<%= item.fullPath %>" class="form-control datepicker" value="<%= item.value || '' %>" id="<%= item.id %>" type="datetime">
+	</div>
+</div>
