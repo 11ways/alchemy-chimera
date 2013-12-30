@@ -40,8 +40,10 @@ hawkejs.event.on({create: 'block'}, function(query, payload) {
 		// Enable the hidden field
 		$hidden.attr('name', $this.attr('name'));
 
-		// Set the beginning value on the hidden field
-		$hidden.val(date.toISOString());
+		if (date.valueOf()) {
+			// Set the beginning value on the hidden field
+			$hidden.val(date.toISOString());
+		}
 
 		// Make sure the datepicker field value doesn't get submitted
 		$this.attr('name', '');
