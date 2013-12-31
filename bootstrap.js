@@ -23,8 +23,6 @@ var options = {
 // Inject the user-overridden options
 alchemy.plugins.chimera = alchemy.inject(options, alchemy.plugins.chimera);
 
-pr(options);
-
 // Get the view settings
 var viewSettings = {
 	baselayout: alchemy.layoutify(options.baselayout),
@@ -43,4 +41,50 @@ alchemy.on('render.callback', function(render, callback) {
 	}
 	
 	callback();
+});
+
+// Make sure the chimera-sidebar menu exists
+alchemy.ready(function checkChimeraSidebar() {
+	var Menu = Model.get('Menu');
+
+	Menu.find('first', {conditions: {name: 'chimera-sidebar'}}, function (err, result) {
+
+		// If no result was found, create one!
+		if (!result) {
+			var data = {
+				Menu: {
+					name: 'chimera-sidebar'
+				},
+				MenuPiece: [
+					{
+						"settings" : {
+							"module" : "model_editor",
+							"target" : "",
+							"parent" : "",
+							"order" : 5
+						},
+						"type" : "chimera_module"
+					},
+					{
+						"settings" : {
+							"module" : "json",
+							"target" : "",
+							"parent" : "",
+							"order" : 10
+						},
+						"type" : "chimera_module"
+					}
+				]
+			};
+
+			Menu.save(data, function(err, result) {
+				if (err) {
+					log.error('Failed to create chimera-sidebar menu:');
+					log.error(err);
+				}
+			});
+		}
+
+	});
+
 });
