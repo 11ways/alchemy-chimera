@@ -88,3 +88,62 @@ alchemy.ready(function checkChimeraSidebar() {
 	});
 
 });
+
+// Make sure the Administrator ACL group exists
+alchemy.ready(function checkChimeraACLGroups() {
+	var AclGroup = Model.get('AclGroup'),
+	    AclPermission = Model.get('AclPermission');
+	
+	AclGroup.find('first', {conditions: {name: 'Administrator'}}, function (err, result) {
+
+		// If no result was found, create one!
+		if (!result) {
+			var data = {
+				AclGroup: {
+					name: 'Administrator'
+				},
+				AclPermission: [
+					{
+						"target" : "group",
+						"type" : "url",
+						"parent_name" : "/admin(/.*?|)",
+						"child_name" : "",
+						"halt" : false,
+						"order" : 10,
+						"allow" : true
+					}
+				]
+			};
+
+			// Also create an AclPermission to restrict everyone else from entering
+			var permissionData = {
+				AclPermission: {
+					"target" : "everyone",
+					"type" : "url",
+					"parent_name" : "/admin(/.*?|)", // Anything starting with 'admin/' is forbidden
+					"child_name" : "",
+					"halt" : false,
+					"order" : 10,
+					"allow" : false
+				}
+			};
+
+			// Save the group + amdinistrator permission
+			AclGroup.save(data, function(err, result) {
+				if (err) {
+					log.error('Failed to create Administrators ACL group:');
+					log.error(err);
+				}
+			});
+
+			// And save the permission for everyone else
+			AclPermission.save(permissionData, function(err, result) {
+				if (err) {
+					log.error('Failed to save permission to restrict users from Chimera pages');
+					log.error(err);
+				}
+			});
+		}
+	});
+
+});

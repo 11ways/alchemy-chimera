@@ -1,7 +1,7 @@
 <div class="form-group">
 	<label for="<%= item.id %>" class="col-sm-2 control-label"><%= item.title %></label>
 	<div class="col-sm-10 controls">
-		<select name="data[<%= modelName %>][<%= item.name %>]" class=" form-control" id="AdminField-<%= item.name %>">
+		<select name="<%= item.fullPath %>" class=" form-control" id="AdminField-<%= item.name %>">
 			<option value="">-- <%= item.title %> --</option>
 		<%
 			var i, option, html = '';
