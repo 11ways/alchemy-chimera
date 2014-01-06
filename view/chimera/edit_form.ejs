@@ -56,11 +56,8 @@ errors()
 
 				item = group.fields[i];
 
-				print_element('chimera_fields/' + item.view + '_field', {
-					variables: {
-						item: item
-					}
-				});
+				chimera.inputfield(item.view, {variables: {item: item}});
+				
 			}
 
 			echo('</div>');

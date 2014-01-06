@@ -1,38 +1,44 @@
+<% start('wrapper') %>
 <div class="form-group">
 	<label for="<%= item.id %>" class="col-sm-2 control-label"><%= item.title %></label>
 	<div class="col-sm-10 controls">
-		<input type="hidden" name="<%= item.fullPath %>" value="_empty_"/>
-		<select name="<%= item.fullPath %>" class=" form-control" id="AdminField-<%= item.name %>" multiple>
-		<%
-			var i, j, option, entry, html = '';
-
-			for (i = 0; i < item.value.options.length; i++) {
-				option = item.value.options[i];
-
-				html += '<option value="' + option.id + '" ';
-
-				// Go over all the available items and see if they should be selected
-				if (Array.isArray(item.value.selected)) {
-
-					for (j = 0; j < item.value.selected.length; j++) {
-
-						// Cast to string, because comparing objectid doesn't work
-						entry = ''+item.value.selected[j];
-
-						// Coerce the types
-						if (option.id == entry) {
-							html += 'selected ';
-							break;
-						}
-					}
-				}
-
-				html += '>' + __r(option.title) + '</option>';
-
-			}
-
-			echo(html);
-		%>
-		</select>
+		<!--INPUT-->
 	</div>
 </div>
+<% end('wrapper') %>
+
+<% start('input') %>
+<input type="hidden" name="<%= item.fullPath %>" value="_empty_"/>
+<select name="<%= item.fullPath %>" class=" form-control" id="AdminField-<%= item.name %>" multiple>
+<%
+	var i, j, option, entry, html = '';
+
+	for (i = 0; i < item.value.options.length; i++) {
+		option = item.value.options[i];
+
+		html += '<option value="' + option.id + '" ';
+
+		// Go over all the available items and see if they should be selected
+		if (Array.isArray(item.value.selected)) {
+
+			for (j = 0; j < item.value.selected.length; j++) {
+
+				// Cast to string, because comparing objectid doesn't work
+				entry = ''+item.value.selected[j];
+
+				// Coerce the types
+				if (option.id == entry) {
+					html += 'selected ';
+					break;
+				}
+			}
+		}
+
+		html += '>' + __r(option.title) + '</option>';
+
+	}
+
+	echo(html);
+%>
+</select>
+<% end('input') %>

@@ -100,6 +100,87 @@ module.exports = function chimeraHelpers(hawkejs) {
 		}
 	};
 
+	chimera.inputfield = function inputfield(viewname, options) {
+
+		var hWrapper  = '',
+		    addButton = '',
+		    tempOption,
+		    tempValue,
+		    tempItem,
+		    viewPath,
+		    result,
+		    blocks,
+		    wrapper,
+		    input = '',
+		    item,
+		    nr;
+
+		item = options.variables.item;
+		options = hawkejs.µ.inject({}, options);
+		options['return'] = true;
+		options.newscope = true;
+		viewPath = 'chimera_fields/' + viewname + '_field';
+
+		hWrapper = '<hawkejs data-chimera-field ';
+
+		if (options.variables.item.array) {
+
+			hWrapper += 'data-array ';
+
+			addButton = '<button data-chimera-add-entry class="btn btn-default"><i class="fa fa-plus"></i> Add entry</button>';
+
+			if (!Array.isArray(item.value)) {
+				item.value = [''];
+			}
+
+			for (nr = 0; nr < item.value.length; nr++) {
+				tempItem = hawkejs.µ.inject({}, item);
+				tempItem.value = item.value[nr];
+
+				tempOption = hawkejs.µ.inject({}, options);
+				tempOption.variables = hawkejs.µ.inject({}, tempOption.variables);
+				tempOption.variables.item = tempItem;
+
+				result = this.print_element(viewPath, tempOption);
+				blocks = result.payload.request.blocks;
+
+				if (blocks.input) {
+					input += '<hawkejs data-chimera-input>' + blocks.input.buf.join('') + '</hawkejs>';
+				}
+			}
+
+			// Create 1 more with an empty value
+			tempOption.variables.item.value = '';
+			result = this.print_element(viewPath, tempOption);
+			if (result.payload && result.payload.request.blocks && result.payload.request.blocks.input) {
+				input += '<hawkejs data-chimera-empty-input style="display: none;">' + hawkejs.µ.encode(result.payload.request.blocks.input.buf.join('')) + '</hawkejs>';
+			}
+		} else {
+			result = this.print_element(viewPath, options);
+			blocks = result.payload.request.blocks;
+
+			if (blocks.input) {
+				input += '<hawkejs data-chimera-input>' + blocks.input.buf.join('') + '</hawkejs>';
+			}
+		}
+
+		wrapper = blocks.wrapper;
+
+		if (wrapper) {
+			wrapper = wrapper.buf.join('');
+		} else {
+			wrapper = '';
+		}
+
+		// Add the add button (only set if this field is an array)
+		input += addButton;
+
+		hWrapper += '>';
+		wrapper = hWrapper + wrapper.replace('<!--INPUT-->', input) + '</hawkejs>';
+
+		this.echo(wrapper);
+	};
+
 	/**
 	 * Print out the given field
 	 *

@@ -58,5 +58,24 @@ hawkejs.event.on({create: 'block'}, function(query, payload) {
 
 		$hidden.val(e.date.toISOString());
 	});
+});
+
+// Add add buttons to array fields
+hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, payload) {
+
+	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]').each(function() {
+
+		var $this = $(this),
+		    $last = $('[data-chimera-input]', $this).last(),
+		    $empty = $('[data-chimera-empty-input]', $this);
+
+		$empty = $(hawkejs.µ.decode($empty.html()));
+		
+		// Add an add button
+		$('[data-chimera-add-entry]', $this).click(function(e) {
+			e.preventDefault();
+			$last.after($empty.clone());
+		})
+	});
 
 });
