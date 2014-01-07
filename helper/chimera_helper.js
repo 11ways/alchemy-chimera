@@ -4,7 +4,8 @@ module.exports = function chimeraHelpers(hawkejs) {
 	var helpers = hawkejs.helpers,
 	    drones  = hawkejs.drones,
 	    chimera = helpers.chimera = {},
-	    fields  = helpers.chimera_fields = {};
+	    fields  = helpers.chimera_fields = {},
+	    indexv  = helpers.chimera_index_views = {};
 
 	/**
 	 * Print out module actions
@@ -188,9 +189,10 @@ module.exports = function chimeraHelpers(hawkejs) {
 	 * @since         0.0.1
 	 * @version       0.0.1
 	 */
-	chimera.field = function field(record, fieldName, options) {
+	chimera.field = function field(record, fieldInfo, options) {
 
-		var info    = this.fieldInfo[fieldName],
+		var info    = fieldInfo,
+		    fieldName = info.field,
 		    actionName;
 
 		if (typeof info !== 'object') {
@@ -218,7 +220,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 	 * @version       0.0.1
 	 */
 	fields.default_view = function default_view(record, fieldName, options) {
-		this.echo(record[fieldName], {escape: true});
+		this.echo(record[fieldName].value, {escape: true});
 	};
 
 	/**
@@ -230,7 +232,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 	 */
 	fields.json_view = function json_view(record, fieldName, options) {
 		
-		var text = record[fieldName];
+		var text = record[fieldName].value;
 
 		if (typeof options !== 'object') {
 			options = {};
