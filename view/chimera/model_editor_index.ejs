@@ -27,6 +27,16 @@ start(store('chimera-view-setting').contentblock) -%>
 		<% } %>
 		<th>Actions</th>
 	</tr>
+	<tr>
+		<% for (i = 0; i < fieldInfo.length; i++) {
+			field = fieldInfo[i];
+		%>
+		<th><% Paginate.filter({field: field.field, display: field.title}) %></th>
+		<% } %>
+		<th>
+			<a data-apply-pagination class="btn btn-default"><% echo(__('filter', 'Apply')) %></button>
+		</th>
+	</tr>
 
 	<% for (i = 0; i < items.length; i++) {
 		item = items[i];
@@ -34,7 +44,7 @@ start(store('chimera-view-setting').contentblock) -%>
 		<% if (!item) continue %>
 		<tr>
 			<% for (j = 0; j < fieldInfo.length; j++) { %>
-				<td><% chimera.field(item, fieldInfo[j]) %></td>
+				<td><% chimera.field(item.fields, fieldInfo[j]) %></td>
 			<% } %>
 			<td>
 				<div class="actions record-actions">

@@ -78,4 +78,30 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 		})
 	});
 
+	$('[data-apply-pagination]').click(function(e) {
+
+		var $this = $(this),
+		    conditions = {},
+		    url;
+
+		e.preventDefault();
+
+		$('[data-pagination-filter]').each(function() {
+
+			var $input = $(this),
+			    name   = $input.attr('data-pagination-filter'),
+			    val    = $input.val();
+
+			// Do not query for empty strings
+			if (val !== '') {
+				conditions[name] = {value: $input.val()};
+			}
+
+		});
+
+		url = window.location.origin + window.location.pathname;
+
+		hawkejs.goToAjaxView(url, {filter: JSON.stringify(conditions)});
+	});
+
 });
