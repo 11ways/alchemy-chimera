@@ -48,9 +48,9 @@ alchemy.ready(function checkChimeraSidebar() {
 	var Menu = Model.get('Menu');
 
 	Menu.find('first', {conditions: {name: 'chimera-sidebar'}}, function (err, result) {
-
+		
 		// If no result was found, create one!
-		if (!result) {
+		if (!result.length) {
 			var data = {
 				Menu: {
 					name: 'chimera-sidebar'
@@ -97,7 +97,7 @@ alchemy.ready(function checkChimeraACLGroups() {
 	AclGroup.find('first', {conditions: {name: 'Administrator'}}, function (err, result) {
 
 		// If no result was found, create one!
-		if (!result) {
+		if (!result.length) {
 			var data = {
 				AclGroup: {
 					name: 'Administrator'

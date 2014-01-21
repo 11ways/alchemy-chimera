@@ -136,6 +136,8 @@ BaseClass.extend('AdminController', function AdminModelController (){
 
 				var original = that.Names.underscore,
 				    ownView  = 'admin/' + original + '/edit';
+
+				item = item[0];
 				
 				render.viewVars.fields = that.fields;
 				render.viewVars.__current__ = item;
