@@ -197,6 +197,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 
 		if (typeof info !== 'object') {
 			info = {};
+			fieldName = fieldInfo;
 		}
 
 		if (!info.fieldType) {
@@ -220,7 +221,14 @@ module.exports = function chimeraHelpers(hawkejs) {
 	 * @version       0.0.1
 	 */
 	fields.default_view = function default_view(record, fieldName, options) {
-		this.echo(record[fieldName].value, {escape: true});
+
+		var value = record[fieldName];
+
+		if (typeof value == 'object' && typeof value.value !== 'undefined') {
+			value = value.value;
+		}
+
+		this.echo(value, {escape: true});
 	};
 
 	/**
@@ -231,19 +239,23 @@ module.exports = function chimeraHelpers(hawkejs) {
 	 * @version       0.0.1
 	 */
 	fields.json_view = function json_view(record, fieldName, options) {
-		
-		var text = record[fieldName].value;
 
+		var value = record[fieldName];
+
+		if (typeof value == 'object' && typeof value.value !== 'undefined') {
+			value = value.value;
+		}
+		
 		if (typeof options !== 'object') {
 			options = {};
 		}
 
 		// Only encode values that truly need it (objects)
-		if (options.all || typeof text === 'object') {
-			text = JSON.stringify(text);
+		if (options.all || typeof value === 'object') {
+			value = JSON.stringify(value);
 		}
 
-		this.echo(text, {escape: true});
+		this.echo(value, {escape: true});
 	};
 
 };
