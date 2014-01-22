@@ -16,12 +16,21 @@ var options = {
 	mainblock: 'admin-main',
 
 	// The name of the content block
-	contentblock: 'admin-content'
+	contentblock: 'admin-content',
+
+	// The name to use in the routing
+	routename: 'chimera',
+
+	// The title to show in the top left corner
+	title: 'Alchemy Admin'
 
 };
 
 // Inject the user-overridden options
 alchemy.plugins.chimera = alchemy.inject(options, alchemy.plugins.chimera);
+
+// Set the acl placeholder variable
+alchemy.plugins.acl.placeholders.chimeraRouteName = alchemy.plugins.chimera.routename;
 
 // Get the view settings
 var viewSettings = {
@@ -29,7 +38,8 @@ var viewSettings = {
 	bodylayout: alchemy.layoutify(options.bodylayout),
 	bodyblock: options.bodyblock,
 	mainblock: options.mainblock,
-	contentblock: options.contentblock
+	contentblock: options.contentblock,
+	title: options.title
 };
 
 // Send the acl layout options to the client
@@ -106,7 +116,7 @@ alchemy.ready(function checkChimeraACLGroups() {
 					{
 						"target" : "group",
 						"type" : "url",
-						"parent_name" : "/admin(/.*?|)",
+						"parent_name" : "/%chimeraRouteName%(/.*?|)",
 						"child_name" : "",
 						"halt" : false,
 						"order" : 10,
@@ -120,7 +130,7 @@ alchemy.ready(function checkChimeraACLGroups() {
 				AclPermission: {
 					"target" : "everyone",
 					"type" : "url",
-					"parent_name" : "/admin(/.*?|)", // Anything starting with 'admin/' is forbidden
+					"parent_name" : "/%chimeraRouteName%(/.*?|)", // Anything starting with 'admin/' is forbidden
 					"child_name" : "",
 					"halt" : false,
 					"order" : 10,
