@@ -1,0 +1,21 @@
+<% start('wrapper') %>
+<div class="form-group">
+	<label for="<%= item.id %>" class="col-sm-2 control-label"><%= item.title %></label>
+	<div class="col-sm-10 controls">
+		<!--INPUT-->
+	</div>
+</div>
+<% end('wrapper') %>
+
+<% start('input') %>
+<input
+	type="hidden"
+	name="<%= item.fullPath %>"
+	class=" select2-form-control"
+	id="AdminField-<%= item.name %>"
+	data-url="<%= item.value.url %>"
+	value="<%= item.value.value %>"
+	data-select-type="<%= item.value.select %>"
+	>
+</input>
+<% end('input') %>

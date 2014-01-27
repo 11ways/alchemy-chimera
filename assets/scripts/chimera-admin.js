@@ -96,12 +96,61 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 			if (val !== '') {
 				conditions[name] = {value: $input.val()};
 			}
-
 		});
 
 		url = window.location.origin + window.location.pathname;
-
 		hawkejs.goToAjaxView(url, {filter: JSON.stringify(conditions)});
+	});
+
+	$('select.form-control').select2();
+
+	// [data-select-type="single"]
+	$('input.select2-form-control[data-url]').each(function() {
+
+		var $this = $(this),
+		    assocUrl = $this.data('url'),
+		    multiple = ($this.data('select-type') === 'multiple');
+
+		$this.select2({
+			allowClear: true,
+			multiple: multiple,
+			ajax: {
+				url: assocUrl,
+				cache: true,
+				type: 'POST',
+				dataType: 'json',
+				quietMillis: 200,
+				data: function(term, page) {
+					return {
+						q: term,
+						page_limit: 10,
+						page: page
+					}
+				},
+				results: function (data, page) {
+					return data;
+				}
+			},
+			initSelection: function (element, callback) {
+				
+				var id = $(element).val();
+
+				if (multiple) {
+					id = String(id).split(',');
+				}
+
+				if (id) {
+					$.post(assocUrl, {id: id}, function(data) {
+
+						if (multiple) {
+							callback(data.results)
+						} else {
+							callback(data.results[0]);
+						}
+					});
+				}
+			}
+		});
 	});
 
 });

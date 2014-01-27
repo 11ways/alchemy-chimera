@@ -17,11 +17,12 @@ asset.script([
 	'moment2.5/moment',
 	'bootstrap3.0/datetimepicker',
 	'jsoneditor2.3/jsoneditor',
+	'select2-3.4/select2',
 	'chimera-admin'
 	], {block: 'head'});
 
 // Always add the admin less files
-asset.style(['chimera', 'jsoneditor2.3/jsoneditor'], {block: 'head'});
+asset.style(['chimera', 'jsoneditor2.3/jsoneditor', 'select2-3.4/select2'], {block: 'head'});
 
 start(store('chimera-view-setting').mainblock) %>
 	<div id="wrapper">
