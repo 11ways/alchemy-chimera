@@ -104,7 +104,6 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 
 	$('select.form-control').select2();
 
-	// [data-select-type="single"]
 	$('input.select2-form-control[data-url]').each(function() {
 
 		var $this = $(this),
@@ -141,7 +140,6 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 
 				if (id) {
 					$.post(assocUrl, {id: id}, function(data) {
-
 						if (multiple) {
 							callback(data.results)
 						} else {
@@ -151,6 +149,17 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 				}
 			}
 		});
+
+		$this.select2('container').find('ul.select2-choices').sortable({
+			containment: 'parent',
+			start: function() {
+				$this.select2('onSortStart');
+			},
+			update: function() {
+				$this.select2('onSortEnd');
+			}
+		});
 	});
+
 
 });

@@ -103,6 +103,41 @@ alchemy.ready(function checkChimeraSidebar() {
 alchemy.ready(function checkChimeraACLGroups() {
 	var AclGroup = Model.get('AclGroup'),
 	    AclPermission = Model.get('AclPermission');
+
+	// Make sure the super user exists
+	AclGroup.find('first', {conditions: {name: 'Superuser'}}, function (err, result) {
+
+		// If no result was found, create one!
+		if (!result.length) {
+			var data = {
+				AclGroup: {
+					name: 'Superuser',
+					root: true,
+					weight: 10001
+				},
+				AclPermission: [
+					{
+						"target" : "group",
+						"type" : "url",
+						"parent_name" : "/%chimeraRouteName%(/.*?|)",
+						"child_name" : "",
+						"halt" : false,
+						"order" : 10,
+						"allow" : true
+					}
+				]
+			};
+
+			// Save the data
+			AclGroup.save(data, function(err, result) {
+				if (err) {
+					log.error('Failed to create Superusers ACL group:');
+					log.error(err);
+				}
+			});
+
+		}
+	});
 	
 	AclGroup.find('first', {conditions: {name: 'Administrator'}}, function (err, result) {
 
@@ -110,7 +145,9 @@ alchemy.ready(function checkChimeraACLGroups() {
 		if (!result.length) {
 			var data = {
 				AclGroup: {
-					name: 'Administrator'
+					name: 'Administrator',
+					root: false,
+					weight: 9999
 				},
 				AclPermission: [
 					{
