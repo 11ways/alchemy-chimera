@@ -155,5 +155,4 @@ alchemy.ready(function checkChimeraACLGroups() {
 			});
 		}
 	});
-
 });
