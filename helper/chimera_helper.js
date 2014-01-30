@@ -44,7 +44,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 		    i;
 
 		// Merge routeVars in the viewvars with the routevars in the options
-		hawkejs.µ.inject(routeVars, this.routeVars, options.routeVars);
+		hawkejs.utils.inject(routeVars, this.routeVars, options.routeVars);
 
 		// Make sure the actionlist exists
 		if (actionLists[actionListName]) {
@@ -117,7 +117,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 		    nr;
 
 		item = options.variables.item;
-		options = hawkejs.µ.inject({}, options);
+		options = hawkejs.utils.inject({}, options);
 		options['return'] = true;
 		options.newscope = true;
 		viewPath = 'chimera_fields/' + viewname + '_field';
@@ -135,11 +135,11 @@ module.exports = function chimeraHelpers(hawkejs) {
 			}
 
 			for (nr = 0; nr < item.value.length; nr++) {
-				tempItem = hawkejs.µ.inject({}, item);
+				tempItem = hawkejs.utils.inject({}, item);
 				tempItem.value = item.value[nr];
 
-				tempOption = hawkejs.µ.inject({}, options);
-				tempOption.variables = hawkejs.µ.inject({}, tempOption.variables);
+				tempOption = hawkejs.utils.inject({}, options);
+				tempOption.variables = hawkejs.utils.inject({}, tempOption.variables);
 				tempOption.variables.item = tempItem;
 
 				result = this.print_element(viewPath, tempOption);
@@ -154,7 +154,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 			tempOption.variables.item.value = '';
 			result = this.print_element(viewPath, tempOption);
 			if (result.payload && result.payload.request.blocks && result.payload.request.blocks.input) {
-				input += '<hawkejs data-chimera-empty-input style="display: none;">' + hawkejs.µ.encode(result.payload.request.blocks.input.buf.join('')) + '</hawkejs>';
+				input += '<hawkejs data-chimera-empty-input style="display: none;">' + hawkejs.utils.encode(result.payload.request.blocks.input.buf.join('')) + '</hawkejs>';
 			}
 		} else {
 			result = this.print_element(viewPath, options);

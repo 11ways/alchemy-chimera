@@ -69,7 +69,7 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 		    $last = $('[data-chimera-input]', $this).last(),
 		    $empty = $('[data-chimera-empty-input]', $this);
 
-		$empty = $(hawkejs.µ.decode($empty.html()));
+		$empty = $(hawkejs.utils.decode($empty.html()));
 		
 		// Add an add button
 		$('[data-chimera-add-entry]', $this).click(function(e) {
