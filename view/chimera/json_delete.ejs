@@ -15,7 +15,8 @@ start(store('chimera-view-setting').contentblock) %>
 <% errors() %>
 <div id="jsoneditor"></div>
 
-<button class="btn btn-primary" id="delete"><%= deleteButton %></button>
+<button class="btn btn-danger" id="delete"><%= deleteButton %></button>
+<% add_link('../index', {title: 'Cancel', 'class': 'btn btn-default'}); %>
 
 <script>
 (function() {
