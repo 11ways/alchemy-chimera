@@ -15,9 +15,14 @@ start('chimera-page-title'); -%>
 
 		<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
 		
-		<% itemId = item[modelName]['_id'] %>
+		<% var itemName = item[modelName][displayField]; %>
+		<% var itemId = item[modelName]['_id'] %>
 		
-		<p>Are you sure you want to delete <%= modelName %> <%= itemId %>?<p>
+		<% if (itemName === undefined) {itemName = itemId} %>
+		
+		
+		
+		<p>Are you sure you want to delete <%= modelName %> <%= itemName %>?<p>
 			
 			<% form.input('_id', {'type':'hidden'}, {'value':String(itemId)}) %>
 
