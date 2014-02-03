@@ -1,0 +1,50 @@
+<% expands('layouts/admin_main');
+
+start('chimera-page-title'); -%>
+<div class="adminActionHead">
+	<span class="title" id="mainTitle"><%= modelName %>: <%= deleteTitle %></span>
+	<div class="actions paginate-actions">
+		<% chimera.actions(showActions) %>
+	</div>
+	<div class="clear"></div>
+</div>
+<% end('chimera-page-title');
+
+start(store('chimera-view-setting').contentblock) %>
+
+<% errors() %>
+<div id="jsoneditor"></div>
+
+<button class="btn btn-primary" id="delete"><%= deleteButton %></button>
+
+<script>
+(function() {
+var item,
+    container = document.getElementById('jsoneditor'),
+    editor    = new jsoneditor.JSONEditor(container);
+
+	item = <%
+		// If item is not defined, use the __current__ variable
+		if (typeof item != 'undefined') {
+			echo(JSON.stringify(item));
+		} else {
+			var item = {};
+			item[modelName] = __current__;
+			echo(JSON.stringify(item));
+		}
+	%>;
+
+	editor.set(item[<% echo(JSON.stringify(modelName)) %>]);
+
+$('#delete').click(function(e) {
+	e.preventDefault();
+	
+	var postUrl = <% echo(JSON.stringify(postUrl)) %>;
+
+	hawkejs.goToAjaxViewWithHistory(postUrl, null, {data: editor.get()});
+});
+
+}());
+</script>
+
+<% end(store('chimera-view-setting').contentblock) %>

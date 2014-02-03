@@ -1,0 +1,29 @@
+<% expands('layouts/admin_main');
+
+start('chimera-page-title'); -%>
+<div class="adminActionHead">
+	<span class="title" id="mainTitle"><%= modelName %>: <%= deleteTitle %></span>
+	<div class="actions paginate-actions">
+		<% chimera.actions(showActions) %>
+	</div>
+	<div class="clear"></div>
+</div>
+<% end('chimera-page-title'); %>
+
+<% start(store('chimera-view-setting').contentblock); %>
+
+
+		<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
+		
+		<% itemId = item[modelName]['_id'] %>
+		
+		<p>Are you sure you want to delete <%= modelName %> <%= itemId %>?<p>
+			
+			<% form.input('_id', {'type':'hidden'}, {'value':String(itemId)}) %>
+
+		<% form.submit('Yes', {'class': 'btn btn-primary'}) %>
+		<% add_link('../index', {title: 'No', 'class': 'btn btn-default'}); %>
+
+	<% form.end() %>
+
+<% end(store('chimera-view-setting').contentblock); %>
