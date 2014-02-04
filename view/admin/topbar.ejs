@@ -1,10 +1,13 @@
 <% matchIns = {class: 'active', parent: {class: 'active'}}; %>
 
-<ul class="topbar-right">
-	<li><%= name %></li>
-	<li><% add_link('/logout', {title: '<i class="fa fa-sign-out"></i> Logout'}); %></li>
-</ul>
-
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		<%= name %> <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu">
+		<li><% add_link('/logout', {title: '<i class="fa fa-power-off"></i> Logout'}); %></li>
+    </ul>
+</li>
 
 <%
 // add_link('/', {title: 'Home', match: matchIns});

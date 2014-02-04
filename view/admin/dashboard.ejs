@@ -1,11 +1,21 @@
 <% expands('layouts/admin_main') %>
 
 <% start(store('chimera-view-setting').contentblock) %>
-<p>This is the admin main!</p>
-<% __('default', 'key.test') %>
-<% flowtest('replacethis') %>
 
-<% async(function(insert) {
+
+<% expands('layouts/admin_main') %>
+
+<% start(store('chimera-view-setting').contentblock) %>
+<h1>Welcome, <%= name %>!</h1>
+
+<% end(store('chimera-view-setting').contentblock) %>
+
+
+
+<% //__('default', 'key.test') %>
+<% //flowtest('replacethis') %>
+
+<% /*async(function(insert) {
 console.log('Firing timeout')
 console.time('dashtest')
 	setTimeout(function() {
@@ -14,8 +24,8 @@ console.time('dashtest')
 	}, 100)
 
 	})
-%>
+*/%>
 
-<% form.input('testname', {}, {zever: 1, option: 'test', data: {facebook: 1}}) %>
+<% //form.input('testname', {}, {zever: 1, option: 'test', data: {facebook: 1}}) %>
 
 <% end(store('chimera-view-setting').contentblock) %>
