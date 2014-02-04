@@ -102,94 +102,61 @@ alchemy.ready(function checkChimeraSidebar() {
 // Make sure the Administrator ACL group exists
 alchemy.ready(function checkChimeraACLGroups() {
 	var AclGroup = Model.get('AclGroup'),
-	    AclPermission = Model.get('AclPermission');
+	    AclPermission = Model.get('AclPermission'),
+	    AllowId = alchemy.ObjectId('52efff0000A1C00002000001'),
+	    DenyId = alchemy.ObjectId('52efff0000A1C00002000000');
 
-	// Make sure the super user exists
-	AclGroup.find('first', {conditions: {name: 'Superuser'}}, function (err, result) {
+	// See if the Superusers allow permission exists
+	AclPermission.find('first', {conditions: {_id: AllowId}}, function(err, result) {
 
-		// If no result was found, create one!
 		if (!result.length) {
 			var data = {
-				AclGroup: {
-					name: 'Superuser',
-					root: true,
-					weight: 10001
-				},
-				AclPermission: [
-					{
-						"target" : "group",
-						"type" : "url",
-						"parent_name" : "/%chimeraRouteName%(/.*?|)",
-						"child_name" : "",
-						"halt" : false,
-						"order" : 10,
-						"allow" : true
-					}
-				]
+				AclPermission: {
+					"target" : "group",
+					"type" : "url",
+					"parent_name" : "/%chimeraRouteName%(/.*?|)",
+					"child_name" : "",
+					"halt" : false,
+					"order" : 20,
+					"allow" : true,
+					"target_group": alchemy.plugins.acl.SuperUserGroupId,
+					"_id": AllowId
+				}
 			};
-
-			// Save the data
-			AclGroup.save(data, function(err, result) {
+		
+			AclPermission.save(data, function(err, result) {
 				if (err) {
-					log.error('Failed to create Superusers ACL group:');
+					log.error('Failed to create Superusers Chimera rule');
 					log.error(err);
 				}
 			});
-
 		}
 	});
-	
-	AclGroup.find('first', {conditions: {name: 'Administrator'}}, function (err, result) {
 
-		// If no result was found, create one!
+	// See if the deny permission exists
+	AclPermission.find('first', {conditions: {_id: DenyId}}, function(err, result) {
+
 		if (!result.length) {
 			var data = {
-				AclGroup: {
-					name: 'Administrator',
-					root: false,
-					weight: 9999
-				},
-				AclPermission: [
-					{
-						"target" : "group",
-						"type" : "url",
-						"parent_name" : "/%chimeraRouteName%(/.*?|)",
-						"child_name" : "",
-						"halt" : false,
-						"order" : 10,
-						"allow" : true
-					}
-				]
-			};
-
-			// Also create an AclPermission to restrict everyone else from entering
-			var permissionData = {
 				AclPermission: {
 					"target" : "everyone",
 					"type" : "url",
-					"parent_name" : "/%chimeraRouteName%(/.*?|)", // Anything starting with 'admin/' is forbidden
+					"parent_name" : "/%chimeraRouteName%(/.*?|)", // Anything starting with the chimera path is forbidden
 					"child_name" : "",
 					"halt" : false,
 					"order" : 10,
-					"allow" : false
+					"allow" : false,
+					"_id": DenyId
 				}
 			};
 
-			// Save the group + amdinistrator permission
-			AclGroup.save(data, function(err, result) {
-				if (err) {
-					log.error('Failed to create Administrators ACL group:');
-					log.error(err);
-				}
-			});
-
-			// And save the permission for everyone else
-			AclPermission.save(permissionData, function(err, result) {
+			AclPermission.save(data, function(err, result) {
 				if (err) {
 					log.error('Failed to save permission to restrict users from Chimera pages');
 					log.error(err);
 				}
 			});
 		}
+
 	});
 });
