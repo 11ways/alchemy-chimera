@@ -14,16 +14,22 @@ start('chimera-page-title'); -%>
 		<% chimera.actions('paginate') %>
 	</div>
 	<div class="clear"></div>
-	<!--<div class="filters">
+	<div class="filters">
+		<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
 		Show: 
-		<select>
-			<option>10</option>
-			<option>50</option>
-			<option>100</option>
-			<option>200</option>
+		<select id="show" name='data[<%= modelName %>][show]'>
+			<% for(var i in pageSizes){ %>
+			<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
+			<% } %>
 		</select>
+		<script>
+			$('#show').on('change', function(e){
+				$('#<%= modelName %>AddForm').submit();
+			});
+		</script>
+		<% form.end() %>
 	</div>
-	<div class="clear"></div>-->
+	<div class="clear"></div>
 </div>
 <% end('chimera-page-title');
 
