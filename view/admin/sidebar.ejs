@@ -10,7 +10,12 @@
 </div>
 
 <div class="collapse navbar-collapse navbar-ex1-collapse">
-	<% sb.menu('chimera-sidebar', {admin:true}) %>
+
+	<div id="sidebarwrapper" class="nano">
+		<div class="nano-content">
+			<% sb.menu('chimera-sidebar', {admin:true}) %>
+		</div>
+	</div>
 
 	<ul class="nav navbar-nav navbar-right navbar-user">
 		<% implement('admin/topbar') %>

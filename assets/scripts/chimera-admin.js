@@ -60,6 +60,27 @@ hawkejs.event.on({create: 'block'}, function(query, payload) {
 	});
 });
 
+// Enable nanoscroller
+hawkejs.event.on({create: 'block', name: 'admin-main'}, function(query, payload) {
+
+	var $nanos = $('.nano');
+
+	// Enable nanoScroller
+	$nanos.nanoScroller();
+
+	// Force a nanoScroller reset every 5 seconds
+	setInterval(function nanoResetter() {
+		$nanos.nanoScroller('reset');
+	}, 5000);
+
+	// Reset on every click
+	$nanos.click(function(e) {
+		setTimeout(function() {
+			$nanos.nanoScroller('reset');
+		}, 100);
+	});
+});
+
 // Add add buttons to array fields
 hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, payload) {
 

@@ -84,93 +84,107 @@ table.tablesorter thead tr th:hover {
 		padding: 0px 30px;
 	}
 
-	.side-nav {
+	#sidebarwrapper {
 		margin-left: -225px;
 		left: 225px;
 		width: 225px;
 		position: fixed;
 		top: 50px;
-		height: 100%;
-		border-radius: 0;
-		border: none;
-		background-color: #222222;
-		overflow-y: auto;
+		bottom: 0;
+		height: auto;
 
-		>li.section {
-			
-			a{
-				text-shadow: none !important;
-			}
-			i.collapse {
-				display: none;
-			}
+		// Code d'or logo
+		background-image: url('/public/img/codedor_logo.png');
+		background-repeat:no-repeat;
+		background-position:left bottom;
+		background-color: #1b1e24;
 
-			i.pull-right {
-				margin-top: 3px;
-			}
+		li {
+			background-color: #1b1e24;
+		}
 
-			ul.children {
-				display: none;
+		.side-nav {
+			border-radius: 0;
+			border: none;
+			background-color: #222222;
+			overflow-y: auto;
 
-				top: 100%;
-				left: 0;
-				float: left;
+			>li.section {
 				
-
-				position: relative;
-				min-width: 225px;
-				margin: 0;
-				padding: 0;
-				border: none;
-				border-radius: 0;
-				background-color: transparent;
-				box-shadow: none;
-				-webkit-box-shadow: none;
-				>li{
-					// border-bottom: 1px solid #DFDFDF;
-					// border-top: 1px solid #FFFFFF;
+				a{
+					text-shadow: none !important;
 				}
-				>li.active {
-					color: #fff;
-					//background-color: #35C1A2;
-					a{
-						color: #fff;
-						text-shadow: 0px 0px 9px rgba(255,255,255,0.5) !important;
-					}
-				}
-
-				>li>a {
-					color: #8b91a0;
-					padding: 15px 15px 15px 25px;
-					display: block;
-					clear: both;
-					font-weight: bold;
-					white-space: nowrap;
-					text-decoration: none;
-
-					&:hover {
-						color: #fff;
-						background-color: #080808;
-					}
-				}
-			}
-
-			&.open {
-				
 				i.collapse {
-					display: block;
-				}
-
-				i.expand {
 					display: none;
 				}
 
+				i.pull-right {
+					margin-top: 3px;
+				}
+
 				ul.children {
-					display: block;
+					display: none;
+
+					top: 100%;
+					left: 0;
+					float: left;
+					
+
+					position: relative;
+					min-width: 225px;
+					margin: 0;
+					padding: 0;
+					border: none;
+					border-radius: 0;
+					background-color: transparent;
+					box-shadow: none;
+					-webkit-box-shadow: none;
+					>li{
+						// border-bottom: 1px solid #DFDFDF;
+						// border-top: 1px solid #FFFFFF;
+					}
+					>li.active {
+						color: #fff;
+						//background-color: #35C1A2;
+						a{
+							color: #fff;
+							text-shadow: 0px 0px 9px rgba(255,255,255,0.5) !important;
+						}
+					}
+
+					>li>a {
+						color: #8b91a0;
+						padding: 15px 15px 15px 25px;
+						display: block;
+						clear: both;
+						font-weight: bold;
+						white-space: nowrap;
+						text-decoration: none;
+
+						&:hover {
+							color: #fff;
+							background-color: #080808;
+						}
+					}
+				}
+
+				&.open {
+					
+					i.collapse {
+						display: block;
+					}
+
+					i.expand {
+						display: none;
+					}
+
+					ul.children {
+						display: block;
+					}
 				}
 			}
-		}
 
+		}
 	}
 
 	/* Bootstrap Default Overrides - Customized Dropdowns for the Side Nav */
@@ -231,16 +245,6 @@ table.tablesorter thead tr th:hover {
 	border:none;
 }
 
-#admin-sidebar{
-	background-image: url('/public/img/codedor_logo.png');
-	background-repeat:no-repeat;
-	background-position:left bottom;
-	background-color: #1b1e24;
-	li {
-		background-color: #1b1e24;
-	}
-}
-
 .navbar-brand{
 	width: 225px;
 	background-color: #22262e;
@@ -258,4 +262,27 @@ table.tablesorter thead tr th:hover {
 
 .navbar-inverse .navbar-nav > li > a {
 	color: #8b91a0;
+}
+
+#sidebarwrapper {
+
+	.nano-pane {
+		right: 5px;
+		top: 5px;
+		bottom: 5px;
+		background: rgba(100, 100, 100, 0.25);
+
+		.nano-slider {
+			background: rgba(100,100,100,.5);
+		}
+
+		&:hover {
+			width: 15px;
+			background: rgba(100, 100, 100, 0.5);
+
+			.nano-slider {
+				background: rgba(100,100,100,.75);
+			}
+		}
+	}
 }
