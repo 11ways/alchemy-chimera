@@ -14,10 +14,50 @@ start(store('chimera-view-setting').contentblock) %>
 
 <% errors() %>
 
-<ul>
-    <% for (var i in fields) { %>
-        <li><input type="checkbox" name="check" value="<%= fields[i] %>"><%= fields[i] %></li>
-    <% } %>
-</ul>
+<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
+<div class="table-responsive" style="max-width: 600px;">
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>&nbsp;</th>
+				<th>Column</th>
+				<th>Conditions</th>
+				<th>Conditions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% for (var i in fields) { %>
+			<tr>
+				<td>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" checked name="data[<%= modelName %>][<%= fields[i] %>]" value="<%= fields[i] %>">
+						</label>
+					</div>
+				</td>
+				<td>
+					<%= fields[i] %>
+				</td>
+				<td>
+					<select name="data[<%= modelName %>][<%= fields[i] %>_condition]">
+						<option value="all">- ALL -</option>
+						<option value="or">Contains</option>
+						<option value="is">Equals</option>
+						<option value="not">Is not</option>
+					</select>
+				</td>
+				<td>
+					<input type="text" class="form-control" placeholder="<%= fields[i] %>" name="data[<%= modelName %>][<%= fields[i] %>_value]">
+				</td>
+			</tr>
+			<% } %>
+		</tbody>
+	</table>
+</div>
+<button type="submit">derp</button>
+<% form.submit('Export', {'class': 'btn btn-primary'}) %>
+<% add_link('../index', {title: 'Cancel', 'class': 'btn btn-default'}); %>
+<br /><br />
+<% form.end() %>
 
 <% end(store('chimera-view-setting').contentblock) %>
