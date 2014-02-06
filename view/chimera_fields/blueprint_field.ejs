@@ -1,0 +1,10 @@
+<%
+start('wrapper');
+item.value.variables.nested = true;
+var a = print_element('chimera/edit_form', {return: true, variables: item.value.variables});
+
+// Nested forms are NOT allowed!
+a.html = a.html.replace(/<form/g, '<div').replace(/<\/form/g, '</div');
+%>
+<%= a.html %>
+<% end('wrapper') %>

@@ -4,7 +4,12 @@ var groupName,
     active = 'active',
     group,
     item,
+    uid = ~~(Math.random()*1000),
     i;
+
+if (typeof nested === 'undefined') {
+	var nested = false;
+}
 
 if (typeof options !== 'object') {
 	options = {};
@@ -32,7 +37,7 @@ errors()
 	<div class="grouptabs">
 		<ul class="nav nav-tabs">
 		<% for (groupName in options.groups) { %>
-			<li class="<%= active %>"><a href="#chitab-<%= groupName %>" data-toggle="tab"><%= options.groups[groupName].title || groupName.humanize() %></a></li>
+			<li class="<%= active %>"><a href="#chitab-<%= groupName %>-<%= uid %>" data-toggle="tab"><%= options.groups[groupName].title || groupName.humanize() %></a></li>
 		<%
 			active = '';
 		}
@@ -47,7 +52,7 @@ errors()
 		active = 'active';
 		for (groupName in options.groups) {
 	%>
-				<div class="tab-pane <%= active %>" id="chitab-<%= groupName %>">
+				<div class="tab-pane <%= active %>" id="chitab-<%= groupName %>-<%= uid %>">
 	<%
 			active = '';
 			group = options.groups[groupName];
@@ -57,7 +62,6 @@ errors()
 				item = group.fields[i];
 
 				chimera.inputfield(item.view, {variables: {item: item}});
-				
 			}
 
 			echo('</div>');
