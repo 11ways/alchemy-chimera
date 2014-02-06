@@ -39,7 +39,7 @@ start(store('chimera-view-setting').contentblock) %>
 					<%= fields[i] %>
 				</td>
 				<td>
-					<select name="data[<%= modelName %>][<%= fields[i] %>_condition]">
+					<select name="data[<%= modelName %>][<%= fields[i] %>_condition]" class="form-control-nos2">
 						<option value="all">- ALL -</option>
 						<option value="or">Contains</option>
 						<option value="is">Equals</option>
@@ -58,5 +58,4 @@ start(store('chimera-view-setting').contentblock) %>
 <% add_link('../index', {title: 'Cancel', 'class': 'btn btn-default'}); %>
 <br /><br />
 <% form.end() %>
-
 <% end(store('chimera-view-setting').contentblock) %>
