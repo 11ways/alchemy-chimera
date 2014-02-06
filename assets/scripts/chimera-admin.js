@@ -168,6 +168,9 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 						}
 					});
 				}
+			},
+			formatResult: function(item) {
+				return item.formatted || String(item.text);
 			}
 		});
 
