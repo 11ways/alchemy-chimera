@@ -185,5 +185,24 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 		});
 	});
 
+	$('textarea.mention').each(function() {
+
+		var $this = $(this),
+		    items = hawkejs.parse(($this.siblings('.mention-source').html()));
+
+		$this.mentionsInput({
+			onDataRequest:function (query, callback) {
+
+				var data = items;
+
+				data = _.filter(data, function(item) {
+					return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+				});
+
+				callback.call(this, data);
+			}
+		});
+
+	});
 
 });

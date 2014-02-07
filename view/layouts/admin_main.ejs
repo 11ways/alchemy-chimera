@@ -19,12 +19,19 @@ asset.script([
 	'jsoneditor2.3/jsoneditor',
 	'chimera-jqueryui',
 	'select2-3.4/select2',
+	'underscore1.5/underscore',
 	'nanoscroller/jquery.nanoscroller',
+	'mentionsInput/jquery.mentionsInput',
 	'chimera-admin'
 	], {block: 'head'});
 
 // Always add the admin less files
-asset.style(['chimera', 'jsoneditor2.3/jsoneditor', 'select2-3.4/select2', 'nanoscroller/nanoscroller'], {block: 'head'});
+asset.style([
+	'chimera',
+	'jsoneditor2.3/jsoneditor',
+	'select2-3.4/select2',
+	'nanoscroller/nanoscroller',
+	'mentionsInput/mentionsInput'], {block: 'head'});
 
 start(store('chimera-view-setting').mainblock) %>
 	<div id="wrapper">
