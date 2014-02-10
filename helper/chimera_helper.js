@@ -134,11 +134,17 @@ module.exports = function chimeraHelpers(hawkejs) {
 				item.value = [''];
 			}
 
+			// Make sure the array contains a value, an empty string at least
+			if (!item.value.length) {
+				item.value.push('');
+			}
+
 			for (nr = 0; nr < item.value.length; nr++) {
 				tempItem = hawkejs.utils.inject({}, item);
 				tempItem.value = item.value[nr];
 
 				tempOption = hawkejs.utils.inject({}, options);
+
 				tempOption.variables = hawkejs.utils.inject({}, tempOption.variables);
 				tempOption.variables.item = tempItem;
 
