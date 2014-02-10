@@ -228,7 +228,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 			value = value.value;
 		}
 
-		this.echo(value, {escape: true});
+		this.echo(value, {escape: false});
 	};
 
 	/**

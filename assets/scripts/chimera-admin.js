@@ -187,10 +187,13 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 
 	$('textarea.mention').each(function() {
 
-		var $this = $(this),
-		    items = hawkejs.parse(($this.siblings('.mention-source').html()));
+		var $this   = $(this),
+		    items   = hawkejs.parse(($this.siblings('.mention-source').html())),
+		    $hidden = $this.siblings('.mention-hidden');
 
 		$this.mentionsInput({
+			minChars: 0,
+			useCurrentVal: true,
 			onDataRequest:function (query, callback) {
 
 				var data = items;
@@ -203,6 +206,12 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 			}
 		});
 
+		// Store the marked up value on changes
+		$this.change(function() {
+			$this.mentionsInput('val', function(result){
+				$hidden.val(result);
+			});
+		});
 	});
 
 });

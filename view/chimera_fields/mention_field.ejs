@@ -8,8 +8,8 @@
 <% end('wrapper') %>
 
 <% start('input') %>
+<input class="mention-hidden" type="hidden" name="<%= item.fullPath %>" value="<%= item.value.value %>"/>
 <textarea
-	name="<%= item.fullPath %>"
 	class='form-control mention'
 	id="<%= item.id %>">
 		<%= item.value.value || '' %>
