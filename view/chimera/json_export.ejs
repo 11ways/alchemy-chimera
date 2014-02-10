@@ -41,9 +41,10 @@ start(store('chimera-view-setting').contentblock) %>
 				<td>
 					<select name="data[<%= modelName %>][<%= fields[i] %>_condition]" class="form-control-nos2">
 						<option value="all">- ALL -</option>
-						<option value="or">Contains</option>
+						<option value="like">Contains</option>
 						<option value="is">Equals</option>
-						<option value="not">Is not</option>
+						<option value="notlike">Not like</option>
+						<option value="isnot">Is not</option>
 					</select>
 				</td>
 				<td>
@@ -51,6 +52,22 @@ start(store('chimera-view-setting').contentblock) %>
 				</td>
 			</tr>
 			<% } %>
+			<tr>
+				<td colspan="4">
+					<div class="radio col-sm-6">
+						<label>
+							<input type="radio" name="data[<%= modelName %>][andor]" value="or" checked>
+							Match any condition
+						</label>
+					</div>
+					<div class="radio col-sm-6">
+						<label>
+							<input type="radio" name="data[<%= modelName %>][andor]" value="and">
+							Match all conditions
+						</label>
+					</div>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </div>

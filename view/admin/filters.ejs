@@ -1,0 +1,247 @@
+<% 
+//FOR JSON VIEW
+if(fieldInfo[0] === undefined){
+	fieldInfo = [];
+	for(var i in fields){
+		var field = {};
+		field.title = fields[i];
+		fieldInfo.push(field);
+	}
+}
+%>
+
+<div class="filters">
+	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
+	<!-- SHOW X ITEMS PER PAGE -->
+	<div class="col-sm-7">
+		<div class="form-group">
+			<label for="data[<%= modelName %>][show]" class="col-sm-2">Show:</label>
+			<div class="col-sm-3">
+				<select id="show" name="data[<%= modelName %>][show]" class="form-control-nos2">
+					<% for(var i in pageSizes){ %>
+					<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
+					<% } %>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<!-- FILTERS -->
+	<div class="panel-group" id="accordion" >
+		<div class="panel panel-default">
+			<div class="panel-heading" id="filters-collapse">
+				<h4 class="panel-title" >
+					Filters
+				</h4>
+			</div>
+			<div id="collapse-filters" class="panel-collapse collapse">
+				<div class="panel-body">
+					<div id="filters" class="pull-right col-sm-12">
+						<table class="col-sm-12">
+
+						</table>
+					</div>
+					<div class="clear"></div>
+					<div class="col-sm-12">
+						<select id="filters-group" class="form-control-nos2 col-sm-12">
+							<option value="" >- Column -</option>
+							<% for (i = 0; i < fieldInfo.length; i++) {
+								field = fieldInfo[i]; %>
+								<option value="<%= field.title %>" ><%= field.title %></option>
+							<% } %>
+						</select>
+					</div>
+					<div class="clear"></div>
+					<br />
+					<div id="andor" class="col-sm-12" style="display:none;">
+						<div class="radio col-sm-6">
+							<label>
+								<input type="radio" name="data[<%= modelName %>][andor]" value="or" <% if(!andor){%> checked <% } %> <% if(andor && andor === "or"){%> checked <% } %>>
+								Match any condition
+							</label>
+						</div>
+						<div class="radio col-sm-6">
+							<label>
+								<input type="radio" name="data[<%= modelName %>][andor]" value="and" <% if(andor && andor === "and"){%> checked <% } %>>
+								Match all conditions
+							</label>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<br />
+					<div class="col-sm-12 pull-right" style="text-align:right;">
+						<button class="btn btn-primary disabled" id="applybtn"><i class="fa fa-check"></i> Apply</button>
+						<button class="btn btn-default" id="clearbtn"><i class="fa fa-refresh"></i> Clear</button>
+						<button class="btn btn-default" id="filterbtn"><i class="fa fa-plus"></i> Add filter</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<input name="data[<%= modelName %>][filters]"  value="" type="hidden" >
+
+
+	<script>
+		$('#show').on('change', function(e) {
+			saveForm();
+		});
+
+		$('#filters-collapse').on('click', function(e){
+			$('#collapse-filters').collapse('toggle');
+		});
+
+		$('#filters-group, #applybtn, #clearbtn').hide();
+
+		<% if(filters){ %>
+			var filters = "<%=filters%>";
+			filters = filters.replace(/&quot;/g, '"');
+			filters = JSON.parse(filters);
+			for(var i in filters){
+				var filter = filters[i];
+				createConditions(filter);
+			}
+			$('#collapse-filters').collapse('show');
+			$('#applybtn, #clearbtn').show();
+		<% } %>
+
+		$('#filterbtn').on('click', function(e) {
+			e.preventDefault();
+			$('#filters-group').show();
+			$('#filterbtn, #applybtn').addClass("disabled");
+		});
+		$('#filters-group').on('change', function(){
+			var filterName = $('#filters-group option:selected').text();
+			if (filterName !== '- Column -') {
+				$('#filters-group').hide();
+				$('#filters-group option:selected').remove();
+				$('#filters-group')[0].selectedIndex = 0;
+				var filter = {name: filterName, type: 'test'};
+				createConditions(filter);
+			}
+		});
+
+		$('#clearbtn').on('click', function(e){
+			e.preventDefault();
+			$('.trash').each(function(){
+				if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
+					$('#filters-group').append('<option value="'+$(this).data('filter-name')+'">'+$(this).data('filter-name')+'</option>');
+				}
+				$(this).parent().parent().remove();
+				if ( $(".filter:hidden").length === 0){
+					$('#applybtn, #filterbtn').removeClass("disabled");
+					$('#andor').show();
+				}
+			});
+		});
+
+		$('#andor .radio').on('change', function(){
+			$('#applybtn').removeClass("disabled");
+		});
+
+		function createConditions(filter){
+			var html = '<tr class="tr-'+ filter.name.replace(/ /g, '_') +'" >';
+			html += '<td><button class="btn btn-default btn-xs trash" data-filter-name="'+ filter.name +'"><i class="fa fa-trash-o"></i></button></td>';
+			html += '<td>' + filter.name + '</td>';
+			html += '<td>';
+
+			if(!filter.value){
+				filter.value = '';
+			}
+			html += '<select name="" id="select-'+ filter.name.replace(/ /g, '_') +'" class="form-control-nos2">';
+			html +=	'<option value="--">- Condition -</option>';
+			html +=	'<option value="like">Contains</option>';
+			html +=	'<option value="is">Equals</option>';
+			html +=	'<option value="notlike">Doesn\'t contain</option>';
+			html +=	'<option value="isnot">Is not equal to</option>';
+			html +=	'</select>';
+			html +=	'</td>';
+			html += '<td><input style="display:none;" id="input-'+ filter.name.replace(/ /g, '_') +'" class="form-control filter" data-filter-name="'+filter.name+'" value="'+filter.value+'" type="text"></td>';
+
+
+			html += '</tr>';
+
+			$('#filters table').append(html);
+			$('#filters-group').hide();
+
+			if(filter.condition){
+				$('#select-'+ filter.name.replace(/ /g, '_')).val(filter.condition);
+			}
+			if(filter.value && filter.condition){
+				$('#input-'+ filter.name.replace(/ /g, '_')).show();
+				$('#filterbtn, #applybtn, #clearbtn').show();
+				$('#andor').show();
+			}
+
+
+			//BIND EVENTS:
+			//CONDITION SELECT CHANGE EVENT: SHOWS/HIDES INPUT
+			$('#select-'+ filter.name.replace(/ /g, '_')).on('change', function(){
+				var conditionName = $(this).val();
+				if (conditionName !== '--') {
+					$('#input-'+ filter.name.replace(/ /g, '_')).show();
+					$('#filterbtn, #applybtn, #clearbtn').show();
+					$('#andor').show();
+				} else {
+					$('#input-'+ filter.name.replace(/ /g, '_')).hide();
+					$('#andor').hide();
+				}
+			});
+
+			//INPUT KEYUP EVENT: ENABLES/DISABLES BUTTONS
+			$('#input-'+ filter.name.replace(/ /g, '_')).on('keyup', function(){
+				var disable = false;
+				$(".filter").each(function(){
+					if($(this).val() === ''){
+						disable = true;
+					}
+				});
+				if(disable){
+					$('#applybtn, #filterbtn').addClass("disabled");
+					$('#andor').hide();
+				} else {
+					$('#applybtn, #filterbtn').removeClass("disabled");
+					$('#andor').show();
+				}
+			});
+
+			//TRASH CLICK EVENT: REMOVES FILTER AND ADDS BACK TO FILTER SELECT
+			$('.trash').on('click', function(e){
+				if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
+					$('#filters-group').append('<option value="'+$(this).data('filter-name')+'">'+$(this).data('filter-name')+'</option>');
+				}
+				$(this).parent().parent().remove();
+				if ( $(".filter:hidden").length === 0){
+					$('#applybtn, #filterbtn').removeClass("disabled");
+					$('#andor').hide();
+				}
+				//saveFilters();
+			});
+
+			$('.filter').focusout(function(){
+				//saveFilters();
+			});
+		}
+
+		$('#applybtn').on('click', function(e){
+			e.preventDefault();
+			saveForm();
+		});
+
+		function saveForm(){
+			var filters = [];
+			$('#filters tr').each(function(){
+				var filter = {};
+				filter.name = $(this).find('.filter').data('filter-name');
+				filter.condition = $(this).find('select').val();
+				filter.value = $(this).find('.filter').val();
+				filters.push(filter);
+			});
+
+			$('input[name="data[<%= modelName %>][filters]"]').val(hawkejs.stringify(filters));
+			$('#<%= modelName %>AddForm').submit();
+		}
+	</script>
+
+	<% form.end() %>
+</div>
+<div class="clear"></div>
