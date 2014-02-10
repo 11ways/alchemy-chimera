@@ -1,3 +1,5 @@
+(function() {
+
 $(document).ready(function() {
 	$('body').on('click', '[data-toggle]', function(e) {
 		var $this = $(this);
@@ -81,8 +83,8 @@ hawkejs.event.on({create: 'block', name: 'admin-main'}, function(query, payload)
 	});
 });
 
-// Add add buttons to array fields
-hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, payload) {
+
+function applyChimeraFields(query, payload) {
 
 	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]').each(function() {
 
@@ -214,4 +216,10 @@ hawkejs.event.on({create: 'block', name: 'admin-content'}, function(query, paylo
 		});
 	});
 
-});
+}
+
+// Add add buttons to array fields
+hawkejs.event.on({create: 'block', name: 'admin-content'}, applyChimeraFields);
+hawkejs.event.on({create: 'block', name: 'tempeditor'}, applyChimeraFields);
+
+}());
