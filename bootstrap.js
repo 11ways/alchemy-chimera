@@ -1,4 +1,4 @@
-alchemy.requirePlugin(['styleboost', 'acl', 'jquery', 'jsoneditor', 'select2']);
+alchemy.requirePlugin(['menu', 'styleboost', 'acl', 'jquery', 'jsoneditor', 'select2']);
 
 // Define the default options
 var options = {
