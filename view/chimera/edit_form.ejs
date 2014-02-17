@@ -61,8 +61,7 @@ errors();
 			for (i = 0; i < group.fields.length; i++) {
 
 				item = group.fields[i];
-				
-				chimera.inputfield(item.view, {variables: {item: item}});
+				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item}});
 			}
 
 			echo('</div>');

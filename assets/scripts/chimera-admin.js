@@ -88,16 +88,30 @@ function applyChimeraFields(query, payload) {
 
 	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]').each(function() {
 
-		var $this = $(this),
-		    $last = $('[data-chimera-input]', $this).last(),
-		    $empty = $('[data-chimera-empty-input]', $this);
+		var $this     = $(this),
+		    $empty    = $('[data-chimera-empty-input]', $this),
+		    emptyHtml = $empty.html();
 
-		$empty = $(hawkejs.utils.decode($empty.html()));
+		$empty.remove();
+
+		emptyHtml = '<hawkejs data-chimera-input>' + emptyHtml + '</hawkejs>'
 		
 		// Add an add button
 		$('[data-chimera-add-entry]', $this).click(function(e) {
+
+			var $button = $(this),
+			    $inputs = $('>[data-chimera-input]', $this),
+			    $last = $inputs.last(),
+			    cloneHtml;
+
+			// Replace possible %INCREMENT% tags
+			cloneHtml = emptyHtml.replace(/%INCREMENT%/g, $inputs.length);
+
+			console.log('There are ' + $inputs.length + ' inputs already');
+			console.log($last);
+
 			e.preventDefault();
-			$last.after($empty.clone());
+			$button.before(cloneHtml);
 		})
 	});
 

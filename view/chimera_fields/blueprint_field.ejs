@@ -1,10 +1,56 @@
 <%
-start('wrapper');
-item.value.variables.nested = true;
-var a = print_element('chimera/edit_form', {return: true, variables: item.value.variables});
+var variables = item.value.variables,
+    options = variables.options,
+    groupName,
+    active = 'active',
+    group,
+    item,
+    uid = ~~(Math.random()*1000),
+    i;
 
-// Nested forms are NOT allowed!
-a.html = a.html.replace(/<form/g, '<div').replace(/<\/form/g, '</div');
-echo(a.html);
+start('wrapper') %>
+<h3><%= item.title %></h3>
+<hr/>
+<!--INPUT-->
+<hr/>
+<% end('wrapper');
 
-end('wrapper') %>
+start('input') %>
+<div class="editform nested-blueprint">
+	<div class="grouptabs">
+		<ul class="nav nav-tabs">
+		<% for (groupName in options.groups) { %>
+			<li class="<%= active %>"><a href="#chitab-<%= groupName %>-<%= uid %>" data-toggle="tab"><%= options.groups[groupName].title || groupName.humanize() %></a></li>
+		<%
+			active = '';
+		}
+		%>
+		</ul>
+	</div>
+	<div class="panel panel-default">
+		
+		<div class="panel-body">
+			<div class="tab-content">
+	<%
+		active = 'active';
+		for (groupName in options.groups) {
+	%>
+				<div class="tab-pane <%= active %>" id="chitab-<%= groupName %>-<%= uid %>">
+	<%
+
+			active = '';
+			group = options.groups[groupName];
+
+			for (i = 0; i < group.fields.length; i++) {
+				item = group.fields[i];
+				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item}});
+			}
+
+			echo('</div>');
+		}
+	%>
+			</div>
+		</div>
+	</div>
+</div>
+<% end('input') %>

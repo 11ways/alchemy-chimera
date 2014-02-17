@@ -126,6 +126,8 @@ module.exports = function chimeraHelpers(hawkejs) {
 
 		if (options.variables.item.array) {
 
+			var emptyVal;
+
 			hWrapper += 'data-array ';
 
 			addButton = '<button data-chimera-add-entry class="btn btn-default"><i class="fa fa-plus"></i> Add entry</button>';
@@ -156,11 +158,18 @@ module.exports = function chimeraHelpers(hawkejs) {
 				}
 			}
 
+			if (options.emptyResult) {
+				emptyVal = options.emptyResult;
+			} else {
+				emptyVal = '';
+			}
+
 			// Create 1 more with an empty value
-			tempOption.variables.item.value = '';
+			tempOption.variables.item.value = emptyVal;
 			result = this.print_element(viewPath, tempOption);
+
 			if (result.payload && result.payload.request.blocks && result.payload.request.blocks.input) {
-				input += '<hawkejs data-chimera-empty-input style="display: none;">' + hawkejs.utils.encode(result.payload.request.blocks.input.buf.join('')) + '</hawkejs>';
+				input += '<script type="text/html" data-chimera-empty-input style="display: none;">' + result.payload.request.blocks.input.buf.join('') + '</script>';
 			}
 		} else {
 			result = this.print_element(viewPath, options);
