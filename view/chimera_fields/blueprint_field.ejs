@@ -31,10 +31,12 @@ start('input') %>
 		
 		<div class="panel-body">
 			<div class="tab-content">
-	<%
-		active = 'active';
-		for (groupName in options.groups) {
-	%>
+			<% if (options.id) {
+				echo('<input type="hidden" value="' + options.id + '" name="' + options.basePath + '[_id]"/>');
+			}
+				active = 'active';
+				for (groupName in options.groups) {
+			%>
 				<div class="tab-pane <%= active %>" id="chitab-<%= groupName %>-<%= uid %>">
 	<%
 
