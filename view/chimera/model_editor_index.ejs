@@ -9,7 +9,7 @@ if (typeof editconnection === 'undefined') {
 
 start('chimera-page-title'); -%>
 <div class="adminActionHead">
-	<span class="title" id="mainTitle"><%= modelName %>: Index</span>
+	<span class="title" id="mainTitle"><%= modelTitle || modelName %>: Index</span>
 	<div class="actions paginate-actions">
 		<% chimera.actions('paginate') %>
 	</div>

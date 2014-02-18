@@ -2,7 +2,7 @@
 
 start('chimera-page-title'); -%>
 <div class="adminActionHead">
-	<span class="title" id="mainTitle"><%= modelName %>: <%= editTitle %></span>
+	<span class="title" id="mainTitle"><%= modelTitle || modelName %>: <%= editTitle %></span>
 	<div class="actions paginate-actions">
 		<% chimera.actions(showActions) %>
 	</div>
