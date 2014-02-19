@@ -49,6 +49,8 @@ start(store('chimera-view-setting').contentblock) -%>
 	<% } %>
 </table>
 
+<div id="pagination-showing" class="pull-right"><%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> <%= modelName.pluralize() %></div>
+
 <% Paginate.show() %>
 
 <% end(store('chimera-view-setting').contentblock) %>
