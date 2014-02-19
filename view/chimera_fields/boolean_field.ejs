@@ -16,5 +16,6 @@
 	id="<%= item.id %>"
 	type="checkbox"
 	<%= (item.value ? 'checked' : '') %>
+	<% if(item.readonly===true){ %> readonly <% } %>
 >
 <% end('input') %>

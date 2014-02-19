@@ -8,7 +8,7 @@
 <% end('wrapper') %>
 
 <% start('input') %>
-<select name="<%= item.fullPath %>" class=" form-control" id="AdminField-<%= item.name %>">
+<select name="<%= item.fullPath %>" class=" form-control" id="AdminField-<%= item.name %>" <% if(item.readonly===true){ %> readonly <% } %>>
 	<option value="">-- <%= item.title %> --</option>
 	<%
 		var i, option, html = '';

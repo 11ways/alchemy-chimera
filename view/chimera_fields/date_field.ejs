@@ -9,5 +9,5 @@
 
 <% start('input') %>
 <input id="<%= item.id %>-hidden" type="hidden">
-<input name="<%= item.fullPath %>" class="form-control datepicker" value="<%= item.value || '' %>" id="<%= item.id %>" type="datetime">
+<input name="<%= item.fullPath %>" class="form-control datepicker" value="<%= item.value || '' %>" id="<%= item.id %>" type="datetime" <% if(item.readonly===true){ %> readonly <% } %>>
 <% end('input') %>

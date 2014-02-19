@@ -5,7 +5,8 @@ var groupName,
     group,
     item,
     uid = ~~(Math.random()*1000),
-    i;
+    i,
+	readonly=true;
 
 if (typeof nested === 'undefined') {
 	var nested = false;
@@ -23,12 +24,18 @@ if (typeof options.formName === 'undefined') {
 	}
 }
 
+
+
 if (typeof options.saveButton === 'undefined') {
 	if (typeof saveButton !== 'undefined') {
 		options.saveButton = saveButton;
 	} else {
 		options.saveButton = __('chimera', 'Save');
 	}
+}
+
+if(typeof options.showSaveButton == 'undefined' || options.showSaveButton){
+	readonly = false;
 }
 
 errors();
@@ -61,6 +68,7 @@ errors();
 			for (i = 0; i < group.fields.length; i++) {
 
 				item = group.fields[i];
+				item.readonly = readonly;
 				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item}});
 			}
 

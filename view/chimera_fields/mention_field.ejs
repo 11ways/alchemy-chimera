@@ -11,6 +11,7 @@
 <input class="mention-hidden" type="hidden" name="<%= item.fullPath %>" value="<%= item.value.value %>"/>
 <textarea
 	class='form-control mention'
+	<% if(item.readonly===true){ %> readonly <% } %>
 	id="<%= item.id %>">
 		<%= item.value.value || '' %>
 </textarea>

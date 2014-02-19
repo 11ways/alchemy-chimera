@@ -9,7 +9,7 @@
 
 <% start('input') %>
 <input type="hidden" name="<%= item.fullPath %>" value="_empty_"/>
-<select name="<%= item.fullPath %>" class=" form-control" id="AdminField-<%= item.name %>" multiple>
+<select name="<%= item.fullPath %>" class=" form-control" id="AdminField-<%= item.name %>" multiple <% if(item.readonly===true){ %> readonly <% } %>>
 <%
 	var i, j, option, entry, html = '';
 

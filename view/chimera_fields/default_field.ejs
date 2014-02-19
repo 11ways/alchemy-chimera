@@ -8,5 +8,5 @@
 <% end('wrapper') %>
 
 <% start('input') %>
-<input name="<%= item.fullPath %>" class="form-control" value="<%= item.value || '' %>" id="<%= item.id %>" type="text">
+<input name="<%= item.fullPath %>" class="form-control" value="<%= item.value || '' %>" id="<%= item.id %>" type="text" <% if(item.readonly===true){ %> readonly <% } %>>
 <% end('input') %>

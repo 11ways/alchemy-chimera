@@ -16,6 +16,7 @@
 	data-url="<%= item.value.url %>"
 	value="<%= item.value.value %>"
 	data-select-type="<%= item.value.select %>"
+	<% if(item.readonly===true){ %> readonly <% } %>
 	>
 </input>
 <% end('input') %>
