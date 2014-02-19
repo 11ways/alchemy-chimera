@@ -19,53 +19,69 @@ start('chimera-page-title'); -%>
 <% end('chimera-page-title'); %>
 
 <% start(store('chimera-view-setting').contentblock) -%>
-<table class="table table-striped table-bordered">
-	<tr>
-		<% for (i = 0; i < fieldInfo.length; i++) {
-			field = fieldInfo[i];
-		%>
-		<th><% Paginate.sort({field: field.field, display: field.title, parentClass: 'activesort'}) %></th>
-		<% } %>
-		<th>Actions</th>
-	</tr>
-	<tr>
-		<% for (i = 0; i < fieldInfo.length; i++) {
-			field = fieldInfo[i];
-		%>
-		<th><% Paginate.filter({field: field.field, display: field.title}) %></th>
-		<% } %>
-		<th>
-			<a data-apply-pagination class="btn btn-default"><% echo(__('filter', 'Apply')) %></button>
-		</th>
-	</tr>
-
-	<% for (i = 0; i < items.length; i++) {
-		item = items[i];
-	%>
-		<% if (!item) continue %>
-		<tr>
-			<% for (j = 0; j < fieldInfo.length; j++) { %>
-				<td><% chimera.field(item.fields, fieldInfo[j]) %></td>
-			<% } %>
-			<td>
-				<div class="actions record-actions">
-				<%
-					chimera.actions('record', {
-						'class': 'btn btn-xs',
-						routeVars: {
-							id: item._id
-						},
-						content: false
-					});
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-4">
+				
+			</div>
+			<div class="col-md-4 center">
+				
+			</div>
+			<div class="col-md-4 right" style="text-align:right;">
+				<%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> <%= modelName.pluralize() %>
+			</div>
+		</div>
+	</div>
+	<div class="panel-body" style="padding:0px;">
+		<table class="table table-striped indextable" style="margin-bottom:0px;">
+			<tr>
+				<% for (i = 0; i < fieldInfo.length; i++) {
+					field = fieldInfo[i];
 				%>
-				</div>
-			</td>
-		</tr>
-	<% } %>
-</table>
+				<th><% Paginate.sort({field: field.field, display: field.title, parentClass: 'activesort'}) %></th>
+				<% } %>
+				<th>Actions</th>
+			</tr>
+			<tr>
+				<% for (i = 0; i < fieldInfo.length; i++) {
+					field = fieldInfo[i];
+				%>
+				<th><% Paginate.filter({field: field.field, display: field.title}) %></th>
+				<% } %>
+				<th>
+					<a data-apply-pagination class="btn btn-default"><% echo(__('filter', 'Apply')) %></button>
+				</th>
+			</tr>
 
-<div id="pagination-showing" class="pull-right"><%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> <%= modelName.pluralize() %></div>
-
-<% Paginate.show() %>
+			<% for (i = 0; i < items.length; i++) {
+				item = items[i];
+			%>
+				<% if (!item) continue %>
+				<tr>
+					<% for (j = 0; j < fieldInfo.length; j++) { %>
+						<td><% chimera.field(item.fields, fieldInfo[j]) %></td>
+					<% } %>
+					<td>
+						<div class="actions record-actions">
+						<%
+							chimera.actions('record', {
+								'class': 'btn btn-xs',
+								routeVars: {
+									id: item._id
+								},
+								content: false
+							});
+						%>
+						</div>
+					</td>
+				</tr>
+			<% } %>
+		</table>
+	</div>
+	<div class="panel-footer">
+		<% Paginate.show() %>
+	</div>
+</div>
 
 <% end(store('chimera-view-setting').contentblock) %>

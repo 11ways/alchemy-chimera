@@ -23,12 +23,12 @@ if(typeof(allfields) === 'undefined'){
 
 <div class="filters">
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
-	<!-- SHOW X ITEMS PER PAGE -->
 	<div class="col-sm-6">
+		<!-- SHOW X ITEMS PER PAGE -->
 		<div class="form-group">
-			<label for="data[<%= modelName %>][show]" class="col-sm-2">Show:</label>
+			<label for="data[<%= modelName %>][show]" class="col-sm-2">Show</label>
 			<div class="col-sm-3">
-				<select id="show" name="data[<%= modelName %>][show]" class="form-control-nos2">
+				<select id="show" name="data[<%= modelName %>][show]" class="form-control-nos2" style="max-height:23px;">
 					<% for(var i in pageSizes){ %>
 						<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
 					<% } %>
@@ -93,180 +93,183 @@ if(typeof(allfields) === 'undefined'){
 
 
 	<script>
-		$('#show').on('change', function(e) {
-			saveForm();
-		});
+		$(function() {
+			
+			$('#show').on('change', function(e) {
+				saveForm();
+			});
 
-		$('#filters-collapse').on('click', function(e){
-			$('#collapse-filters').collapse('toggle');
-		});
+			$('#filters-collapse').on('click', function(e){
+				$('#collapse-filters').collapse('toggle');
+			});
 
-		$('#filters-group, #applybtn, #clearbtn').hide();
+			$('#filters-group, #applybtn, #clearbtn').hide();
 
-		//INIT PREVIOUS FILTERS
-		<% if(filters){ %>
-			var filters = "<%=filters%>";
-			filters = filters.replace(/&quot;/g, '"');
-			filters = JSON.parse(filters);
-			for(var i in filters){
-				var filter = filters[i];
-				filter.fieldName = filter.name;
-				$('#filters-group option[value="'+filter.name+'"]').remove();
-				if(filter.name.slice(filter.name.length - 3) === '_id'){
-					filter.name = filter.name.slice(0, filter.name.length - 3);
+			//INIT PREVIOUS FILTERS
+			<% if(filters){ %>
+				var filters = "<%=filters%>";
+				filters = filters.replace(/&quot;/g, '"');
+				filters = JSON.parse(filters);
+				for(var i in filters){
+					var filter = filters[i];
+					filter.fieldName = filter.name;
+					$('#filters-group option[value="'+filter.name+'"]').remove();
+					if(filter.name.slice(filter.name.length - 3) === '_id'){
+						filter.name = filter.name.slice(0, filter.name.length - 3);
+					}
+					filter.name = filter.name.humanize();
+					createConditions(filter);
 				}
-				filter.name = filter.name.humanize();
-				createConditions(filter);
-			}
-			$('#collapse-filters').collapse('show');
-			$('#applybtn, #clearbtn').show();
-		<% } %>
+				$('#collapse-filters').collapse('show');
+				$('#applybtn, #clearbtn').show();
+			<% } %>
 
-		//SHOW FILTERS SELECT ON 'ADD FILTER' CLICK
-		$('#filterbtn').on('click', function(e) {
-			e.preventDefault();
-			$('#filters-group').show();
-			$('#filterbtn, #applybtn').addClass("disabled");
-		});
-		
-		//DO STUFF WGEN FILTERS SELECT CHANGES
-		$('#filters-group').on('change', function(){
-			var filterName = $('#filters-group option:selected').text();
-			var fieldName = $('#filters-group option:selected').val();
-			if (filterName !== '- Column -') {
-				$('#filters-group').hide();
-				$('#filters-group option:selected').remove();
-				$('#filters-group')[0].selectedIndex = 0;
-				var filter = {name: filterName, fieldName: fieldName, type: 'test'};
-				createConditions(filter);
-			}
-		});
+			//SHOW FILTERS SELECT ON 'ADD FILTER' CLICK
+			$('#filterbtn').on('click', function(e) {
+				e.preventDefault();
+				$('#filters-group').show();
+				$('#filterbtn, #applybtn').addClass("disabled");
+			});
 
-		//WHEN CLICKING CLEAR: REMOVE ALL FILTERS, ENABLE APPLY BUTTON
-		$('#clearbtn').on('click', function(e){
-			e.preventDefault();
-			$('.trash').each(function(){
-				if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
-					$('#filters-group').append('<option value="'+$(this).data('filter-name')+'">'+$(this).data('filter-name')+'</option>');
-				}
-				$(this).parent().parent().remove();
-				if ( $(".filter:hidden").length === 0){
-					$('#applybtn, #filterbtn').removeClass("disabled");
-					$('#andor').show();
+			//DO STUFF WGEN FILTERS SELECT CHANGES
+			$('#filters-group').on('change', function(){
+				var filterName = $('#filters-group option:selected').text();
+				var fieldName = $('#filters-group option:selected').val();
+				if (filterName !== '- Column -') {
+					$('#filters-group').hide();
+					$('#filters-group option:selected').remove();
+					$('#filters-group')[0].selectedIndex = 0;
+					var filter = {name: filterName, fieldName: fieldName, type: 'test'};
+					createConditions(filter);
 				}
 			});
-		});
 
-		$('#andor .radio').on('change', function(){
-			$('#applybtn').removeClass("disabled");
-		});
+			//WHEN CLICKING CLEAR: REMOVE ALL FILTERS, ENABLE APPLY BUTTON
+			$('#clearbtn').on('click', function(e){
+				e.preventDefault();
+				$('.trash').each(function(){
+					if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
+						$('#filters-group').append('<option value="'+$(this).data('filter-name')+'">'+$(this).data('filter-name')+'</option>');
+					}
+					$(this).parent().parent().remove();
+					if ( $(".filter:hidden").length === 0){
+						$('#applybtn, #filterbtn').removeClass("disabled");
+						$('#andor').show();
+					}
+				});
+			});
 
-		//CREATE HTML
-		function createConditions(filter){
-			var cleanFilterName = filter.name.replace(/ /g, '_').toLowerCase();
-			var html = '<tr class="tr-'+ cleanFilterName +'" >';
-			html += '<td><a class="btn btn-default btn-xs trash" data-filter-name="'+ filter.name +'" data-filter-fieldname="'+ filter.fieldName +'"><i class="fa fa-trash-o"></i></a></td>';
-			html += '<td>' + filter.name + '</td>';
-			html += '<td>';
+			$('#andor .radio').on('change', function(){
+				$('#applybtn').removeClass("disabled");
+			});
 
-			if(!filter.value){
-				filter.value = '';
-			}
-			html += '<select name="" id="select-'+ cleanFilterName +'" class="form-control-nos2">';
-			html +=	'<option value="--">- Condition -</option>';
-			html +=	'<option value="like">Contains</option>';
-			html +=	'<option value="is">Equals</option>';
-			html +=	'<option value="notlike">Doesn\'t contain</option>';
-			html +=	'<option value="isnot">Is not equal to</option>';
-			html +=	'</select>';
-			html +=	'</td>';
-			html += '<td><input style="display:none;" id="input-'+ cleanFilterName +'" class="form-control filter" data-filter-name="'+filter.name+'" data-filter-fieldname="'+ filter.fieldName +'" value="'+filter.value+'" type="text"></td>';
+			//CREATE HTML
+			function createConditions(filter){
+				var cleanFilterName = filter.name.replace(/ /g, '_').toLowerCase();
+				var html = '<tr class="tr-'+ cleanFilterName +'" >';
+				html += '<td><a class="btn btn-default btn-xs trash" data-filter-name="'+ filter.name +'" data-filter-fieldname="'+ filter.fieldName +'"><i class="fa fa-trash-o"></i></a></td>';
+				html += '<td>' + filter.name + '</td>';
+				html += '<td>';
 
-
-			html += '</tr>';
-
-			$('#filters table').append(html);
-			$('#filters-group').hide();
-
-			if(filter.condition){
-				$('#select-'+ cleanFilterName).val(filter.condition);
-			}
-			if(filter.value && filter.condition){
-				$('#input-'+ cleanFilterName).show();
-				$('#filterbtn, #applybtn, #clearbtn').show();
-				$('#andor').show();
-			}
+				if(!filter.value){
+					filter.value = '';
+				}
+				html += '<select name="" id="select-'+ cleanFilterName +'" class="form-control-nos2">';
+				html +=	'<option value="--">- Condition -</option>';
+				html +=	'<option value="like">Contains</option>';
+				html +=	'<option value="is">Equals</option>';
+				html +=	'<option value="notlike">Doesn\'t contain</option>';
+				html +=	'<option value="isnot">Is not equal to</option>';
+				html +=	'</select>';
+				html +=	'</td>';
+				html += '<td><input style="display:none;" id="input-'+ cleanFilterName +'" class="form-control filter" data-filter-name="'+filter.name+'" data-filter-fieldname="'+ filter.fieldName +'" value="'+filter.value+'" type="text"></td>';
 
 
-			//BIND EVENTS:
-			//CONDITION SELECT CHANGE EVENT: SHOWS/HIDES INPUT
-			$('#select-'+ cleanFilterName).on('change', function(){
-				var conditionName = $(this).val();
-				if (conditionName !== '--') {
+				html += '</tr>';
+
+				$('#filters table').append(html);
+				$('#filters-group').hide();
+
+				if(filter.condition){
+					$('#select-'+ cleanFilterName).val(filter.condition);
+				}
+				if(filter.value && filter.condition){
 					$('#input-'+ cleanFilterName).show();
 					$('#filterbtn, #applybtn, #clearbtn').show();
 					$('#andor').show();
-				} else {
-					$('#input-'+ cleanFilterName).hide();
-					$('#andor').hide();
 				}
-			});
 
-			//INPUT KEYUP EVENT: ENABLES/DISABLES BUTTONS
-			$('#input-'+ cleanFilterName).on('keyup', function(e){
-				console.log(e.keyCode);
-				if(e.keyCode === 13){
-					e.preventDefault();
-					//saveForm();
-				}
-				var disable = false;
-				$(".filter").each(function(){
-					if($(this).val() === ''){
-						disable = true;
+
+				//BIND EVENTS:
+				//CONDITION SELECT CHANGE EVENT: SHOWS/HIDES INPUT
+				$('#select-'+ cleanFilterName).on('change', function(){
+					var conditionName = $(this).val();
+					if (conditionName !== '--') {
+						$('#input-'+ cleanFilterName).show();
+						$('#filterbtn, #applybtn, #clearbtn').show();
+						$('#andor').show();
+					} else {
+						$('#input-'+ cleanFilterName).hide();
+						$('#andor').hide();
 					}
 				});
-				if(disable){
-					$('#applybtn, #filterbtn').addClass("disabled");
-					$('#andor').hide();
-				} else {
-					$('#applybtn, #filterbtn').removeClass("disabled");
-					$('#andor').show();
-				}
-			});
 
-			//TRASH CLICK EVENT: REMOVES FILTER AND ADDS BACK TO FILTER SELECT
-			$('.trash').on('click', function(e){
-				if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
-					$('#filters-group').append('<option value="'+$(this).data('filter-name')+'">'+$(this).data('filter-name')+'</option>');
-				}
-				$(this).parent().parent().remove();
-				if ( $(".filter:hidden").length === 0){
-					$('#applybtn, #filterbtn').removeClass("disabled");
-					$('#andor').hide();
-				}
-			});
-		}
+				//INPUT KEYUP EVENT: ENABLES/DISABLES BUTTONS
+				$('#input-'+ cleanFilterName).on('keyup', function(e){
+					console.log(e.keyCode);
+					if(e.keyCode === 13){
+						e.preventDefault();
+						//saveForm();
+					}
+					var disable = false;
+					$(".filter").each(function(){
+						if($(this).val() === ''){
+							disable = true;
+						}
+					});
+					if(disable){
+						$('#applybtn, #filterbtn').addClass("disabled");
+						$('#andor').hide();
+					} else {
+						$('#applybtn, #filterbtn').removeClass("disabled");
+						$('#andor').show();
+					}
+				});
 
-		$('#applybtn').on('click', function(e){
-			e.preventDefault();
-			saveForm();
-			/*url = window.location.origin + window.location.pathname;
-			hawkejs.goToAjaxView(url, {filter: JSON.stringify(conditions)});*/
+				//TRASH CLICK EVENT: REMOVES FILTER AND ADDS BACK TO FILTER SELECT
+				$('.trash').on('click', function(e){
+					if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
+						$('#filters-group').append('<option value="'+$(this).data('filter-name')+'">'+$(this).data('filter-name')+'</option>');
+					}
+					$(this).parent().parent().remove();
+					if ( $(".filter:hidden").length === 0){
+						$('#applybtn, #filterbtn').removeClass("disabled");
+						$('#andor').hide();
+					}
+				});
+			}
+
+			$('#applybtn').on('click', function(e){
+				e.preventDefault();
+				saveForm();
+				/*url = window.location.origin + window.location.pathname;
+				hawkejs.goToAjaxView(url, {filter: JSON.stringify(conditions)});*/
+			});
+			
+			function saveForm(){
+				var filters = [];
+				$('#filters tr').each(function(){
+					var filter = {};
+					filter.name = $(this).find('.filter').data('filter-fieldname');
+					filter.condition = $(this).find('select').val();
+					filter.value = $(this).find('.filter').val();
+					filters.push(filter);
+				});
+
+				$('input[name="data[<%= modelName %>][filters]"]').val(hawkejs.stringify(filters));
+				$('#<%= modelName %>AddForm').submit();
+			}
 		});
-
-		function saveForm(){
-			var filters = [];
-			$('#filters tr').each(function(){
-				var filter = {};
-				filter.name = $(this).find('.filter').data('filter-fieldname');
-				filter.condition = $(this).find('select').val();
-				filter.value = $(this).find('.filter').val();
-				filters.push(filter);
-			});
-
-			$('input[name="data[<%= modelName %>][filters]"]').val(hawkejs.stringify(filters));
-			$('#<%= modelName %>AddForm').submit();
-		}
 	</script>
 
 	<% form.end() %>
