@@ -214,9 +214,18 @@ module.exports = function chimeraHelpers(hawkejs) {
 			info = {};
 			fieldName = fieldInfo;
 		}
+		
+		if (typeof options !== 'object') {
+			options = {};
+		}
 
 		if (!info.fieldType) {
 			info.fieldType = this.defaultFieldType || 'default';
+		}
+		
+		if(typeof fieldInfo['assoc'] !== 'undefined'){
+			info.fieldType = 'assoc';
+			options.modelName = fieldInfo['assoc']['modelName'].underscore();
 		}
 
 		actionName = info.fieldType + '_view';
@@ -271,6 +280,25 @@ module.exports = function chimeraHelpers(hawkejs) {
 		}
 
 		this.echo(value, {escape: true});
+	};
+	
+	/**
+	 * Print out the given data, linked to the associated item view page
+	 *
+	 * @author        Kjell Keisse   <kjell@codedor.be>
+	 * @since         0.0.2
+	 * @version       0.0.2
+	 */
+	fields.assoc_view = function assoc_view(record, fieldName, options) {
+
+		var value = record[fieldName];
+
+		if (typeof value == 'object' && typeof value.value !== 'undefined') {
+			value = value.value;
+		}
+		
+		this.add_link('../'+options.modelName+'/view/'+value._id, {title: value.displayName});
+
 	};
 
 };
