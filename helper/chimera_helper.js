@@ -297,7 +297,16 @@ module.exports = function chimeraHelpers(hawkejs) {
 			value = value.value;
 		}
 		
-		this.add_link('../'+options.modelName+'/view/'+value._id, {title: value.displayName});
+		if(typeof value.hasMany !== 'undefined' && value.hasMany.length !== 0){
+			for(var i = 0; i < value.hasMany.length; i++){
+				this.add_link('../'+options.modelName+'/view/'+value.hasMany[i]._id, {title: value.hasMany[i].displayName});
+				if(value.hasMany.length > 1 && i < value.hasMany.length-1){
+					this.echo(', <br />', {escape: false});
+				}
+			}
+		} else if(typeof value.displayName !== 'undefined'){
+			this.add_link('../'+options.modelName+'/view/'+value._id, {title: value.displayName});
+		}
 
 	};
 
