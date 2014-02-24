@@ -86,6 +86,16 @@ hawkejs.event.on({create: 'block', name: 'admin-main'}, function(query, payload)
 
 function applyChimeraFields(query, payload) {
 
+	$('input[data-pagination-filter]').keyup(function(e) {
+
+		var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+
+		if(key == 13) {
+			e.preventDefault();
+			$('[data-apply-pagination]').click();
+		}
+	});
+
 	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]').each(function() {
 
 		var $this     = $(this),
