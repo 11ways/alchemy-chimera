@@ -1,13 +1,15 @@
 (function() {
 
 $(document).ready(function() {
-	$('body').on('click', '[data-toggle]', function(e) {
-		var $this = $(this);
+	$('body').on('click', '[data-toggle] > a', function(e) {
+
+		var $this = $(this),
+		    $li   = $this.parent('li');
 
 		e.preventDefault();
+		e.stopPropagation();
 
-		$this.toggleClass($this.attr('data-toggle'));
-
+		$li.toggleClass($li.attr('data-toggle'));
 	});
 });
 
