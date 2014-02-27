@@ -26,9 +26,9 @@ if(typeof(allfields) === 'undefined'){
 	<div class="col-sm-6">
 		<!-- SHOW X ITEMS PER PAGE -->
 		<div class="form-group">
-			<label for="data[<%= modelName %>][show]" class="col-sm-2">Show</label>
+			<label for="data[<%= modelName %>][show]" class="col-sm-2" style="line-height: 30px;">Show</label>
 			<div class="col-sm-3">
-				<select id="show" name="data[<%= modelName %>][show]" class="form-control-nos2" style="max-height:23px;">
+				<select id="show" name="data[<%= modelName %>][show]" class="form-control-nos2">
 					<% for(var i in pageSizes){ %>
 						<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
 					<% } %>
@@ -95,6 +95,8 @@ if(typeof(allfields) === 'undefined'){
 	<script>
 		$(function() {
 			
+			var filtercount = 0;
+			
 			$('#show').on('change', function(e) {
 				saveForm();
 			});
@@ -113,7 +115,7 @@ if(typeof(allfields) === 'undefined'){
 				for(var i in filters){
 					var filter = filters[i];
 					filter.fieldName = filter.name;
-					$('#filters-group option[value="'+filter.name+'"]').remove();
+					//$('#filters-group option[value="'+filter.name+'"]').remove();
 					if(filter.name.slice(filter.name.length - 3) === '_id'){
 						filter.name = filter.name.slice(0, filter.name.length - 3);
 					}
@@ -137,7 +139,7 @@ if(typeof(allfields) === 'undefined'){
 				var fieldName = $('#filters-group option:selected').val();
 				if (filterName !== '- Column -') {
 					$('#filters-group').hide();
-					$('#filters-group option:selected').remove();
+					//$('#filters-group option:selected').remove();
 					$('#filters-group')[0].selectedIndex = 0;
 					var filter = {name: filterName, fieldName: fieldName, type: 'test'};
 					createConditions(filter);
@@ -147,6 +149,7 @@ if(typeof(allfields) === 'undefined'){
 			//WHEN CLICKING CLEAR: REMOVE ALL FILTERS, ENABLE APPLY BUTTON
 			$('#clearbtn').on('click', function(e){
 				e.preventDefault();
+				$('#clearbtn i').addClass('fa-spin');
 				$('.trash').each(function(){
 					if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
 						$('#filters-group').append('<option value="'+$(this).data('filter-name')+'">'+$(this).data('filter-name')+'</option>');
@@ -157,6 +160,7 @@ if(typeof(allfields) === 'undefined'){
 						$('#andor').show();
 					}
 				});
+				$('#applybtn').click();
 			});
 
 			$('#andor .radio').on('change', function(){
@@ -165,7 +169,8 @@ if(typeof(allfields) === 'undefined'){
 
 			//CREATE HTML
 			function createConditions(filter){
-				var cleanFilterName = filter.name.replace(/ /g, '_').toLowerCase();
+				var cleanFilterName = filter.name.replace(/ /g, '_').toLowerCase()+filtercount;
+				filtercount++;
 				var html = '<tr class="tr-'+ cleanFilterName +'" >';
 				html += '<td><a class="btn btn-default btn-xs trash" data-filter-name="'+ filter.name +'" data-filter-fieldname="'+ filter.fieldName +'"><i class="fa fa-trash-o"></i></a></td>';
 				html += '<td>' + filter.name + '</td>';
@@ -175,7 +180,6 @@ if(typeof(allfields) === 'undefined'){
 					filter.value = '';
 				}
 				html += '<select name="" id="select-'+ cleanFilterName +'" class="form-control-nos2">';
-				html +=	'<option value="--">- Condition -</option>';
 				html +=	'<option value="like">Contains</option>';
 				html +=	'<option value="is">Equals</option>';
 				html +=	'<option value="notlike">Doesn\'t contain</option>';
@@ -202,17 +206,9 @@ if(typeof(allfields) === 'undefined'){
 
 				//BIND EVENTS:
 				//CONDITION SELECT CHANGE EVENT: SHOWS/HIDES INPUT
-				$('#select-'+ cleanFilterName).on('change', function(){
-					var conditionName = $(this).val();
-					if (conditionName !== '--') {
-						$('#input-'+ cleanFilterName).show();
-						$('#filterbtn, #applybtn, #clearbtn').show();
-						$('#andor').show();
-					} else {
-						$('#input-'+ cleanFilterName).hide();
-						$('#andor').hide();
-					}
-				});
+				$('#input-'+ cleanFilterName).show();
+				$('#filterbtn, #applybtn, #clearbtn').show();
+				$('#andor').show();
 
 				//INPUT KEYUP EVENT: ENABLES/DISABLES BUTTONS
 				$('#input-'+ cleanFilterName).on('keyup', function(e){
@@ -238,22 +234,20 @@ if(typeof(allfields) === 'undefined'){
 
 				//TRASH CLICK EVENT: REMOVES FILTER AND ADDS BACK TO FILTER SELECT
 				$('.trash').on('click', function(e){
-					if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
+					/*if($('#filters-group option[value="'+$(this).data('filter-name')+'"]').length === 0){
 						$('#filters-group').append('<option value="'+$(this).data('filter-name')+'">'+$(this).data('filter-name')+'</option>');
-					}
+					}*/
 					$(this).parent().parent().remove();
-					if ( $(".filter:hidden").length === 0){
-						$('#applybtn, #filterbtn').removeClass("disabled");
-						$('#andor').hide();
-					}
+					$('#applybtn, #filterbtn').removeClass("disabled");
 				});
 			}
 
 			$('#applybtn').on('click', function(e){
 				e.preventDefault();
 				saveForm();
-				/*url = window.location.origin + window.location.pathname;
-				hawkejs.goToAjaxView(url, {filter: JSON.stringify(conditions)});*/
+				//url = window.location.origin + window.location.pathname;
+				//hawkejs.goToAjaxView(url, {filter: JSON.stringify(conditions)});
+				//hawkejs.goToAjaxView(url);
 			});
 			
 			function saveForm(){
