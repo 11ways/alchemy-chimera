@@ -212,7 +212,7 @@ if(typeof(allfields) === 'undefined'){
 
 				//INPUT KEYUP EVENT: ENABLES/DISABLES BUTTONS
 				$('#input-'+ cleanFilterName).on('keyup', function(e){
-					console.log(e.keyCode);
+
 					if(e.keyCode === 13){
 						e.preventDefault();
 						//saveForm();
@@ -251,7 +251,13 @@ if(typeof(allfields) === 'undefined'){
 			});
 			
 			function saveForm(){
-				var filters = [];
+
+				var url = window.location.origin + window.location.pathname,
+				    filters = [],
+				    options = {},
+				    data = {},
+				    modelName = <% echo(JSON.stringify(modelName)) %>;
+
 				$('#filters tr').each(function(){
 					var filter = {};
 					filter.name = $(this).find('.filter').data('filter-fieldname');
@@ -260,8 +266,20 @@ if(typeof(allfields) === 'undefined'){
 					filters.push(filter);
 				});
 
-				$('input[name="data[<%= modelName %>][filters]"]').val(hawkejs.stringify(filters));
-				$('#<%= modelName %>AddForm').submit();
+				// Get the amount of items to show, default to 20
+				options.show = $('select[name="data[' + modelName + '][show]"]').val() || 20;
+
+				// Do an AND or an OR search?
+				options.andor = $('input[name="data[' + modelName + '][andor]"]:checked').val() || 'and';
+
+				// Add the actual filters
+				options.filters = hawkejs.stringify(filters);
+
+				// Store everything in the data object under the current model name
+				data[modelName] = options;
+
+				// Load the page over ajax
+				hawkejs.goToAjaxViewWithHistory(url, false, {data: data});
 			}
 		});
 	</script>
