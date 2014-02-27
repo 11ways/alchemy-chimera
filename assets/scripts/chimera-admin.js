@@ -88,6 +88,11 @@ hawkejs.event.on({create: 'block', name: 'admin-main'}, function(query, payload)
 
 function applyChimeraFields(query, payload) {
 
+	var dataDo = function dataDo($element) {
+		hawkejs.event.emit($element.attr('data-emit'), $element);
+	};
+
+	// Make the enter button apply the inline pagination
 	$('input[data-pagination-filter]').keyup(function(e) {
 
 		var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
@@ -98,6 +103,10 @@ function applyChimeraFields(query, payload) {
 		}
 	});
 
+	// Apply ckeditor to textarea's
+	$('#hawkejs-insert-block-admin-content .textfield').ckeditor();
+
+	// Add an "Add entry" button to arrayable fields
 	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]').each(function() {
 
 		var $this     = $(this),
@@ -113,20 +122,33 @@ function applyChimeraFields(query, payload) {
 
 			var $button = $(this),
 			    $inputs = $('>[data-chimera-input]', $this),
-			    $last = $inputs.last(),
-			    cloneHtml;
+			    $last   = $inputs.last(),
+			    cloneHtml,
+			    $new;
 
 			// Replace possible %INCREMENT% tags
 			cloneHtml = emptyHtml.replace(/%INCREMENT%/g, $inputs.length);
 
-			console.log('There are ' + $inputs.length + ' inputs already');
-			console.log($last);
-
 			e.preventDefault();
-			$button.before(cloneHtml);
+
+			// Create a new jquery object
+			$new = $(cloneHtml);
+
+			// Add it before the button
+			$button.before($new);
+
+			$('[data-emit]', $new).each(function() {
+				dataDo($(this));
+			});
 		})
 	});
 
+	// Emit events that have a 'data-emit' attribute
+	$('#hawkejs-insert-block-admin-content [data-emit]').each(function() {
+		dataDo($(this));
+	});
+
+	// Apply pagination
 	$('[data-apply-pagination]').click(function(e) {
 
 		var $this = $(this),
@@ -151,6 +173,7 @@ function applyChimeraFields(query, payload) {
 		hawkejs.goToAjaxView(url, {filter: JSON.stringify(conditions)});
 	});
 
+	// Apply select2 on select fields
 	$('select.form-control').select2();
 
 	$('input.select2-form-control[data-url]').each(function() {
@@ -213,6 +236,7 @@ function applyChimeraFields(query, payload) {
 		});
 	});
 
+	// Apply the mentions field (wip)
 	$('textarea.mention').each(function() {
 
 		var $this   = $(this),
