@@ -1,6 +1,6 @@
 <% 
 //IF JSON VIEW USE FIELDS ELSE USE ALLFIELDS
-if(typeof(allfields) === 'undefined'){
+if(typeof(allFieldTitles) === 'undefined'){
 	fieldInfo = [];
 	for(var i in fields){
 		var field = {};
@@ -8,16 +8,7 @@ if(typeof(allfields) === 'undefined'){
 		fieldInfo.push(field);
 	}
 } else {
-	fieldInfo = [];
-	for(var i in allfields){
-		var field = {};
-		field.title = field.name = allfields[i];
-		if(field.title.slice(field.title.length - 3) === '_id'){
-			field.title = field.title.slice(0, field.title.length - 3);
-		}
-		field.title = field.title.humanize();
-		fieldInfo.push(field);
-	}
+	fieldInfo = allFieldTitles;
 }
 %>
 
