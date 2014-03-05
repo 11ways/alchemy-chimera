@@ -39,7 +39,7 @@ start('chimera-page-title'); -%>
 				<% for (i = 0; i < fieldInfo.length; i++) {
 					field = fieldInfo[i];
 				%>
-				<th><% Paginate.sort({field: field.field, display: field.title, parentClass: 'activesort'}) %></th>
+				<th><% Paginate.sort({field: field.fieldPath, display: field.title, parentClass: 'activesort'}) %></th>
 				<% } %>
 				<th>Actions</th>
 			</tr>
@@ -47,7 +47,7 @@ start('chimera-page-title'); -%>
 				<% for (i = 0; i < fieldInfo.length; i++) {
 					field = fieldInfo[i];
 				%>
-				<th><% Paginate.filter({field: field.field, display: field.title}) %></th>
+				<th><% Paginate.filter({field: field.fieldPath, display: field.title}) %></th>
 				<% } %>
 				<th>
 					<a data-apply-pagination class="btn btn-default"><% echo(__('filter', 'Apply')) %></button>
