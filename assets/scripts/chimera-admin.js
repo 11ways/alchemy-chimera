@@ -13,6 +13,16 @@ $(document).ready(function() {
 	});
 });
 
+hawkejs.event.on({create: 'implementation', name: 'chimera/model_editor_filters'}, function(query, payload) {
+
+	var $filters = $('#hawkejs-implement-chimera__model_editor_filters.filters');
+
+	$('#filters-collapse').on('click', function() {
+		$('#collapse-filters').collapse('toggle');
+	});
+
+});
+
 hawkejs.event.on({create: 'block'}, function(query, payload) {
 	
 	var timeOptions = {
@@ -265,6 +275,19 @@ function applyChimeraFields(query, payload) {
 			});
 		});
 	});
+
+	// i18n static string stuff
+	var $title = $('#mainTitle');
+
+	if ($title.text().indexOf('Static String: Edit record') > -1) {
+
+		// Disable the domain & key field when editing
+		$('#AdminField-domain').attr('disabled', true);
+		$('#AdminField-key').attr('disabled', true);
+
+		// Go directly to the english tab
+		$('a[href^="#chitab-en"]').tab('show')
+	}
 
 }
 
