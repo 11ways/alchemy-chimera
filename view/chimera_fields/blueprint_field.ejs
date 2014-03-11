@@ -4,7 +4,7 @@ var variables = item.value.variables,
     groupName,
     active = 'active',
     group,
-    item,
+    temp,
     uid = ~~(Math.random()*1000),
     i;
 
@@ -44,8 +44,8 @@ start('input') %>
 			group = options.groups[groupName];
 
 			for (i = 0; i < group.fields.length; i++) {
-				item = group.fields[i];
-				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item}});
+				temp = group.fields[i];
+				chimera.inputfield(temp.view, {emptyResult: temp.emptyResult, variables: {item: temp}});
 			}
 
 			echo('</div>');
