@@ -30,6 +30,18 @@ if(typeof(allFieldTitles) === 'undefined'){
 		</div>
 	</div>
 	<div class="clear"></div>
+	
+	<div class="row" style="margin-bottom: 5px;">
+		<div class="col-sm-12">
+			<div class="input-group">
+				<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
+				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(search){ %><%= search %><% } %>">
+				<span class="input-group-addon search-btn" style="cursor: pointer;">Search</span>
+			</div>
+			<option value="global_search" >Global Search</option>
+		</div>
+	</div>
+	<div class="clear"></div>
 
 	<!-- FILTERS -->
 	<div class="row">
@@ -52,7 +64,6 @@ if(typeof(allFieldTitles) === 'undefined'){
 							<div class="col-sm-12">
 								<select id="filters-group" class="form-control-nos2 col-sm-12">
 									<option value="" >- <%= __('chimera', 'Column') %> -</option>
-									<option value="global_search" >Global Search</option>
 									<% for (i = 0; i < fieldInfo.length; i++) {
 										field = fieldInfo[i]; %>
 										<option value="<%= field.name %>" ><%= field.title %></option>
@@ -253,6 +264,17 @@ if(typeof(allFieldTitles) === 'undefined'){
 				//hawkejs.goToAjaxView(url);
 			});
 			
+			$('.search-input').on('keyup', function(e){
+				if(e.keyCode === 13){
+					e.preventDefault();
+					saveForm();
+				}
+			});
+			$('.search-btn').on('click', function(e){
+				e.preventDefault();
+				saveForm();
+			});
+			
 			function saveForm(){
 
 				var url = window.location.origin + window.location.pathname,
@@ -271,6 +293,9 @@ if(typeof(allFieldTitles) === 'undefined'){
 
 				// Get the amount of items to show, default to 20
 				options.show = $('select[name="data[' + modelName + '][show]"]').val() || 20;
+				
+				// Get the amount of items to show, default to 20
+				options.search = $('select[name="data[' + modelName + '][search]"]').val() || false;
 
 				// Do an AND or an OR search?
 				options.andor = $('input[name="data[' + modelName + '][andor]"]:checked').val() || 'and';
