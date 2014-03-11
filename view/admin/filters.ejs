@@ -14,67 +14,79 @@ if(typeof(allFieldTitles) === 'undefined'){
 
 <div class="filters">
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
-	<div class="col-sm-6">
-		<!-- SHOW X ITEMS PER PAGE -->
-		<div class="form-group">
-			<label for="data[<%= modelName %>][show]" class="col-sm-2" style="line-height: 30px;">Show</label>
-			<div class="col-sm-3">
-				<select id="show" name="data[<%= modelName %>][show]" class="form-control-nos2">
-					<% for(var i in pageSizes){ %>
-						<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
-					<% } %>
-				</select>
+	<!-- SHOW X ITEMS PER PAGE -->
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="form-group">
+				<label for="data[<%= modelName %>][show]" class="col-sm-9" style="line-height: 30px; text-align:right;">Show</label>
+				<div class="col-sm-3">
+					<select id="show" name="data[<%= modelName %>][show]" class="form-control-nos2">
+						<% for(var i in pageSizes){ %>
+							<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
+						<% } %>
+					</select>
+				</div>
 			</div>
 		</div>
 	</div>
+	<div class="clear"></div>
 
 	<!-- FILTERS -->
-	<div class="panel-group col-sm-6" id="accordion" style="padding-right:0px;">
-		<div class="panel panel-default">
-			<div class="panel-heading" id="filters-collapse">
-				<h4 class="panel-title" >
-					Filters
-				</h4>
-			</div>
-			<div id="collapse-filters" class="panel-collapse collapse">
-				<div class="panel-body">
-					<div id="filters" class="pull-right col-sm-12">
-						<table class="col-sm-12">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel-group" id="accordion" style="padding-right:0px;">
+				<div class="panel panel-default">
+					<div class="panel-heading" id="filters-collapse">
+						<h4 class="panel-title" >
+							Filters
+						</h4>
+					</div>
+					<div id="collapse-filters" class="panel-collapse collapse">
+						<div class="panel-body">
+							<div id="filters" class="pull-right col-sm-12">
+								<table class="col-sm-12">
 
-						</table>
-					</div>
-					<div class="clear"></div>
-					<div class="col-sm-12">
-						<select id="filters-group" class="form-control-nos2 col-sm-12">
-							<option value="" >- Column -</option>
-							<% for (i = 0; i < fieldInfo.length; i++) {
-								field = fieldInfo[i]; %>
-								<option value="<%= field.name %>" ><%= field.title %></option>
-							<% } %>
-						</select>
-					</div>
-					<div class="clear"></div>
-					<br />
-					<div id="andor" class="col-sm-12" style="display:none;">
-						<div class="radio col-sm-6">
-							<label>
-								<input type="radio" name="data[<%= modelName %>][andor]" value="or" <% if(andor && andor === "or"){%> checked <% } %>>
-								Match any condition
-							</label>
+								</table>
+							</div>
+							<div class="clear"></div>
+							<div class="col-sm-12">
+								<select id="filters-group" class="form-control-nos2 col-sm-12">
+									<option value="" >- <%= __('chimera', 'Column') %> -</option>
+									<option value="global_search" >Global Search</option>
+									<% for (i = 0; i < fieldInfo.length; i++) {
+										field = fieldInfo[i]; %>
+										<option value="<%= field.name %>" ><%= field.title %></option>
+									<% } %>
+								</select>
+							</div>
+							<div class="clear"></div>
+							<br />
+							<div id="andor" class="col-sm-12" style="display:none;">
+								<div class="radio row">
+									<div class="col-sm-12">
+										<label>
+											<input type="radio" name="data[<%= modelName %>][andor]" value="or" <% if(andor && andor === "or"){%> checked <% } %>>
+											<%= __('chimera', 'Match any condition') %>
+										</label>
+									</div>
+								</div>
+								<div class="radio row">
+									<div class="col-sm-12">
+										<label>
+											<input type="radio" name="data[<%= modelName %>][andor]" value="and" <% if(!andor){%> checked <% } %> <% if(andor && andor === "and"){%> checked <% } %>>
+											<%= __('chimera', 'Match all conditions') %>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="clear"></div>
+							<br />
+							<div class="col-sm-12">
+								<button class="btn btn-primary disabled" id="applybtn"><i class="fa fa-check"></i> Apply</button>
+								<button class="btn btn-default" id="clearbtn"><i class="fa fa-refresh"></i> Clear</button>
+								<button class="btn btn-default" id="filterbtn"><i class="fa fa-plus"></i> Add filter</button>
+							</div>
 						</div>
-						<div class="radio col-sm-6">
-							<label>
-								<input type="radio" name="data[<%= modelName %>][andor]" value="and" <% if(!andor){%> checked <% } %> <% if(andor && andor === "and"){%> checked <% } %>>
-								Match all conditions
-							</label>
-						</div>
-					</div>
-					<div class="clear"></div>
-					<br />
-					<div class="col-sm-12 pull-right" style="text-align:right;">
-						<button class="btn btn-primary disabled" id="applybtn"><i class="fa fa-check"></i> Apply</button>
-						<button class="btn btn-default" id="clearbtn"><i class="fa fa-refresh"></i> Clear</button>
-						<button class="btn btn-default" id="filterbtn"><i class="fa fa-plus"></i> Add filter</button>
 					</div>
 				</div>
 			</div>
@@ -124,7 +136,7 @@ if(typeof(allFieldTitles) === 'undefined'){
 				$('#filterbtn, #applybtn').addClass("disabled");
 			});
 
-			//DO STUFF WGEN FILTERS SELECT CHANGES
+			//DO STUFF WHEN FILTERS SELECT CHANGES
 			$('#filters-group').on('change', function(){
 				var filterName = $('#filters-group option:selected').text();
 				var fieldName = $('#filters-group option:selected').val();
