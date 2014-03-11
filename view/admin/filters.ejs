@@ -122,7 +122,7 @@ if(typeof(allFieldTitles) === 'undefined'){
 			$('#filters-group, #applybtn, #clearbtn').hide();
 
 			//INIT PREVIOUS FILTERS
-			<% if(filters){ %>
+			<% if(filters && filters!=='false'){ %>
 				var filters = "<%=filters%>";
 				filters = filters.replace(/&quot;/g, '"');
 				filters = JSON.parse(filters);
