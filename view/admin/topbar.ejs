@@ -2,12 +2,30 @@
 
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-		<%= name %> <i class="fa fa-caret-down"></i>
+		<!--<span class="badge badge-important">5</span>-->
+		<%= name %> 
+		<i class="fa fa-angle-down"></i>
     </a>
     <ul class="dropdown-menu">
+		<!--<li class="notification-success"><a href="#">Notification success</a></li>
+		<li class="notification-alert"><a href="#">Notification alert</a></li>
+		<li class="notification-warning"><a href="#">Notification warning</a></li>
+		<li class="notification-info"><a href="#">Notification info</a></li>-->
+		<li class="notification"><a href="#">No notifications</a></li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		<i class="fa fa-cog fa-lg"></i>
+    </a>
+    <ul class="dropdown-menu" style="min-width: 0px;">
+		<!--<li><% add_link('/', {title: __('chimera', 'Website settings')}); %></li>
+		<li><% add_link('/', {title: __('chimera', 'My settings')}); %></li>
+		<hr style="margin-top: 5px; margin-bottom: 5px;" />-->
 		<li><% add_link('/logout', {title: '<i class="fa fa-power-off"></i> Logout'}); %></li>
     </ul>
 </li>
+
 
 <%
 // add_link('/', {title: 'Home', match: matchIns});
