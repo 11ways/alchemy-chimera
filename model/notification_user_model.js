@@ -7,7 +7,7 @@
  * @since    0.0.1
  * @version  0.0.1
  */
-/*Model.extend(function NotificationUserModel() {
+Model.extend(function NotificationUserModel() {
 
 	this.preInit = function preInit() {
 
@@ -18,6 +18,10 @@
 		this.icon = 'exclamation-circle';
 		
 		this.title = 'User Notifications';
+				
+		this.sort = {
+			created: 'DESC',
+		};
 		
 		this.belongsTo = {
 			User: {
@@ -40,13 +44,31 @@
 			},
 			read: {
 				type: 'Boolean'
-			},
-			joined: {
-				type: 'Boolean'
-			},
-			declined: {
-				type: 'Boolean'
 			}
 		};
+		
+		this.modelEdit = {
+			general: {
+				title: __('chimera', 'General'),
+				fields: [
+					'user_id',
+					'notification_message_id',
+					'read'
+				]
+			}
+		};
+		
+		this.modelIndex = {
+			fields: [
+				'user_id',
+				'notification_message_id',
+				'read',
+			]
+		};
+		
+		this.actionLists = {
+			paginate: ['index'],
+			record: ['view']
+		};
 	};
-});*/
+});

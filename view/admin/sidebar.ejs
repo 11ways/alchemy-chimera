@@ -6,9 +6,7 @@
 		<span class="icon-bar"></span>
 		<span class="icon-bar"></span>
 	</button>
-	<a class="navbar-brand" href="/">
-		<%= store('chimera-view-setting').title %>
-	</a>
+	<% add_link('/', {title: store('chimera-view-setting').title, class: 'navbar-brand'}); %>
 	<a class="navbar-home" href="/"><span class="fa fa-home fa-lg"></span></a>
 </div>
 
@@ -24,3 +22,10 @@
 		<% implement('admin/topbar') %>
 	</ul>
 </div>
+
+<script>
+	$('.navbar-home').on('click', function(){
+		$(this).children('span').removeClass('fa-home');
+		$(this).children('span').addClass('fa-refresh fa-spin');
+	});
+</script>

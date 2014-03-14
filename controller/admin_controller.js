@@ -33,7 +33,7 @@ var AdminController = Controller._extend(function AdminController (){
 	 */
 	this.init = function init () {
 		this.parent();
-	}
+	};
 
 	/**
 	 * Handle Chimera Module Actions
@@ -56,7 +56,7 @@ var AdminController = Controller._extend(function AdminController (){
 
 		// If a module was found, and the action exists, execute it
 		if (module && module[route.options.chimeraAction]) {
-
+			
 			// Call the beforeAction method
 			module.beforeAction(function afterBeforeAction() {
 				module[route.options.chimeraAction](render);
@@ -92,8 +92,9 @@ var AdminController = Controller._extend(function AdminController (){
 		}
 		
 		render.viewVars.adminLinks = models;
+		this.getNotifications(render, false);
 		next();
-	}
+	};
 
 	/**
 	 * The dashboard action
@@ -103,7 +104,97 @@ var AdminController = Controller._extend(function AdminController (){
 	 * @version       0.0.1
 	 */
 	this.dashboard = function dashboard (render) {
-		render();
-	}
+		
+		this.getNotifications(render, true);
+
+	};
+	
+	/**
+	 * The my_settings action
+	 *
+	 * @author        Kjell Keisse   <kjell@kipdola.be>
+	 * @since         0.0.1
+	 * @version       0.0.1
+	 */
+	this.my_settings = function my_settings (render) {
+		
+		this.getNotifications(render, true);
+
+	};
+	
+	/**
+	 * The website_settings action
+	 *
+	 * @author        Kjell Keisse   <kjell@kipdola.be>
+	 * @since         0.0.1
+	 * @version       0.0.1
+	 */
+	this.website_settings = function website_settings (render) {
+		
+		/*var that = this;
+		this.getModel('NotificationMessage').notify('User visited settings page', '', '', '', function(){
+			that.getNotifications(render, true);
+		});*/
+		
+		this.getModel('NotificationMessage').notify('User visited settings page');
+		this.getNotifications(render, true);
+		
+	};
+	
+	
+	/**
+	 * Update notifications (mark as read)
+	 *
+	 * @author        Kjell Keisse   <kjell@codedor.be>
+	 * @since         0.0.1
+	 * @version       0.0.1
+	 */
+	this.update_notification = function update_notification (render) {
+
+		var conditions = {},
+			that = this;
+		conditions['NotificationUser._id'] = render.req.params['id'];
+		conditions['NotificationUser.user_id'] = render.req.session.user._id;
+		this.getModel('NotificationUser').find('first', {conditions: conditions}, function(err, record) {
+			
+			record[0].NotificationUser.read = true;
+			
+			that.getModel('NotificationUser').save(record, function(err, result){
+				//pr(err);
+			});
+			
+		});
+		
+	};
+	
+	/**
+	 * Get notifications
+	 *
+	 * @author        Kjell Keisse   <kjell@codedor.be>
+	 * @since         0.0.1
+	 * @version       0.0.1
+	 */
+	this.getNotifications = function getNotifications (render, must_render) {
+		var conditions = {};
+		conditions['NotificationUser.user_id'] = render.req.session.user._id;
+		this.getModel('NotificationUser').find('all', {conditions: conditions, limit: 10}, function(err, items) {
+			
+			var unread = 0;
+			
+			for(var i=0; i<items.length; i++){
+				var notification = items[i];
+				if(!notification.NotificationUser.read){
+					unread++;
+				}
+			}
+			
+			render.viewVars.notifications = items;
+			render.viewVars.unread = unread;
+
+			if(must_render){
+				render();
+			}
+		});
+	};
 	
 });

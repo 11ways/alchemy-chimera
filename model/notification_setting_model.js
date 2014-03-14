@@ -7,7 +7,7 @@
  * @since    0.0.1
  * @version  0.0.1
  */
-/*Model.extend(function NotificationSettingModel() {
+Model.extend(function NotificationSettingModel() {
 
 	this.preInit = function preInit() {
 
@@ -19,10 +19,16 @@
 		
 		this.title = 'Notification Settings';
 		
-		this.belongsTo = {
+		this.get_notifications = {
+			'all': __('chimera', 'Receive all notifications'),
+			'admin_only': __('chimera', 'Only receive notifications from administrators'),
+			'none': __('chimera', 'Don\'t receive any notifications'),
+		};
+		
+		this.hasOneParent = {
 			User: {
 				modelName: 'User',
-				foreignKey: 'written_by'
+				foreignKey: 'user_id'
 			}
 		};
 		
@@ -37,8 +43,31 @@
 				type: 'Boolean'
 			},
 			get_notifications: {
-				type: 'Enum'//all - only from admin - none
+				type: 'Enum'
 			}
 		};
+		
+		this.modelEdit = {
+			general: {
+				title: __('chimera', 'General'),
+				fields: [
+					'can_mail',
+					'get_notifications'
+				]
+			}
+		};
+
+		this.modelIndex = {
+			fields: [
+				'user_id',
+				'can_mail',
+				'get_notifications',
+			]
+		};
+		
+		this.actionLists = {
+			paginate: ['index'],
+			record: ['view', 'edit']
+		};
 	};
-});*/
+});

@@ -2,16 +2,32 @@
 
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-		<!--<span class="badge badge-important">5</span>-->
+		<span class="badge badge-important"><% if(unread>0){%><%= unread %><% } %></span>
 		<%= name %> 
 		<i class="fa fa-angle-down"></i>
     </a>
     <ul class="dropdown-menu">
-		<!--<li class="notification-success"><a href="#">Notification success</a></li>
-		<li class="notification-alert"><a href="#">Notification alert</a></li>
-		<li class="notification-warning"><a href="#">Notification warning</a></li>
-		<li class="notification-info"><a href="#">Notification info</a></li>-->
-		<li class="notification"><a href="#">No notifications</a></li>
+		<% if(notifications.length>0){ %>
+			<% for(var i=0; i<notifications.length; i++){ %>
+				<% var notification = notifications[i]; %>
+				<li class="notification notification-<%= notification.NotificationMessage.notification_type %>">
+					<a 
+						href="<% if(notification.NotificationMessage.link){ %><%= notification.NotificationMessage.link %><% } else { %>#<% } %>"
+						<% if(!notification.NotificationUser.read){%> data-usermessageid="<%= notification.NotificationUser._id %>" <% } %>
+						<% if(notification.NotificationMessage.external_link){%> target="_blank" <% } %>
+					>
+						<%= notification.NotificationMessage.message %>
+						<br />
+						<small class="text-muted">
+							<%= notification.NotificationUser.created %>
+						</small>
+						<% if(!notification.NotificationUser.read){%><span class="pull-right label label-<%= notification.NotificationMessage.notification_type %> unread" style="margin-top: 3px;"><%= __('chimera', 'new') %></span> <% } %>
+					</a>
+				</li>
+			<% } %>
+		<% } else { %>
+			<li class="notification"><a href="#">No notifications</a></li>
+		<% } %>
     </ul>
 </li>
 <li class="dropdown">
@@ -19,16 +35,44 @@
 		<i class="fa fa-cog fa-lg"></i>
     </a>
     <ul class="dropdown-menu" style="min-width: 0px;">
-		<!--<li><% add_link('/', {title: __('chimera', 'Website settings')}); %></li>
-		<li><% add_link('/', {title: __('chimera', 'My settings')}); %></li>
-		<hr style="margin-top: 5px; margin-bottom: 5px;" />-->
+		<li><% add_link('/chimera/settings', {title: __('chimera', 'Website settings')}); %></li>
+		<li><% add_link('/chimera/my_settings', {title: __('chimera', 'My settings')}); %></li>
+		<hr style="margin-top: 5px; margin-bottom: 5px;" />
 		<li><% add_link('/logout', {title: '<i class="fa fa-power-off"></i> Logout'}); %></li>
     </ul>
 </li>
 
 
-<%
-// add_link('/', {title: 'Home', match: matchIns});
-// add_link('/admin', {title: 'Admin', match: matchIns, matchExtend: true});
-// add_link('/clients', {title: 'Clients', match: matchIns});
-%>
+<script>
+	$('.notification a').on('click', function(e){		
+		//if unread
+		if($(this).data('usermessageid')){
+			var notification_user_id = $(this).data('usermessageid');
+			$(this).removeData('usermessageid');
+			
+			$(this).children('.unread').html('');
+			
+			//update unread count
+			var unread_count = $('.badge-important').html();
+			if(unread_count > 1){
+				$('.badge-important').html(unread_count-1);
+			} else {
+				$('.badge-important').html('');
+			}
+			
+			//do magical ajax stuff with notification_user_id
+			var url = '/chimera/admin/update_notification/'+notification_user_id;
+			$.ajax({
+				url: url,
+				success: function( data ) {
+					response( data );
+				},
+				error: function() {
+					response( [] );
+				}
+			});
+			
+		}
+		
+	});
+</script>
