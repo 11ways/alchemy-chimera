@@ -112,20 +112,49 @@ var AdminController = Controller._extend(function AdminController (){
 	/**
 	 * The my_settings action
 	 *
-	 * @author        Kjell Keisse   <kjell@kipdola.be>
+	 * @author        Kjell Keisse   <kjell@codedor.be>
 	 * @since         0.0.1
 	 * @version       0.0.1
 	 */
 	this.my_settings = function my_settings (render) {
 		
-		this.getNotifications(render, true);
+		var conditions = {},
+			data = render.req.body.data,
+			that = this;
 
+		conditions['NotificationSetting.user_id'] = user_id = render.req.session.user._id;
+		
+		//get current user settings
+		this.getModel('NotificationSetting').find('first', {conditions: conditions}, function(err, record) {
+			//if no settings found, set defaults
+			if(record.length == 0){
+				render.viewVars.settings.can_mail = true;
+				render.viewVars.settings.get_notifications = 'all';
+			} else {
+				render.viewVars.settings = record[0].NotificationSetting;
+			}
+			//if submit, save new settings
+			if(data && data.settings){
+				if(data.settings.can_mail == '1'){
+					render.viewVars.settings.can_mail = true;
+				} else {
+					render.viewVars.settings.can_mail = false;
+				}
+				render.viewVars.settings.get_notifications = data.settings.get_notifications;
+				
+				that.getModel('NotificationSetting').save(render.viewVars.settings, function(err, result) {
+					that.getNotifications(render, true);
+				});
+			} else {
+				that.getNotifications(render, true);
+			}
+		});
 	};
 	
 	/**
 	 * The website_settings action
 	 *
-	 * @author        Kjell Keisse   <kjell@kipdola.be>
+	 * @author        Kjell Keisse   <kjell@codedor.be>
 	 * @since         0.0.1
 	 * @version       0.0.1
 	 */
@@ -140,6 +169,7 @@ var AdminController = Controller._extend(function AdminController (){
 	
 	/**
 	 * Update notifications (mark as read)
+	 * Ajax functions: runs when clicking notification
 	 *
 	 * @author        Kjell Keisse   <kjell@codedor.be>
 	 * @since         0.0.1
@@ -157,6 +187,7 @@ var AdminController = Controller._extend(function AdminController (){
 			
 			that.getModel('NotificationUser').save(record, function(err, result){
 				//pr(err);
+				return true;
 			});
 			
 		});

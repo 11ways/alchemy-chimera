@@ -120,6 +120,16 @@ Model.extend(function NotificationMessageModel() {
 		this.parent();
 	};
 	
+	
+	/*
+	 * After save: created a notification for each selected member / each member in the selected acl group
+	 * Take user settings into account
+	 * 
+	 * @author   Kjell Keisse   <kjell@codedor.be>
+	 * @since    0.0.1
+	 * @version  0.0.1
+	 * 
+	 */
 	this.afterSave = function afterSave(next, record, errors) {
 		this.parent('afterSave', null, function(){
 			var users = {}, 
@@ -205,6 +215,21 @@ Model.extend(function NotificationMessageModel() {
 		}, record, errors);
 	};
 	
+	/*
+	 * Create a notification message
+	 * 
+	 * @author   Kjell Keisse   <kjell@codedor.be>
+	 * @since    0.0.1
+	 * @version  0.0.1
+	 * 
+	 * message = string
+	 * type = string (info / warning / danger / success)
+	 * who = string (acl_group name)
+	 * link = string
+	 * external = boolean
+	 * mail = booleon
+	 * 
+	 */
 	this.notify = function notify(message, type, who, link, external, mail) {
 
 		var or = {},
@@ -229,7 +254,7 @@ Model.extend(function NotificationMessageModel() {
 		if(!link){
 			link = '';
 		}
-		if(!type){
+		if(!type || (type!== 'info' && type!== 'warning' && type!== 'danger' && type!== 'success')){
 			type = 'info';
 		}
 		
