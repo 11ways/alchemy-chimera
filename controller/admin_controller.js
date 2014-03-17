@@ -131,12 +131,8 @@ var AdminController = Controller._extend(function AdminController (){
 	 */
 	this.website_settings = function website_settings (render) {
 		
-		/*var that = this;
-		this.getModel('NotificationMessage').notify('User visited settings page', '', '', '', function(){
-			that.getNotifications(render, true);
-		});*/
-		
-		this.getModel('NotificationMessage').notify('User visited settings page');
+		var name = render.req.session.user.first_name + ' ' + render.req.session.user.last_name;
+		this.getModel('NotificationMessage').notify(name+ ' visited settings page');
 		this.getNotifications(render, true);
 		
 	};

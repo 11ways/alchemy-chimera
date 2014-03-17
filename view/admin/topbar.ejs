@@ -16,9 +16,11 @@
 						<% if(!notification.NotificationUser.read){%> data-usermessageid="<%= notification.NotificationUser._id %>" <% } %>
 						<% if(notification.NotificationMessage.external_link){%> target="_blank" <% } %>
 					>
+						<strong><%= notification.User.first_name %> <%= notification.User.last_name %></strong>
+						<br />
 						<%= notification.NotificationMessage.message %>
 						<br />
-						<small class="text-muted">
+						<small class="text-muted timeago">
 							<%= notification.NotificationUser.created %>
 						</small>
 						<% if(!notification.NotificationUser.read){%><span class="pull-right label label-<%= notification.NotificationMessage.notification_type %> unread" style="margin-top: 3px;"><%= __('chimera', 'new') %></span> <% } %>
@@ -44,6 +46,11 @@
 
 
 <script>
+	
+	$('.timeago').each(function(e){
+		$(this).html($.timeago(new Date($(this).html())));
+	});
+	
 	$('.notification a').on('click', function(e){		
 		//if unread
 		if($(this).data('usermessageid')){
@@ -73,6 +80,5 @@
 			});
 			
 		}
-		
 	});
 </script>

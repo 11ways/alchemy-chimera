@@ -1,5 +1,6 @@
 /**
  * The Notification Setting Model class
+ * User defined notification settings (opt-out)
  *
  * @constructor
  *

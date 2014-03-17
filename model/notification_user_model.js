@@ -1,5 +1,7 @@
 /**
  * The Notification User Model class
+ * Every user has multiple notification messages
+ * This between-table keeps track of which are read
  *
  * @constructor
  *

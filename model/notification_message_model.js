@@ -109,7 +109,9 @@ Model.extend(function NotificationMessageModel() {
 	};
 	
 	this.beforeSave = function beforeSave(next, record, options) {
-		record.written_by = this.render.req.session.user._id;
+		if(typeof record.written_by == 'undefined'){
+			record.written_by = this.render.req.session.user._id;
+		}
 		if(typeof record.sent == 'undefined'){
 			record.sent = false;
 		}
@@ -204,23 +206,87 @@ Model.extend(function NotificationMessageModel() {
 	};
 	
 	this.notify = function notify(message, type, who, link, external, mail) {
-		pr(message);
+
+		var or = {},
+			conditions = {},
+			notification_message = {},
+			users_acl_group = '',
+			users = [];
 		
-		//who: 
-		//default = administrators
-		//accept = everything in aclgroup
+		//set default values
+		if(!message){
+			message = 'Something has changed!';
+		}
+		if(!who){
+			who = 'Superuser';
+		}
+		if(!mail){
+			mail = false;
+		}
+		if(!external){
+			external = false;
+		}
+		if(!link){
+			link = '';
+		}
+		if(!type){
+			type = 'info';
+		}
 		
-		//type = warning/danger/success/info
+		notification_message.message = message;
+		notification_message.notification_type = type;
+		notification_message.link = link;
+		notification_message.external_link = external;
+		notification_message.send_mail = mail;
+		notification_message.sent = true;
 		
-		//mail = true/false
-		
-		//sent=true
-		
-		//written_by = Superuser
-		
-		//link = string
-		
-		//external = boolean
+		//get all acl groups
+		Model.get('AclGroup').find('all', function(err, items) {
+			
+			//find root acl id and who acl id
+			var root_acl_id = '';
+			for(var i=0; i<items.length; i++){
+				var acl_group = items[i].AclGroup;
+				if(acl_group.root === true){
+					root_acl_id = acl_group._id;
+				}
+				
+				if(acl_group.name === who){
+					users_acl_group = acl_group._id;
+				}
+			}
+			//if no user group is found for "who", use superuser
+			if(users_acl_group === ''){
+				users_acl_group = root_acl_id;
+			}
+			
+			or = {};
+			or['acl_group_id'] = new RegExp('.*?' + root_acl_id + '.*?', 'i');
+			conditions['$or'] = or;
+			
+			//find superadmin _id for message written_by
+			Model.get('User').find('first', {fields: ['User._id'], conditions: conditions, sort: {username: 'ASC'}}, function(err, record) {
+				
+				notification_message.written_by = record[0].User._id;
+				
+				or = {};
+				or['acl_group_id'] = new RegExp('.*?' + users_acl_group + '.*?', 'i');
+				conditions['$or'] = or;
+				
+				//find users belonging to "who" usergroup
+				Model.get('User').find('all', {fields: ['User._id'], conditions: conditions}, function(err, items) {
+					for(var i=0; i<items.length; i++){
+						users.push(items[i].User._id);
+					}
+					notification_message.user_id = users;
+					
+					//save notificationmessage
+					Model.get('NotificationMessage').save(notification_message, function(err, result){
+						pr(err);
+					});
+				});
+			});
+		});
 		
 	};
 	
