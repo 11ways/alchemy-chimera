@@ -52,6 +52,76 @@ hawkejs.spot.introduced('hawkejs[data-chimera-input] input.datepicker', function
 	});
 });
 
+// Apply timeago
+hawkejs.spot.introduced('.timeago', function(elements) {
+	$(elements).timeago();
+});
+
+// Apply select2
+hawkejs.spot.introduced('input.select2-form-control[data-url]', function(elements) {
+
+	$(elements).each(function() {
+
+		var $this      = $(this),
+		    assocUrl   = $this.data('url'),
+		    multiple   = ($this.data('select-type') === 'multiple'),
+		    echoQuery  = $this.data('echo-query');
+
+		$this.select2({
+			allowClear: true,
+			multiple: multiple,
+			ajax: {
+				url: assocUrl,
+				cache: true,
+				type: 'POST',
+				dataType: 'json',
+				quietMillis: 200,
+				data: function(term, page) {
+					return {
+						q: term,
+						page_limit: 10,
+						page: page
+					}
+				},
+				results: function (data, page) {
+					return data;
+				}
+			},
+			initSelection: function (element, callback) {
+				
+				var id = $(element).val();
+
+				if (multiple) {
+					id = String(id).split(',');
+				}
+
+				if (id) {
+					$.post(assocUrl, {init: true, id: id}, function(data) {
+						if (multiple) {
+							callback(data.results)
+						} else {
+							callback(data.results[0]);
+						}
+					});
+				}
+			},
+			formatResult: function(item) {
+				return item.formatted || String(item.text);
+			}
+		});
+
+		$this.select2('container').find('ul.select2-choices').sortable({
+			containment: 'parent',
+			start: function() {
+				$this.select2('onSortStart');
+			},
+			update: function() {
+				$this.select2('onSortEnd');
+			}
+		});
+	});
+})
+
 $(document).ready(function() {
 
 	// @todo: integrate into i18n
@@ -91,8 +161,6 @@ hawkejs.event.on({create: 'implementation', name: 'chimera/model_editor_filters'
 
 });
 
-
-
 // Enable nanoscroller
 hawkejs.event.on({create: 'block', name: 'admin-main'}, function(query, payload) {
 
@@ -111,6 +179,47 @@ hawkejs.event.on({create: 'block', name: 'admin-main'}, function(query, payload)
 		setTimeout(function() {
 			$nanos.nanoScroller('reset');
 		}, 100);
+	});
+});
+
+// Apply notification listeners
+hawkejs.event.on('chimera-notifications', function(query) {
+
+	$('.notification a').on('click', function(e){
+
+		var $this = $(this),
+		    notification_user_id,
+		    unread_count,
+		    url;
+
+		// If unread
+		if($this.data('usermessageid')){
+
+			notification_user_id = $this.data('usermessageid');
+
+			$this.removeData('usermessageid');
+			$this.children('.unread').html('');
+			
+			// Update unread count
+			unread_count = $('.badge-important').html();
+
+			if(unread_count > 1){
+				$('.badge-important').html(unread_count-1);
+			} else {
+				$('.badge-important').html('');
+			}
+			
+			//do magical ajax stuff with notification_user_id
+			url = '/chimera/admin/update_notification/'+notification_user_id;
+
+			$.ajax({
+				url: url,
+				success: function( data ) {
+				},
+				error: function() {
+				}
+			});
+		}
 	});
 });
 
@@ -142,10 +251,13 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 			var filter = {},
 			    $this  = $(this);
 
-			filter.fieldPath = $this.find('.filter').data('filter-field');
+			filter.fieldPath = $this.find('.filter[data-filter-field]').data('filter-field');
 			filter.condition = $this.find('select').val();
-			filter.value = $this.find('.filter').val();
-			filters.push(filter);
+			filter.value = $this.find('.filter[data-filter-field]').val();
+
+			if (filter.fieldPath) {
+				filters.push(filter);
+			}
 		});
 
 		// Get the amount of items to show, default to 20
@@ -201,54 +313,75 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 		html +=	'</select>';
 		html +=	'</td>';
 
-		// @todo: GET from server
-		html += '<td><input style="display:none;" id="input-'+ cleanFilterName +'" class="form-control filter" data-filter-field="'+ filter.fieldPath +'" value="'+filter.value+'" type="text"></td>';
-		html += '</tr>';
+		// Get the input field
+		$.post('/chimera/editor/' + modelName.underscore() + '/filterInput/' + filter.fieldPath, function(result) {
 
-		$filtersTable.append(html);
-		$('#filters-group').hide();
+			var template,
+			    payload,
+			    fieldHtml;
 
-		if(filter.condition){
-			$('#select-'+ cleanFilterName).val(filter.condition);
-		}
-		if(filter.value && filter.condition){
+			payload = {
+				data: result.data,
+				id: 'input-' + cleanFilterName,
+				filter: filter,
+				modelName: result.modelName,
+				fieldName: result.fieldName,
+				fieldPath: result.fieldPath
+			};
+
+			template = hawkejs.getTemplate('chimera_filter_input/' + result.filterFieldName + '_filter_input');
+
+			// Remove hawkejs specific code
+			template = template.slice(32);
+			template = template.slice(0, template.length-21)
+
+			fieldHtml = hawkejs.ejs.render(template, payload);
+
+			html += '<td>' + fieldHtml + '</td></tr>';
+			$filtersTable.append(html);
+
+			$('#filters-group').hide();
+
+			if(filter.condition){
+				$('#select-'+ cleanFilterName).val(filter.condition);
+			}
+
+			if(filter.value && filter.condition){
+				$('#input-'+ cleanFilterName).show();
+				$('#filterbtn, #applybtn, #clearbtn').show();
+				$andor.show();
+			}
+
+			//BIND EVENTS:
+			//CONDITION SELECT CHANGE EVENT: SHOWS/HIDES INPUT
 			$('#input-'+ cleanFilterName).show();
 			$('#filterbtn, #applybtn, #clearbtn').show();
 			$andor.show();
-		}
 
-		//BIND EVENTS:
-		//CONDITION SELECT CHANGE EVENT: SHOWS/HIDES INPUT
-		$('#input-'+ cleanFilterName).show();
-		$('#filterbtn, #applybtn, #clearbtn').show();
-		$andor.show();
+			//INPUT KEYUP EVENT: ENABLES/DISABLES BUTTONS
+			$('#input-'+ cleanFilterName).on('change', function(e){
 
-		//INPUT KEYUP EVENT: ENABLES/DISABLES BUTTONS
-		$('#input-'+ cleanFilterName).on('keyup', function(e){
+				var $this   = $(this),
+				    disable = false;
 
-			if(e.keyCode === 13){
-				e.preventDefault();
-				//saveForm();
-			}
-			var disable = false;
-			$(".filter").each(function(){
-				if($(this).val() === ''){
+				if ($this.val() === '') {
 					disable = true;
 				}
-			});
-			if(disable){
-				$('#applybtn, #filterbtn').addClass("disabled");
-				$andor.hide();
-			} else {
-				$('#applybtn, #filterbtn').removeClass("disabled");
-				$andor.show();
-			}
-		});
 
-		//TRASH CLICK EVENT: REMOVES FILTER AND ADDS BACK TO FILTER SELECT
-		$('.trash').on('click', function(e){
-			$(this).parent().parent().remove();
-			$('#applybtn, #filterbtn').removeClass("disabled");
+				if(disable){
+					$('#applybtn, #filterbtn').addClass("disabled");
+					$andor.hide();
+				} else {
+					$('#applybtn, #filterbtn').removeClass("disabled");
+					$andor.show();
+				}
+			});
+
+			//TRASH CLICK EVENT: REMOVES FILTER AND ADDS BACK TO FILTER SELECT
+			$('.trash').on('click', function(e){
+				$(this).parent().parent().remove();
+				$('#applybtn, #filterbtn').removeClass("disabled");
+			});
 		});
 	}
 
@@ -452,66 +585,6 @@ function applyChimeraFields(query, payload) {
 
 	// Apply select2 on select fields
 	$('select.form-control').select2();
-
-	$('input.select2-form-control[data-url]').each(function() {
-
-		var $this = $(this),
-		    assocUrl = $this.data('url'),
-		    multiple = ($this.data('select-type') === 'multiple');
-
-		$this.select2({
-			allowClear: true,
-			multiple: multiple,
-			ajax: {
-				url: assocUrl,
-				cache: true,
-				type: 'POST',
-				dataType: 'json',
-				quietMillis: 200,
-				data: function(term, page) {
-					return {
-						q: term,
-						page_limit: 10,
-						page: page
-					}
-				},
-				results: function (data, page) {
-					return data;
-				}
-			},
-			initSelection: function (element, callback) {
-				
-				var id = $(element).val();
-
-				if (multiple) {
-					id = String(id).split(',');
-				}
-
-				if (id) {
-					$.post(assocUrl, {init: true, id: id}, function(data) {
-						if (multiple) {
-							callback(data.results)
-						} else {
-							callback(data.results[0]);
-						}
-					});
-				}
-			},
-			formatResult: function(item) {
-				return item.formatted || String(item.text);
-			}
-		});
-
-		$this.select2('container').find('ul.select2-choices').sortable({
-			containment: 'parent',
-			start: function() {
-				$this.select2('onSortStart');
-			},
-			update: function() {
-				$this.select2('onSortEnd');
-			}
-		});
-	});
 
 	// Apply the mentions field (wip)
 	$('textarea.mention').each(function() {

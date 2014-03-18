@@ -1,12 +1,17 @@
-<% matchIns = {class: 'active', parent: {class: 'active'}}; %>
+<%
+matchIns = {class: 'active', parent: {class: 'active'}};
+
+// Emit the event that'll apply the notification js
+emit('chimera-notifications')
+%>
 
 <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 		<span class="badge badge-important"><% if(unread>0){%><%= unread %><% } %></span>
 		<%= name %> 
 		<i class="fa fa-angle-down"></i>
-    </a>
-    <ul class="dropdown-menu">
+	</a>
+	<ul class="dropdown-menu">
 		<% if(notifications.length>0){ %>
 			<% for(var i=0; i<notifications.length; i++){ %>
 				<% var notification = notifications[i]; %>
@@ -20,9 +25,7 @@
 						<br />
 						<%= notification.NotificationMessage.message %>
 						<br />
-						<small class="text-muted timeago">
-							<%= notification.NotificationUser.created %>
-						</small>
+						<small class="text-muted timeago" title="<%= notification.NotificationUser.created.toISOString() %>"></small>
 						<% if(!notification.NotificationUser.read){%><span class="pull-right label label-<%= notification.NotificationMessage.notification_type %> unread" style="margin-top: 3px;"><%= __('chimera', 'new') %></span> <% } %>
 					</a>
 				</li>
@@ -30,53 +33,16 @@
 		<% } else { %>
 			<li class="notification"><a href="#">No notifications</a></li>
 		<% } %>
-    </ul>
+	</ul>
 </li>
 <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 		<i class="fa fa-cog fa-lg"></i>
-    </a>
-    <ul class="dropdown-menu" style="min-width: 0px;">
+	</a>
+	<ul class="dropdown-menu" style="min-width: 0px;">
 		<li><% add_link('/chimera/settings', {title: __('chimera', 'Website settings')}); %></li>
 		<li><% add_link('/chimera/my_settings', {title: __('chimera', 'My settings')}); %></li>
 		<hr style="margin-top: 5px; margin-bottom: 5px;" />
 		<li><% add_link('/logout', {title: '<i class="fa fa-power-off"></i> Logout'}); %></li>
-    </ul>
+	</ul>
 </li>
-
-
-<script>
-	
-	$('.timeago').each(function(e){
-		$(this).html($.timeago(new Date($(this).html())));
-	});
-	
-	$('.notification a').on('click', function(e){		
-		//if unread
-		if($(this).data('usermessageid')){
-			var notification_user_id = $(this).data('usermessageid');
-			$(this).removeData('usermessageid');
-			
-			$(this).children('.unread').html('');
-			
-			//update unread count
-			var unread_count = $('.badge-important').html();
-			if(unread_count > 1){
-				$('.badge-important').html(unread_count-1);
-			} else {
-				$('.badge-important').html('');
-			}
-			
-			//do magical ajax stuff with notification_user_id
-			var url = '/chimera/admin/update_notification/'+notification_user_id;
-			$.ajax({
-				url: url,
-				success: function( data ) {
-				},
-				error: function() {
-				}
-			});
-			
-		}
-	});
-</script>
