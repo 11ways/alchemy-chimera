@@ -107,7 +107,8 @@ hawkejs.spot.introduced('input.select2-form-control[data-url]', function(element
 			},
 			formatResult: function(item) {
 				return item.formatted || String(item.text);
-			}
+			},
+			escapeMarkup: function(m) { return m; }
 		});
 
 		$this.select2('container').find('ul.select2-choices').sortable({
