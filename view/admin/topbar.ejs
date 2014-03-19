@@ -10,8 +10,8 @@ emit('chimera-notifications')
 		<span class="badge badge-important"><% if(unread>0){%><%= unread %><% } %></span>
 		<%= name %> 
 		<i class="fa fa-angle-down"></i>
-	</a>
-	<ul class="dropdown-menu">
+    </a>
+    <ul class="dropdown-menu" style="max-height: 450px;overflow-y: auto;overflow-x: hidden;">
 		<% if(notifications.length>0){ %>
 			<% for(var i=0; i<notifications.length; i++){ %>
 				<% var notification = notifications[i]; %>

@@ -21,7 +21,7 @@
 	</div>
 	<div class="clear"></div>
 	<div class="col-xs-12 col-sm-12 col-md-12">
-		<select name="data[settings][get_notifications]" class="form-control-nos2" style="max-width: 150px;">
+		<select name="data[settings][get_notifications]" class="selectpicker" style="max-width: 150px;">
 			<option value="all" <% if(settings.get_notifications == 'all'){ %> selected <% } %>><%= __('chimera', 'Everyone') %></option>
 			<option value="admin_only" <% if(settings.get_notifications == 'admin_only'){ %> selected <% } %>><%= __('chimera', 'Administrators only') %></option>
 			<option value="none" <% if(settings.get_notifications == 'none'){ %> selected <% } %>><%= __('chimera', 'Nobody') %></option>
@@ -34,5 +34,6 @@
 		<% form.end('my_settings', {title: 'Save settings', 'class': 'btn btn-primary'}) %>
 	</div>
 </div>
+<script>$('.selectpicker').selectpicker();</script>
 
 <% end(store('chimera-view-setting').contentblock) %>
