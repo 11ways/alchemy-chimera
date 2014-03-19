@@ -17,7 +17,7 @@ emit('chimera-notifications')
 				<% var notification = notifications[i]; %>
 				<li class="notification notification-<%= notification.NotificationMessage.notification_type %>">
 					<a 
-						href="<% if(notification.NotificationMessage.link){ %><%= notification.NotificationMessage.link %><% } else { %>#<% } %>"
+						href="<% if(notification.NotificationMessage.link){ %><%= notification.NotificationMessage.link %><% } %>"
 						<% if(!notification.NotificationUser.read){%> data-usermessageid="<%= notification.NotificationUser._id %>" <% } %>
 						<% if(notification.NotificationMessage.external_link){%> target="_blank" <% } %>
 					>
