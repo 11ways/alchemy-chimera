@@ -334,12 +334,9 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 
 			// Remove hawkejs specific code
 			template = template.slice(32);
-			template = template.slice(0, template.length-21)
+			template = template.slice(0, template.length-21);
 
 			fieldHtml = hawkejs.ejs.render(template, payload);
-			
-			console.log('derp');
-			console.log(fieldHtml);
 
 			html += '<td style="width:48%">' + fieldHtml + '</td></tr>';
 			$filtersTable.append(html);
