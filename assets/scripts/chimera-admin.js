@@ -298,22 +298,22 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 		filtercount++;
 
 		html = '<tr class="tr-'+ cleanFilterName +'" >';
-		html += '<td><a class="btn btn-default btn-xs trash" data-filter-field="'+ filter.fieldPath +'"><i class="fa fa-trash-o"></i></a></td>';
-		html += '<td>' + cleanTitle + '</td>';
-		html += '<td>';
+		html += '<td style="width:7%"><a class="btn btn-default btn-xs trash" data-filter-field="'+ filter.fieldPath +'"><i class="fa fa-trash-o"></i></a></td>';
+		html += '<td style="width:20%">' + cleanTitle + '</td>';
+		html += '<td style="width:25%">';
 
 		if(!filter.value){
 			filter.value = '';
 		}
 
-		html += '<select name="" id="select-'+ cleanFilterName +'" class="form-control-nos2">';
+		html += '<select name="" id="select-'+ cleanFilterName +'" class="selectpicker" data-width="100%">';
 		html +=	'<option value="like">Contains</option>';
 		html +=	'<option value="is">Equals</option>';
 		html +=	'<option value="notlike">Doesn\'t contain</option>';
 		html +=	'<option value="isnot">Is not equal to</option>';
 		html +=	'</select>';
 		html +=	'</td>';
-
+		
 		// Get the input field
 		$.post('/chimera/editor/' + modelName.underscore() + '/filterInput/' + filter.fieldPath, function(result) {
 
@@ -337,9 +337,14 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 			template = template.slice(0, template.length-21)
 
 			fieldHtml = hawkejs.ejs.render(template, payload);
+			
+			console.log('derp');
+			console.log(fieldHtml);
 
-			html += '<td>' + fieldHtml + '</td></tr>';
+			html += '<td style="width:48%">' + fieldHtml + '</td></tr>';
 			$filtersTable.append(html);
+			
+			$('.selectpicker').selectpicker();
 
 			$('#filters-group').hide();
 
@@ -398,16 +403,20 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 
 	// Create the filter fields for select2
 	Object.each(fields, function(group, alias) {
-
 		fieldMap[alias+'.__all'] = alias;
 
 		filterFields.push({id: alias + '.__all', text: '<b>' + alias + '</b>', modelGroup: true, modelName: group.modelName});
 
-		Object.each(group.fields, function(title, name) {
+		Object.each(group.fields, function(field, name) {
+			if(field.model){
+				fieldMap[field.model+'.'+name] = field.key;
 
-			fieldMap[alias+'.'+name] = title;
+				filterFields.push({id: field.model + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field.key});
+			} else {
+				fieldMap[alias+'.'+name] = field;
 
-			filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + title});
+				filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field});
+			}
 		});
 	});
 
@@ -420,11 +429,13 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 	$filterselect = $('#s2id_chimera-filters-input');
 
 	// Hide the select by default
-	$filterselect.hide();
+	//$filterselect.hide();
 
 	// Add the new filter when it has been chosen in the select
 	$filterInput.on('change', function(){
-
+		
+		$('#applybtn').addClass("disabled");
+		
 		var filterData = $filterInput.select2('data'),
 		    filterName = filterData.text,
 		    fieldName  = filterData.id,
@@ -432,7 +443,7 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 
 		if (filterName !== '- Column -') {
 
-			$filterselect.hide();
+			//$filterselect.hide();
 			$filterInput.select2('val', '');
 
 			filter = {title: filterName, fieldPath: fieldName, type: 'test'};
@@ -442,11 +453,11 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 	});
 
 	//SHOW FILTERS SELECT ON 'ADD FILTER' CLICK
-	$('#filterbtn').on('click', function(e) {
+	/*$('#filterbtn').on('click', function(e) {
 		e.preventDefault();
 		$filterselect.show();
 		$('#filterbtn, #applybtn').addClass("disabled");
-	});
+	});*/
 
 	//WHEN CLICKING CLEAR: REMOVE ALL FILTERS, ENABLE APPLY BUTTON
 	$('#clearbtn').on('click', function(e){

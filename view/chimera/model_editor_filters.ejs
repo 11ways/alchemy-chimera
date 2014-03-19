@@ -22,7 +22,7 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 			<div class="form-group">
 				<label for="data[<%= modelName %>][show]" class="col-sm-9" style="line-height: 30px; text-align:right;"><% echo(__('chimera', 'Show')) %></label>
 				<div class="col-sm-3">
-					<select id="show" name="data[<%= modelName %>][show]" class="form-control-nos2">
+					<select id="show" name="data[<%= modelName %>][show]" class="selectpicker" data-width="100%">
 						<% for(var i in pageSizes){ %>
 							<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
 						<% } %>
@@ -40,7 +40,7 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(search){ %><%= search %><% } %>">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><% echo(__('chimera', 'Search')) %></span>
 			</div>
-			<option value="global_search" ><% echo(__('chimera', 'Global Search')) %></option>
+			<!--<option value="global_search" ><% //echo(__('chimera', 'Global Search')) %></option>-->
 		</div>
 	</div>
 	<div class="clear"></div>
@@ -63,6 +63,7 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 								</table>
 							</div>
 							<div class="clear"></div>
+							<br />
 							<div class="col-sm-12">
 								<input type="hidden" id="chimera-filters-input">
 							</div>
@@ -91,7 +92,7 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 							<div class="col-sm-12">
 								<button class="btn btn-primary disabled" id="applybtn"><i class="fa fa-check"></i> <% echo(__('chimera', 'Apply')) %></button>
 								<button class="btn btn-default" id="clearbtn"><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
-								<button class="btn btn-default" id="filterbtn"><i class="fa fa-plus"></i> <% echo(__('chimera', 'Add filter')) %></button>
+								<!--<button class="btn btn-default" id="filterbtn"><i class="fa fa-plus"></i> <% echo(__('chimera', 'Add filter')) %></button>-->
 							</div>
 						</div>
 					</div>
@@ -103,3 +104,4 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 	<% form.end() %>
 </div>
 <div class="clear"></div>
+<script>$('.selectpicker').selectpicker();</script>
