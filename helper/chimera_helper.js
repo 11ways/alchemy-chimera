@@ -8,6 +8,39 @@ module.exports = function chimeraHelpers(hawkejs) {
 	    indexv  = helpers.chimera_index_views = {};
 
 	/**
+	 * Show flash messages
+	 *
+	 * @author   Jelle De Loecker   <jelle@codedor.be>
+	 * @since    0.0.1
+	 * @version  0.0.1
+	 */
+	hawkejs.event.on('viewready', function(type, data) {
+
+		var entry, list, i;
+
+		if (hawkejs.storage.deliverData && hawkejs.storage.deliverData.list) {
+			list = hawkejs.storage.deliverData.list;
+		} else {
+			return;
+		}
+
+		for (i = 0; i < list.length; i++) {
+
+			entry = list[i];
+			
+			if (entry.type == 'flash' && !entry.done) {
+				if (toastr[entry.value.type]) {
+					toastr[entry.value.type](entry.value.value);
+				} else {
+					toastr.info(entry.value.type + ': ' + entry.value.value);
+				}
+
+				entry.done = true;
+			}
+		}
+	});
+
+	/**
 	 * Print out module actions
 	 *
 	 * @author        Jelle De Loecker   <jelle@codedor.be>
