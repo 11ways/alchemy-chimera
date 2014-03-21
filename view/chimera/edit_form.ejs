@@ -38,6 +38,10 @@ if(typeof options.showSaveButton == 'undefined' || options.showSaveButton){
 	readonly = false;
 }
 
+if (typeof history === 'undefined') {
+	history = true;
+}
+
 errors();
 %>
 <div class="editform">
@@ -52,7 +56,7 @@ errors();
 		</ul>
 	</div>
 	<div class="panel panel-default">
-		<% form.create(options.formName, {action: 'here', 'class': 'form-horizontal'}) %>
+		<% form.create(options.formName, {action: 'here', 'class': 'form-horizontal', history: history}) %>
 		<div class="panel-body">
 			<div class="tab-content">
 	<%
