@@ -1,0 +1,14 @@
+<% expands('chimera/model_edit');
+
+start('tempeditor')
+
+var options = {};
+options.groups = __groups;
+
+if (typeof showSaveButton !== 'undefined') {
+	options.showSaveButton = showSaveButton;
+}
+
+print_element('chimera/edit_form', {variables: {options: options, history: false, modal: true}});
+
+end('tempeditor') %>

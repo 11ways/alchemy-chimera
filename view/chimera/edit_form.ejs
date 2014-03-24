@@ -24,8 +24,6 @@ if (typeof options.formName === 'undefined') {
 	}
 }
 
-
-
 if (typeof options.saveButton === 'undefined') {
 	if (typeof saveButton !== 'undefined') {
 		options.saveButton = saveButton;
@@ -40,6 +38,10 @@ if(typeof options.showSaveButton == 'undefined' || options.showSaveButton){
 
 if (typeof history === 'undefined') {
 	history = true;
+}
+
+if (typeof modal === 'undefined') {
+	modal = false;
 }
 
 errors();
@@ -57,6 +59,7 @@ errors();
 	</div>
 	<div class="panel panel-default">
 		<% form.create(options.formName, {action: 'here', 'class': 'form-horizontal', history: history}) %>
+		<% if (modal) { %><input type="hidden" name="modal" value="1"/><% } %>
 		<div class="panel-body">
 			<div class="tab-content">
 	<%
@@ -82,7 +85,9 @@ errors();
 			</div>
 		</div>
 		<div class="panel-footer">
-			<% if (typeof options.showSaveButton == 'undefined' || options.showSaveButton) { %>
+			<% if (modal) { %>
+				<button class="btn btn-primary modalsubmit"><% echo(options.saveButton) %></button>
+			<% } else if (typeof options.showSaveButton == 'undefined' || options.showSaveButton) { %>
 				<% form.submit(options.saveButton, {'class': 'btn btn-primary'}) %>
 			<% } %>
 		</div>

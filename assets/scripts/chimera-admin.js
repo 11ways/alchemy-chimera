@@ -13,6 +13,33 @@ var timeOptions = {
 	}
 };
 
+hawkejs.spot.introduced('.fillwidth', function(elements) {
+
+	$(elements).each(function() {
+
+		return;
+
+		var $this      = $(this),
+		    $parent    = $this.parent(),
+		    $siblings  = $this.siblings(),
+		    totalWidth = $parent.innerWidth(),
+		    usedWidth  = 0;
+
+		if (!totalWidth) {
+			totalWidth = $parent.parent().innerWidth();
+		}
+
+		for (var i = 0; i < $siblings.length; i++) {
+			usedWidth += $($siblings[i]).outerWidth();
+		}
+
+		pr('Width calculation: ' + totalWidth + ' - ' + usedWidth + ': ' + (totalWidth-usedWidth));
+
+		$this.width(totalWidth-usedWidth);
+	});
+
+});
+
 // Apply datepicker
 hawkejs.spot.introduced('hawkejs[data-chimera-input] input.datepicker', function(elements) {
 
@@ -121,7 +148,123 @@ hawkejs.spot.introduced('input.select2-form-control[data-url]', function(element
 			}
 		});
 	});
-})
+});
+
+(function() {
+
+	var activeButton;
+
+	hawkejs.spot.introduced('button[data-modal-add]', function(elements) {
+
+		$(elements).click(function(e) {
+
+			var $this = $(this);
+
+			e.preventDefault();
+
+			activeButton = $this;
+
+			hawkejs.goToAjaxView($this.data('modal-url'), {modal: true}, undefined, function(payload){
+				
+			});
+		});
+	});
+
+	hawkejs.spot.introduced('#tempeditor .btn.modalsubmit', function(elements) {
+
+		$(elements).click(function(e) {
+
+			// Prevent the browser from submitting the form
+			e.preventDefault();
+
+			// Turn the submit button into a jQuery object
+			var $this = $(this);
+
+			// Get the parent form
+			var $form = $this.parents('form');
+
+			// Get the wanted action
+			var action = $form.attr('action');
+
+			// Get the wanted method
+			var method = $form.attr('method').toLowerCase();
+
+			// Get the data
+			var getData, postData;
+
+			var href = action;
+
+			function handleModalResponse(variables, textStatus, jqXHR) {
+
+				if (!activeButton) {
+					if (console) {
+						console.error('Could not determine modal origin');
+					}
+					return;
+				}
+
+				var item   = variables.item[variables.modelName],
+				    $input = activeButton.parents('.select2group').find('.select2-form-control'),
+				    original;
+
+				if (item) {
+
+					// Get the original value
+					original = $input.select2('val');
+
+					// If it's an array, add the new value
+					if (Array.isArray(original)) {
+						$input.select2('val', original.concat(item._id));
+					} else {
+						// Replace the original value
+						$input.select2('val', item._id);
+					}
+
+					// Hide the modal
+					$this.parents('.modal').modal('hide');
+				}
+
+			};
+
+			if (getData) href = hawkejs.buildUrl(href, getData);
+
+			if (method === 'get') {
+				getData = $form.jsonify();
+			} else if (method === 'post') {
+				postData = $form.jsonify();
+			}
+
+			// Is POST data is given, turn it into a JSON post
+			if (postData) {
+				$.ajax(href, {
+					data: JSON.stringify(postData),
+					contentType : 'application/json',
+					type: 'POST',
+					success: handleModalResponse,
+					headers: {
+						'x-hawkejs-request': true
+					}
+				});
+			} else {
+				// Get the variables we need to build this page
+				$.ajax(href, {
+					type: 'GET',
+					success: handleModalResponse,
+					headers: {
+						'x-hawkejs-request': true
+					}
+				});
+			}
+		});
+
+	});
+
+}());
+
+// Show a modal when menu piece config data is loaded
+hawkejs.event.on({create: 'block', name: 'tempeditor'}, function(identifier, data) {
+	$('#tempeditor div.modal').modal();
+});
 
 $(document).ready(function() {
 
