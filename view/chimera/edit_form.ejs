@@ -86,9 +86,9 @@ errors();
 		</div>
 		<div class="panel-footer">
 			<% if (modal) { %>
-				<button class="btn btn-primary modalsubmit"><% echo(options.saveButton) %></button>
+				<button class="btn btn-primary savemodeledit modalsubmit"><% echo(options.saveButton) %></button>
 			<% } else if (typeof options.showSaveButton == 'undefined' || options.showSaveButton) { %>
-				<% form.submit(options.saveButton, {'class': 'btn btn-primary'}) %>
+				<% form.submit(options.saveButton, {'class': 'btn btn-primary savemodeledit'}) %>
 			<% } %>
 		</div>
 

@@ -152,6 +152,35 @@ hawkejs.spot.introduced('input.select2-form-control[data-url]', function(element
 
 (function() {
 
+	var openTab;
+
+	// Remember which tab was opened before a save
+	hawkejs.spot.introduced('#hawkejs-insert-block-admin-content button.savemodeledit', function(elements) {
+
+		$(elements).click(function(e) {
+			
+			// Get the href of the open tab
+			openTab = $('#hawkejs-insert-block-admin-content .grouptabs li.active a').attr('href');
+
+			// Remove the trailing uid
+			openTab = openTab.replace(/[\s\d]+$/, '');
+		});
+
+	});
+
+	// When a new tab is inserted
+	hawkejs.spot.introduced('#hawkejs-insert-block-admin-content .grouptabs', function(elements) {
+
+		// If no openTab is defined, do nothing
+		if (!openTab) {
+			return;
+		}
+
+		// Activate the tab
+		$('a[href^="' + openTab + '"]', $(elements)).tab('show');
+	});
+
+
 	var activeButton;
 
 	hawkejs.spot.introduced('button[data-modal-add]', function(elements) {
