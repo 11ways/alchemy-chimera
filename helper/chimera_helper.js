@@ -72,6 +72,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 		    prepend,
 		    action,
 		    title,
+		    path,
 		    list,
 		    key,
 		    i;
@@ -87,7 +88,11 @@ module.exports = function chimeraHelpers(hawkejs) {
 			// Go over every action name in the list
 			for (i = 0; i < list.length; i++) {
 
-				action = actions[list[i]];
+				if (typeof list[i] === 'object') {
+					action = list[i];
+				} else {
+					action = actions[list[i]];
+				}
 
 				if (action) {
 
@@ -118,12 +123,17 @@ module.exports = function chimeraHelpers(hawkejs) {
 						title = false;
 					}
 
-					this.add_link(action.path, {
+					path = action.path.fillPlaceholders(routeVars);
+
+					if (path.placeholders().length) {
+						continue;
+					}
+
+					this.add_link(path, {
 						title: title,
 						content: content,
 						'class': cssClass,
 						prepend: prepend,
-						urlvars: routeVars,
 						match: {
 							'class': 'active',
 							greedy: true
