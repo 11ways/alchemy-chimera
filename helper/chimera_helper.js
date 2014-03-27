@@ -150,6 +150,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 		    addButton = '',
 		    tempOption,
 		    tempValue,
+		    helptext,
 		    tempItem,
 		    viewPath,
 		    result,
@@ -236,6 +237,11 @@ module.exports = function chimeraHelpers(hawkejs) {
 
 		hWrapper += '>';
 		wrapper = hWrapper + wrapper.replace('<!--INPUT-->', input) + '</hawkejs>';
+
+		if (options.variables.item.help) {
+			helptext = '<div class="alert alert-info chimera-help-text"><span>' + options.variables.item.help + '</span></div>'
+			wrapper = wrapper.replace('<!--HELP-->', helptext);
+		}
 
 		this.echo(wrapper);
 	};
