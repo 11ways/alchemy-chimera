@@ -1,0 +1,115 @@
+<% 
+//IF JSON VIEW USE FIELDS ELSE USE ALLFIELDS
+if(typeof(allGroupedFields) === 'undefined'){
+	fieldInfo = [];
+	for(var i in fields){
+		var field = {};
+		field.title = field.name = fields[i];
+		fieldInfo.push(field);
+	}
+} else {
+	fieldInfo = allFieldTitles;
+}
+
+emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: filters});
+
+%>
+<div class="filters">
+	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
+	<!-- SHOW X ITEMS PER PAGE -->
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="form-group">
+				<label for="data[<%= modelName %>][show]" class="col-sm-9" style="line-height: 30px; text-align:right;"><% echo(__('chimera', 'Show')) %></label>
+				<div class="col-sm-3">
+					<select id="show" name="data[<%= modelName %>][show]" class="selectpicker" data-width="100%">
+						<% for(var i in pageSizes){ %>
+							<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
+						<% } %>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+
+	<div class="row" style="margin-bottom: 5px;">
+		<div class="col-sm-12">
+			<div class="input-group">
+				<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
+				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(search){ %><%= search %><% } %>">
+				<span class="input-group-addon search-btn" style="cursor: pointer;"><% echo(__('chimera', 'Search')) %></span>
+			</div>
+			<!--<option value="global_search" ><% //echo(__('chimera', 'Global Search')) %></option>-->
+		</div>
+	</div>
+	<div class="clear"></div>
+
+	<!-- FILTERS -->
+	<div class="row">
+		<div class="col-sm-10">
+			<button class="btn btn-default btn-block"  data-toggle="modal" data-target="#filterModal" id="add-filters-btn">
+				<% echo(__('chimera', 'Add Filters')) %>
+			</button>
+		</div>
+		<div class="col-sm-2">
+			<button type="button" class="btn btn-default  btn-block" id="clearbtn" ><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
+		</div>
+	</div>
+	
+	<!-- Filter Modal -->
+	<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="filterModalLabel"><% echo(__('chimera', 'Add Filters')) %></h4>
+				</div>
+				
+				<div class="modal-body">
+					<div class="panel-group" id="filter-modal-body">
+						
+					</div>
+					<!-- ANDOR -->
+					<input type="hidden" id="chimera-filters-input">
+					<div class="clear"></div>
+					<br />
+					<div id="andor" class="col-sm-12">
+						<div class="radio row">
+							<div class="col-sm-12">
+								<label>
+									<input type="radio" name="data[<%= modelName %>][andor]" value="or" <% if(andor && andor === "or"){%> checked <% } %>>
+									<%= __('chimera', 'Match any condition') %>
+								</label>
+							</div>
+						</div>
+						<div class="radio row">
+							<div class="col-sm-12">
+								<label>
+									<input type="radio" name="data[<%= modelName %>][andor]" value="and" <% if(!andor){%> checked <% } %> <% if(andor && andor === "and"){%> checked <% } %>>
+									<%= __('chimera', 'Match all conditions') %>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<br />
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><% echo(__('chimera', 'Close')) %></button>
+					<button type="button" class="btn btn-primary" id="applybtn" data-dismiss="modal"><% echo(__('chimera', 'Apply Filters')) %></button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<input name="data[<%= modelName %>][filters]"  value="" type="hidden" >
+	<% form.end() %>
+</div>
+<div class="clear"></div>
+<script>
+	$('.selectpicker').selectpicker();
+</script>

@@ -677,6 +677,261 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 
 });
 
+hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
+
+	var filterFields = [],
+	    fields = payload.fields,
+	    modelName = payload.modelName,
+	    filters   = payload.filters,
+	    $filters  = $('#filters'),
+	    $filterrows = $('tr', $filters),
+	    $filterInput = $('#chimera-filters-input'),
+	    $filterselect,
+	    fieldMap = {},
+	    filterConditions = [];
+
+	/**
+	 * Apply the filter & show settings to the current index
+	 */
+	console.log('hodor');
+	function applyFormFilters(){
+
+		var url = window.location.origin + window.location.pathname,
+		    filters = [],
+		    options = {},
+		    data = {};
+
+		$('.filters tr').each(function(){
+			
+			var filter = {},
+			    $this  = $(this);
+
+			filter.fieldPath = $this.find('.filter[data-filter-field]').data('filter-field');
+			filter.condition = $this.find('select').val();
+			filter.value = $this.find('.filter[data-filter-field]').val();
+
+			if (filter.fieldPath && filter.value!== '') {
+				filters.push(filter);
+			}
+		});
+
+		// Get the amount of items to show, default to 20
+		options.show = $('select[name="data[' + modelName + '][show]"]').val() || 20;
+		
+		// Get the search query
+		options.search = $('input[name="data[' + modelName + '][search]"]').val() || false;
+
+		// Do an AND or an OR search?
+		options.andor = $('input[name="data[' + modelName + '][andor]"]:checked').val() || 'and';
+
+		// Add the actual filters
+		options.filters = filters;
+
+		// Store everything in the data object under the current model name
+		data[modelName] = options;
+
+		// Load the page over ajax
+		hawkejs.goToAjaxViewWithHistory(url, false, {data: data});
+	}
+
+	/**
+	 * Create filter conditions
+	 */
+	function createConditions(filter, table){
+
+		var filtercount      = 0,
+		    $andor           = $('#andor'),
+		    cleanFilterName,
+		    cleanTitle,
+		    html;
+
+		cleanFilterName = filter.fieldPath.replace('.', '_').toLowerCase()+filtercount;
+		cleanTitle = filter.title.replace(/\&nbsp;/g, '');
+
+		filtercount++;
+
+		html = '<tr class="tr-'+ cleanFilterName +'" >';
+		html += '<td style="width:35%">' + cleanTitle + '</td>';
+		html += '<td style="width:30%">';
+
+		if(!filter.value){
+			filter.value = '';
+		}
+
+		html += '<select name="" id="select-'+ cleanFilterName +'" class="selectpicker" data-width="100%">';
+		html +=	'<option value="like">Contains</option>';
+		html +=	'<option value="is">Equals</option>';
+		html +=	'<option value="notlike">Doesn\'t contain</option>';
+		html +=	'<option value="isnot">Is not equal to</option>';
+		html +=	'</select>';
+		html +=	'</td>';
+		
+		// Get the input field
+		$.post('/chimera/editor/' + modelName.underscore() + '/filterInput/' + filter.fieldPath, function(result) {
+
+			var template,
+			    payload,
+			    fieldHtml;
+
+			payload = {
+				data: result.data,
+				id: 'input-' + cleanFilterName,
+				filter: filter,
+				modelName: result.modelName,
+				fieldName: result.fieldName,
+				fieldPath: result.fieldPath
+			};
+
+			template = hawkejs.getTemplate('chimera_filter_input/' + result.filterFieldName + '_filter_input');
+
+			// Remove hawkejs specific code
+			template = template.slice(32);
+			template = template.slice(0, template.length-21);
+
+			fieldHtml = hawkejs.ejs.render(template, payload);
+
+			html += '<td style="width:35%">' + fieldHtml + '</td></tr>';
+			table.append(html);
+			
+			$('#filters-group').hide();
+
+			if(filter.condition){
+				$('#select-'+ cleanFilterName).val(filter.condition);
+			}
+
+			if(filter.value && filter.condition){
+				$('#input-'+ cleanFilterName).show();
+				$('#filterbtn, #applybtn, #clearbtn').show();
+				$andor.show();
+			}
+			
+			// Apply the previously set filters
+			if (filters && typeof filters == 'object') {
+				filters.forEach(function(filter) {
+					if(filter.fieldPath === payload.fieldPath){
+						$('#'+payload.id).val(filter.value);
+						var selectid = payload.id.replace("input", "select");
+						$('#'+selectid).val(filter.condition);
+					}
+				});
+			}
+			
+			$('.selectpicker').selectpicker();
+
+			//BIND EVENTS:
+			//CONDITION SELECT CHANGE EVENT: SHOWS/HIDES INPUT
+			$('#input-'+ cleanFilterName).show();
+			$('#filterbtn, #applybtn, #clearbtn').show();
+			$andor.show();
+
+			//INPUT KEYUP EVENT: ENABLES/DISABLES BUTTONS
+			$('#input-'+ cleanFilterName).on('change', function(e){
+
+				var $this   = $(this),
+				    disable = false;
+
+				if ($this.val() === '') {
+					disable = true;
+				}
+
+				if(disable){
+					$('#applybtn, #filterbtn').addClass("disabled");
+					$andor.hide();
+				} else {
+					$('#applybtn, #filterbtn').removeClass("disabled");
+					$andor.show();
+				}
+			});
+
+			//TRASH CLICK EVENT: REMOVES FILTER AND ADDS BACK TO FILTER SELECT
+			$('.trash').on('click', function(e){
+				$(this).parent().parent().remove();
+				$('#applybtn, #filterbtn').removeClass("disabled");
+			});
+		});
+	}
+
+	// Apply the change of amount of items to show on the page
+	$('#show').on('change', applyFormFilters);
+
+	// Create the filter fields for select2
+	Object.each(fields, function(group, alias) {
+		fieldMap[alias+'.__all'] = alias;
+
+		filterFields.push({id: alias + '.__all', text: '<b>' + alias + '</b>', modelGroup: true, modelName: group.modelName});
+
+		Object.each(group.fields, function(field, name) {
+			if(field.model){
+				fieldMap[field.model+'.'+name] = field.key;
+
+				filterFields.push({id: field.model + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field.key});
+			} else {
+				fieldMap[alias+'.'+name] = field;
+
+				filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field});
+			}
+		});
+	});
+	
+	var newPanelGroup = false;
+	var html='';
+	var currentParentI = 0;
+	for(var i=0; i < filterFields.length; i++){
+		var filterField = filterFields[i];
+		var filter;
+		
+		if(filterField.modelGroup){
+			if(i !== 0){
+				newPanelGroup = true;
+				currentParentI = i;
+				html = '</table></div></div></div>';
+			} else {
+				html = '';
+			}
+			html+= '<div class="panel panel-default">';
+			html+= '<a data-toggle="collapse" data-parent="#accordion" href="#collapse'+i+'"><div class="panel-heading" ><h4 class="panel-title">'+filterField.text+'</h4></div></a>';
+			html+= '<div id="collapse'+i+'" class="panel-collapse collapse"><div class="panel-body"><table id="table-collapse'+i+'" class="filters">';
+			$('#filter-modal-body').append(html);
+		} else {
+			newPanelGroup = false;
+			filter = {title: filterField.text, fieldPath: filterField.id, type: 'test'};
+			createConditions(filter, $('#table-collapse'+currentParentI));
+		}
+		if(i === filterFields.length-1 ){
+			html = '</table></div></div></div>';
+			$('#filter-modal-body').append(html);
+		}
+
+	}
+
+	//WHEN CLICKING CLEAR: REMOVE ALL FILTERS, ENABLE APPLY BUTTON
+	$('#clearbtn').on('click', function(e){
+		e.preventDefault();
+		$('#clearbtn i').addClass('fa-spin');
+		$('.filters input').each(function(){
+			$(this).val('');
+		});
+		$('#applybtn').click();
+	});
+
+	$('#applybtn').on('click', function(e){
+		e.preventDefault();
+		applyFormFilters();
+	});
+	
+	$('.search-input').on('keyup', function(e){
+		if(e.keyCode === 13){
+			e.preventDefault();
+			applyFormFilters();
+		}
+	});
+	$('.search-btn').on('click', function(e){
+		e.preventDefault();
+		applyFormFilters();
+	});
+
+});
+
 function applyChimeraFields(query, payload) {
 
 	var dataDo = function dataDo($element) {

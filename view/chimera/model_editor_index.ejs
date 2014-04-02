@@ -14,7 +14,11 @@ start('chimera-page-title'); -%>
 		<% chimera.actions('paginate') %>
 	</div>
 	<div class="clear"></div>
-	<% implement('chimera/model_editor_filters') %>
+	<% if(!useSeparateFilterPage){ %>
+		<% implement('chimera/model_editor_filters') %>
+	<% } else { %>
+		<% implement('chimera/model_editor_filters_modal') %>
+	<% } %>
 </div>
 <% end('chimera-page-title'); %>
 
