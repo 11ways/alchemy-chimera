@@ -693,7 +693,6 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 	/**
 	 * Apply the filter & show settings to the current index
 	 */
-	console.log('hodor');
 	function applyFormFilters(){
 
 		var url = window.location.origin + window.location.pathname,
