@@ -11,7 +11,9 @@
 <% start('input') %>
 <div class="select2group" style="width:100%;overflow: auto;">
 	<div style="float:right;margin-left:15px">
-		<button data-modal-add data-modal-url="<%= item.value.modalUrl %>" class="btn btn-default"><i class="fa fa-plus-circle"></i> <% echo(__('chimera', 'Add property')) %></button>
+		<% if(!item.value.string) { %>
+			<button data-modal-add data-modal-url="<%= item.value.modalUrl %>" class="btn btn-default"><i class="fa fa-plus-circle"></i> <% echo(__('chimera', 'Add property')) %></button>
+		<% } %>
 	</div>
 	<div style="overflow:auto;">
 		<input
@@ -22,6 +24,9 @@
 			data-url="<%= item.value.url %>"
 			value="<%= item.value.value %>"
 			data-select-type="<%= item.value.select %>"
+			<% if(item.value.string) { %>
+			data-string-type="true"
+			<% } %>
 			<% if(item.readonly===true){ %> readonly <% } %>
 			>
 		</input>

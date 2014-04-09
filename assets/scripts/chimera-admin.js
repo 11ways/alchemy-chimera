@@ -115,8 +115,15 @@ hawkejs.spot.introduced('input.select2-form-control[data-url]', function(element
 				}
 			},
 			initSelection: function (element, callback) {
-				
-				var id = $(element).val();
+
+				var $element = $(element),
+				    id       = $element.val();
+
+				// No need to query the server for simple string types
+				if ($element.data('string-type')) {
+					callback({id: id, text: id, formatted: id});
+					return;
+				}
 
 				if (multiple) {
 					id = String(id).split(',');
