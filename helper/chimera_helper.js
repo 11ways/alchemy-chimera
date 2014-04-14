@@ -336,16 +336,20 @@ module.exports = function chimeraHelpers(hawkejs) {
 	 *
 	 * @author        Kjell Keisse   <kjell@codedor.be>
 	 * @since         0.0.2
-	 * @version       0.0.2
+	 * @version       0.1.0
 	 */
 	fields.assoc_view = function assoc_view(record, fieldName, options) {
 
 		var value = record[fieldName];
 
-		if (typeof value == 'object' && typeof value.value !== 'undefined') {
+		if (value && typeof value == 'object' && typeof value.value !== 'undefined') {
 			value = value.value;
 		}
-		
+
+		if (value === null) {
+			return;
+		}
+
 		if(typeof value.hasMany !== 'undefined' && value.hasMany.length !== 0){
 			for(var i = 0; i < value.hasMany.length; i++){
 				this.add_link('../'+options.modelName+'/view/'+value.hasMany[i]._id, {title: value.hasMany[i].displayName});
