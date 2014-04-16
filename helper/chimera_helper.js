@@ -233,7 +233,9 @@ module.exports = function chimeraHelpers(hawkejs) {
 		}
 
 		// Add the add button (only set if this field is an array)
-		input += addButton;
+		if (!item.disabled) {
+			input += addButton;
+		}
 
 		hWrapper += '>';
 		wrapper = hWrapper + wrapper.replace('<!--INPUT-->', input) + '</hawkejs>';

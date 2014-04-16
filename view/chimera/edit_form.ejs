@@ -75,7 +75,8 @@ errors();
 			for (i = 0; i < group.fields.length; i++) {
 
 				item = group.fields[i];
-				item.readonly = readonly;
+				item.readonly = readonly || item.disabled;
+
 				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item}});
 			}
 
@@ -85,10 +86,12 @@ errors();
 			</div>
 		</div>
 		<div class="panel-footer">
-			<% if (modal) { %>
-				<button class="btn btn-primary savemodeledit modalsubmit"><% echo(options.saveButton) %></button>
-			<% } else if (typeof options.showSaveButton == 'undefined' || options.showSaveButton) { %>
-				<% form.submit(options.saveButton, {'class': 'btn btn-primary savemodeledit'}) %>
+			<% if (modelFlags[actionType]) { %>
+				<% if (modal) { %>
+					<button class="btn btn-primary savemodeledit modalsubmit"><% echo(options.saveButton) %></button>
+				<% } else if (typeof options.showSaveButton == 'undefined' || options.showSaveButton) { %>
+					<% form.submit(options.saveButton, {'class': 'btn btn-primary savemodeledit'}) %>
+				<% } %>
 			<% } %>
 		</div>
 
