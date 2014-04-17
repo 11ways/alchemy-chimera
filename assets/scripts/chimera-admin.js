@@ -84,8 +84,8 @@ hawkejs.spot.introduced('.timeago', function(elements) {
 	$(elements).timeago();
 });
 
-// Apply select2
-hawkejs.spot.introduced('input.select2-form-control[data-url]', function(elements) {
+// Apply select2 once the inputs appear
+hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, function(elements) {
 
 	$(elements).each(function() {
 
@@ -879,14 +879,19 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		});
 	});
 	
-	var newPanelGroup = false;
-	var html='';
-	var currentParentI = 0;
-	for(var i=0; i < filterFields.length; i++){
-		var filterField = filterFields[i];
-		var filter;
+	var newPanelGroup = false,
+	    $filterModalBody = $('#filter-modal-body'),
+	    currentParentI = 0;
+
+	filterFields.forEach(function(filterField, i) {
+
+		var filter,
+		    created,
+		    parent,
+		    html;
 		
 		if(filterField.modelGroup){
+
 			if(i !== 0){
 				newPanelGroup = true;
 				currentParentI = i;
@@ -894,21 +899,35 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 			} else {
 				html = '';
 			}
+
 			html+= '<div class="panel panel-default">';
 			html+= '<a data-toggle="collapse" data-parent="#accordion" href="#collapse'+i+'"><div class="panel-heading" ><h4 class="panel-title">'+filterField.text+'</h4></div></a>';
 			html+= '<div id="collapse'+i+'" class="panel-collapse collapse"><div class="panel-body"><table id="table-collapse'+i+'" class="filters">';
-			$('#filter-modal-body').append(html);
+
+			$filterModalBody.append(html);
+
 		} else {
+
+			parent = currentParentI;
 			newPanelGroup = false;
 			filter = {title: filterField.text, fieldPath: filterField.id, type: 'test'};
-			createConditions(filter, $('#table-collapse'+currentParentI));
-		}
-		if(i === filterFields.length-1 ){
-			html = '</table></div></div></div>';
-			$('#filter-modal-body').append(html);
+			
+			$('[href="#collapse'+parent+'"]').click(function(e) {
+
+				if (created) {
+					return;
+				}
+
+				created = true;
+				createConditions(filter, $('#table-collapse'+parent));
+			});
 		}
 
-	}
+		if(i === filterFields.length-1 ){
+			html = '</table></div></div></div>';
+			$filterModalBody.append(html);
+		}
+	});
 
 	//WHEN CLICKING CLEAR: REMOVE ALL FILTERS, ENABLE APPLY BUTTON
 	$('#clearbtn').on('click', function(e){
