@@ -7,22 +7,11 @@ if (typeof editconnection === 'undefined') {
 	var editconnection = '/admin/editor/:modelname/edit/:id';
 }
 
-start('chimera-page-title'); -%>
-<div class="adminActionHead">
-	<span class="title" id="mainTitle"><%= modelTitle || modelName %>: Index</span>
-	<div class="actions paginate-actions">
-		<% chimera.actions('paginate') %>
-	</div>
-	<div class="clear"></div>
-	<% if(!useSeparateFilterPage){ %>
-		<% implement('chimera/model_editor_filters') %>
-	<% } else { %>
-		<% implement('chimera/model_editor_filters_modal') %>
-	<% } %>
-</div>
-<% end('chimera-page-title'); %>
+start('chimera-page-title');
+implement('chimera/index_head');
+end('chimera-page-title');
 
-<% start(store('chimera-view-setting').contentblock) -%>
+start(store('chimera-view-setting').contentblock) -%>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<div class="row">

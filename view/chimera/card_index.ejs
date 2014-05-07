@@ -1,0 +1,33 @@
+<%
+var item, i;
+
+expands('layouts/admin_main');
+
+start('chimera-page-title');
+implement('chimera/index_head');
+end('chimera-page-title');
+
+start(store('chimera-view-setting').contentblock);
+
+for (i = 0; i < items.length; i++) {
+
+	if (i % cardCount === 0) {
+		echo('<div class="row">');
+	}
+
+	item = items[i];
+	print_element(cardElement, {variables: {cardCount: cardCount, cardGrid: cardGrid, modelName: modelName, item: item}});
+
+	if ((i+1) % cardCount === 0) {
+		echo('</div>');
+	};
+}
+
+// Make sure the last row is closed
+if (i % cardCount !== 0) {
+	echo('</div>');
+}
+
+Paginate.show();
+
+end(store('chimera-view-setting').contentblock) %>

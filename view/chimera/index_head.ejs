@@ -1,0 +1,12 @@
+<div class="adminActionHead">
+	<span class="title" id="mainTitle"><%= modelTitle || modelName %>: Index</span>
+	<div class="actions paginate-actions">
+		<% chimera.actions('paginate') %>
+	</div>
+	<div class="clear"></div>
+	<% if (!useSeparateFilterPage) {
+		print_element('chimera/model_editor_filters');
+	} else {
+		print_element('chimera/model_editor_filters_modal');
+	} %>
+</div>
