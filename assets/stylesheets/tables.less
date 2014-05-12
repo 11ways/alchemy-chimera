@@ -1,0 +1,49 @@
+.table {
+	font-family: @pcardFont;
+	background-color: transparent;
+
+	thead th {
+		color: @columnTitle;
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+
+	> tbody > tr > td {
+		border-top: 1px solid @tableBorderColor;
+		color: @tableTextColor;
+	}
+}
+
+.tablewrap {
+
+	div.pagination {
+		float: right;
+		margin: 0;
+		margin-left: 8px;
+
+		ul {
+			box-shadow: none;
+			font-size: 12px;
+			padding: 0;
+
+			> li {
+				> a {
+					border: none;
+					box-shadow: none;
+					border-radius: 3px;
+					color: #6F7B8A;
+				}
+			}
+		}
+	}
+
+	div.listinfo {
+		padding-top: 3px;
+		padding-bottom: 3px;
+		font-size: 12px;
+		float: right;
+		display: inline-block;
+		padding-right: 14px;
+		border-right: 1px solid #cecece;
+	}
+}

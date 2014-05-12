@@ -12,8 +12,8 @@ implement('chimera/index_head');
 end('chimera-page-title');
 
 start(store('chimera-view-setting').contentblock) -%>
-<div class="panel panel-default">
-	<div class="panel-heading">
+<div class="pcard">
+	<header class="no-border">
 		<div class="row">
 			<div class="col-md-4">
 				
@@ -25,27 +25,29 @@ start(store('chimera-view-setting').contentblock) -%>
 				<%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> <%= modelName.pluralize() %>
 			</div>
 		</div>
-	</div>
-	<div class="panel-body" style="padding:0px;">
-		<table class="table table-striped indextable" style="margin-bottom:0px;">
-			<tr>
-				<th>Actions</th>
-				<% for (i = 0; i < fieldInfo.length; i++) {
-					field = fieldInfo[i];
-				%>
-				<th><% Paginate.sort({field: field.fieldPath, display: field.title, parentClass: 'activesort'}) %></th>
-				<% } %>
-			</tr>
-			<tr>
-				<th>
-					<a data-apply-pagination class="btn btn-default"><% echo(__('filter', 'Apply')) %></button>
-				</th>
-				<% for (i = 0; i < fieldInfo.length; i++) {
-					field = fieldInfo[i];
-				%>
-				<th><% Paginate.filter({field: field.fieldPath, display: field.title}) %></th>
-				<% } %>
-			</tr>
+	</header>
+	<div class="body no-border tablewrap">
+		<table class="table table-hover indextable" style="margin-bottom:0px;">
+			<thead>
+				<tr>
+					<th>Actions</th>
+					<% for (i = 0; i < fieldInfo.length; i++) {
+						field = fieldInfo[i];
+					%>
+					<th><% Paginate.sort({field: field.fieldPath, display: field.title, parentClass: 'activesort'}) %></th>
+					<% } %>
+				</tr>
+				<tr>
+					<th>
+						<a data-apply-pagination class="btn btn-default"><% echo(__('filter', 'Apply')) %></button>
+					</th>
+					<% for (i = 0; i < fieldInfo.length; i++) {
+						field = fieldInfo[i];
+					%>
+					<th><% Paginate.filter({field: field.fieldPath, display: field.title}) %></th>
+					<% } %>
+				</tr>
+			</thead>
 
 			<% for (i = 0; i < items.length; i++) {
 				item = items[i];
@@ -71,9 +73,16 @@ start(store('chimera-view-setting').contentblock) -%>
 				</tr>
 			<% } %>
 		</table>
-	</div>
-	<div class="panel-footer">
-		<% Paginate.show() %>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pagination">
+					<% Paginate.show() %>
+				</div>
+				<div class="listinfo">
+					<%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> entries
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
