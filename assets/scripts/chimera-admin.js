@@ -190,7 +190,7 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 
 	var activeButton;
 
-	hawkejs.spot.introduced('button[data-modal-add]', function(elements) {
+	hawkejs.spot.introduced('button[data-modal-url]', function(elements) {
 
 		$(elements).click(function(e) {
 
@@ -201,7 +201,7 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 			activeButton = $this;
 
 			hawkejs.goToAjaxView($this.data('modal-url'), {modal: true}, undefined, function(payload){
-				
+				console.log(payload);
 			});
 		});
 	});

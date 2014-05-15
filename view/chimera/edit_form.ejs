@@ -2,11 +2,16 @@
 
 var groupName,
     active = 'active',
+    original = {},
     group,
     item,
     uid = ~~(Math.random()*1000),
     i,
 	readonly=true;
+
+if (originalItem) {
+	original = originalItem[modelName] || {};
+}
 
 if (typeof nested === 'undefined') {
 	var nested = false;
@@ -68,7 +73,6 @@ errors();
 	%>
 				<div class="tab-pane <%= active %>" id="chitab-<%= groupName %>-<%= uid %>">
 	<%
-
 			active = '';
 			group = options.groups[groupName];
 
@@ -77,7 +81,7 @@ errors();
 				item = group.fields[i];
 				item.readonly = readonly || item.disabled;
 
-				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item}});
+				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item, original: original, foreign: foreignData}});
 			}
 
 			echo('</div>');

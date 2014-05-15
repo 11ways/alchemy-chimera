@@ -8,11 +8,23 @@
 </div>
 <% end('wrapper') %>
 
-<% start('input') %>
+<%
+
+start('input');
+
+var value = item.value.value,
+    readonlyOverload = false;
+
+if (!value && foreign.key == item.field) {
+	value = foreign.id;
+	readonlyOverload = true;
+}
+
+%>
 <div class="select2group" style="width:100%;overflow: auto;">
-	<% if (!item.readonly && !item.value.string) { %>
+	<% if (!item.readonly && !readonlyOverload && !item.value.string) { %>
 		<div style="float:right;margin-left:15px">
-			<button data-modal-add data-modal-url="<%= item.value.modalUrl %>" class="btn btn-default"><i class="fa fa-plus-circle"></i> <% echo(__('select2', 'Add new')) %></button>
+			<button data-modal-url="<%= item.value.modalUrl %>" class="btn btn-default"><i class="fa fa-plus-circle"></i> <% echo(__('select2', 'Add new')) %></button>
 		</div>
 	<% } %>
 	<div style="overflow:auto;">
@@ -22,12 +34,12 @@
 			class=" select2-form-control"
 			id="AdminField-<%= item.name %>"
 			data-url="<%= item.value.url %>"
-			value="<%= item.value.value %>"
+			value="<%= value %>"
 			data-select-type="<%= item.value.select %>"
 			<% if(item.value.string) { %>
 			data-string-type="true"
 			<% } %>
-			<% if(item.readonly===true){ %> readonly <% } %>
+			<% if(item.readonly===true || readonlyOverload){ %> readonly <% } %>
 			>
 		</input>
 	</div>

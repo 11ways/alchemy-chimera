@@ -1,6 +1,10 @@
-<% start('wrapper') %>
+<%
+start('wrapper');
+var val, i;
+
+%>
 <div class="form-group">
-	<label for="<%= item.id %>" class="col-sm-2 control-label"><%= item.title %></label>
+	<label for="<%= item.id %>" class="col-sm-2 control-label"><%= item.assoc.alias %></label>
 	<div class="col-sm-10 controls">
 		<!--INPUT-->
 		<!--HELP-->
@@ -9,6 +13,17 @@
 <% end('wrapper') %>
 
 <% start('input') %>
-dddd
-<% echo(JSON.stringify(item)) %>
+<ul>
+<% for(i = 0; i < item.value.value.length; i++) {
+	val = item.value.value[i];
+%>
+	<li>
+		<span class="name"><%= val.name || val._id %></span>
+		<button data-modal-url="<%= val.modalUrl %>" class="btn btn-default"><i class="fa fa-pencil"></i> <% echo(__('chimera', 'Edit')) %></button>
+	</li>
+<% } %>
+</ul>
+<% if (original._id) { %>
+	<button data-modal-url="<%= item.value.modalUrl %>?foreignKey=<%= item.assoc.foreignKey %>&foreignId=<%= original._id %>" class="btn btn-default"><i class="fa fa-plus-circle"></i> <% echo(__('chimera', 'Add new')) %></button>
+<% } %>
 <% end('input') %>
