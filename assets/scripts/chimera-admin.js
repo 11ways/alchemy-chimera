@@ -187,6 +187,18 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 		$('a[href^="' + openTab + '"]', $(elements)).tab('show');
 	});
 
+	hawkejs.spot.introduced('[data-remove-row]', function(elements) {
+
+		$(elements).click(function(e) {
+
+			var $this = $(this);
+
+			$this.parents('tr').remove();
+
+			e.preventDefault();
+		});
+	});
+
 
 	var activeButton;
 
@@ -201,7 +213,7 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 			activeButton = $this;
 
 			hawkejs.goToAjaxView($this.data('modal-url'), {modal: true}, undefined, function(payload){
-				console.log(payload);
+
 			});
 		});
 	});

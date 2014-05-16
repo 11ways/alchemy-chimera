@@ -81,6 +81,10 @@ errors();
 				item = group.fields[i];
 				item.readonly = readonly || item.disabled;
 
+				if (item.scripts) {
+					asset.script(item.scripts, {block: 'head'});
+				}
+
 				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item, original: original, foreign: foreignData}});
 			}
 
