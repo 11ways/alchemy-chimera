@@ -42,7 +42,7 @@ a.btn {
 	}
 }
 
-div.alchemy-error:not(:empty) {
+div.alchemy-error.wrapper:not(:empty) {
 	background: rgb(220, 157, 159);
 	margin-bottom: 10px;
 	font-size: 15px;
@@ -56,6 +56,14 @@ div.alchemy-error:not(:empty) {
 		background-color: inherit;
 		padding: 0;
 		border: none;
+	}
+
+	.message {
+		cursor: pointer;
+	}
+
+	.stack {
+		margin-left: 50px;
 	}
 }
 

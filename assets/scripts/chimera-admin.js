@@ -40,6 +40,17 @@ hawkejs.spot.introduced('.fillwidth', function(elements) {
 
 });
 
+// Make errors clickable (for stack traces)
+hawkejs.spot.introduced('.alchemy-error', function(elements) {
+
+	$(elements).on('click', 'div.message', function(e) {
+
+		var $this = $(this);
+		$this.parents().find('.stack').toggle();
+	});
+
+});
+
 // Apply datepicker
 hawkejs.spot.introduced('hawkejs[data-chimera-input] input.datepicker', function(elements) {
 
