@@ -119,30 +119,52 @@ var AdminController = Controller._extend(function AdminController (){
 	this.my_settings = function my_settings (render) {
 		
 		var conditions = {},
-			data = render.req.body.data,
-			that = this;
+		    settings,
+		    data = render.req.body.data,
+		    that = this,
+		    user = render.req.session.user,
+		    temp,
+		    prefixes = [],
+		    key;
 
 		conditions['NotificationSetting.user_id'] = user_id = render.req.session.user._id;
+
+		temp = Prefix.all();
+
+		for (key in temp) {
+			prefixes.push({_id: key, title: temp[key].title || temp[key].name});
+		}
+
+		render.viewVars.prefixes = prefixes;
 		
-		//get current user settings
+		// Get current user settings
 		this.getModel('NotificationSetting').find('first', {conditions: conditions}, function(err, record) {
-			//if no settings found, set defaults
+			
+			// If no settings found, set defaults
 			if(record.length == 0){
-				render.viewVars.settings.can_mail = true;
-				render.viewVars.settings.get_notifications = 'all';
+				settings = render.viewVars.settings = {};
+
+				settings.can_mail = true;
+				settings.get_notifications = 'all';
+				settings.prefix_preference = render.prefix;
 			} else {
-				render.viewVars.settings = record[0].NotificationSetting;
+				settings = render.viewVars.settings = record[0].NotificationSetting;
 			}
-			//if submit, save new settings
-			if(data && data.settings){
-				if(data.settings.can_mail == '1'){
-					render.viewVars.settings.can_mail = true;
+
+			// If submit, save new settings
+			if(data && data.MySetting){
+
+				if (data.MySetting.can_mail == '1'){
+					settings.can_mail = true;
 				} else {
-					render.viewVars.settings.can_mail = false;
+					settings.can_mail = false;
 				}
-				render.viewVars.settings.get_notifications = data.settings.get_notifications;
+
+				settings.prefix_preference = data.MySetting.prefix_preference;
+
+				settings.get_notifications = data.MySetting.get_notifications;
 				
-				that.getModel('NotificationSetting').save(render.viewVars.settings, function(err, result) {
+				that.getModel('NotificationSetting').save(settings, function(err, result) {
 					that.getNotifications(render, true);
 				});
 			} else {
