@@ -484,8 +484,17 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 		// Store everything in the data object under the current model name
 		data[modelName] = options;
 
+		
+
 		// Load the page over ajax
 		hawkejs.goToAjaxViewWithHistory(url, false, {data: data});
+		
+		//for export
+		var substr = window.location.pathname.split('/');
+		if(substr[substr.length-1] === 'export'){
+			$('#export-filters').val(JSON.stringify(filters));
+			$('.export-submit-btn').click();
+		}
 	}
 
 	/**
@@ -767,6 +776,13 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 
 		// Load the page over ajax
 		hawkejs.goToAjaxViewWithHistory(url, false, {data: data});
+		
+		//for export
+		var substr = window.location.pathname.split('/');
+		if(substr[substr.length-1] === 'export'){
+			$('#export-filters').val(JSON.stringify(filters));
+			$('.export-submit-btn').click();
+		}
 	}
 
 	/**
@@ -984,6 +1000,76 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		applyFormFilters();
 	});
 
+});
+
+
+hawkejs.event.on('create-chimera-fields', function(query, payload) {
+	// Toggle the filter collapse
+	$('#fields-collapse').on('click', function(e){
+		$('#collapse-fields').collapse('toggle');
+	});
+	
+	var allGroupedFields = payload.fields;
+	var fieldFields = [];
+	var fieldMap = {};
+
+	Object.each(allGroupedFields, function(group, alias) {
+		fieldMap[alias+'.__all'] = alias;
+
+		fieldFields.push({id: alias + '.__all', text: '<b>' + alias + '</b>', modelGroup: true, modelName: group.modelName});
+
+		Object.each(group.fields, function(field, name) {
+			if(field.model){
+				fieldMap[field.model+'.'+name] = field.key;
+
+				fieldFields.push({id: field.model + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field.key});
+			} else {
+				fieldMap[alias+'.'+name] = field;
+
+				fieldFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field});
+			}
+		});
+	});
+	
+	var count = 0;
+	var html="";
+	$.each(fieldFields, function(id, field){
+		
+		var fieldsplit = field.id.split('.');
+		if(fieldsplit[1] === "__all"){
+			if(count !== 0){
+				html += '</div>';
+			}
+			if(count !== fieldFields.length){
+				html += '<div class="row" style="width:260px; float:left; padding-left: 20px">';
+			}
+			html += '<h3>'+field.text+'</h3>';
+		} else {
+			html += '<div class="checkbox"><label><input type="checkbox" value="'+field.id+'" class="fields" checked>'+field.text+'</label></div>';
+		}
+		if(count === fieldFields.length-1){
+			html +='</div>';
+		}
+		count++;
+	});
+	
+	$('#fields').html(html);
+	getAllFields();
+	
+	$('.fields').on('change', function(){
+		getAllFields();
+	});
+	
+	
+	function getAllFields(){
+		var exportfields = [];
+		$.each($('.fields'), function(){
+			if($(this).prop('checked')){
+				exportfields.push($(this).val());
+			}
+		});
+		$('#export-fields').val(JSON.stringify(exportfields));
+	}
 });
 
 function applyChimeraFields(query, payload) {

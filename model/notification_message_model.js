@@ -47,14 +47,12 @@ Model.extend(function NotificationMessageModel() {
 		this.blueprint = {
 			message: {
 				type: 'String',
-				translatable: true,
 				rules: {
 					notempty: {message: 'This field should not be empty!'}
 				}
 			},
 			link: {
-				type: 'String',
-				translatable: true
+				type: 'String'
 			},
 			external_link: {
 				type: 'Boolean'
@@ -289,9 +287,11 @@ Model.extend(function NotificationMessageModel() {
 			or['acl_group_id'] = new RegExp('.*?' + root_acl_id + '.*?', 'i');
 			conditions['$or'] = or;
 			
+			pr(conditions);
+			
 			//find superadmin _id for message written_by
 			Model.get('User').find('first', {fields: ['User._id'], conditions: conditions, sort: {username: 'ASC'}}, function(err, record) {
-				
+				pr(record);
 				notification_message.written_by = record[0].User._id;
 				
 				or = {};

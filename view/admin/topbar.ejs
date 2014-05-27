@@ -7,12 +7,12 @@ emit('chimera-notifications')
 
 <li class="dropdown">
 	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-		<span class="badge badge-important"><% if(unread>0){%><%= unread %><% } %></span>
+		<span class="badge badge-important"><% if(typeof unread == 'object' && unread>0){%><%= unread %><% } %></span>
 		<%= name %> 
 		<i class="fa fa-angle-down"></i>
     </a>
     <ul class="dropdown-menu" style="max-height: 450px;overflow-y: auto;overflow-x: hidden;">
-		<% if(notifications.length>0){ %>
+		<% if(typeof notifications == 'object' && notifications.length>0){ %>
 			<% for(var i=0; i<notifications.length; i++){ %>
 				<% var notification = notifications[i]; %>
 				<li class="notification notification-<%= notification.NotificationMessage.notification_type %>">
