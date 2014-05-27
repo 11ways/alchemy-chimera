@@ -106,8 +106,14 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 		    echoQuery  = $this.data('echo-query');
 
 		$this.select2({
+			// Allow the user to remove a selected option
 			allowClear: true,
+			placeholder: ' ',
+
+			// Allow multiple selections?
 			multiple: multiple,
+
+			// Ajax settings
 			ajax: {
 				url: assocUrl,
 				cache: true,
