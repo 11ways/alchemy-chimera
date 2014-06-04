@@ -227,7 +227,6 @@ var AdminController = Controller._extend(function AdminController (){
 		var conditions = {};
 		conditions['NotificationUser.user_id'] = render.req.session.user._id;
 		this.getModel('NotificationUser').find('all', {conditions: conditions, limit: 10}, function(err, items) {
-			
 			var unread = 0;
 			
 			for(var i=0; i<items.length; i++){

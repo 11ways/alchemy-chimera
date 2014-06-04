@@ -7,7 +7,7 @@ emit('chimera-notifications')
 
 <li class="dropdown">
 	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-		<span class="badge badge-important"><% if(typeof unread == 'object' && unread>0){%><%= unread %><% } %></span>
+		<span class="badge badge-important"><% if(typeof unread == 'number' && unread>0){%><%= unread %><% } %></span>
 		<%= name %> 
 		<i class="fa fa-angle-down"></i>
     </a>

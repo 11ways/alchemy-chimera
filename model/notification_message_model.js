@@ -139,7 +139,7 @@ Model.extend(function NotificationMessageModel() {
 				//ADD SELECTED ACL GROUPS TO CONDITIONS
 				if(typeof record.acl_group_id !== 'undefined'){
 					for(var i = 0; i<record.acl_group_id.length; i++){
-						var group_id = new RegExp('.*?' + record.acl_group_id[i] + '.*?', 'i');
+						var group_id = record.acl_group_id[i];
 						if(typeof or['User.acl_group_id'] == 'undefined'){
 							or['User.acl_group_id'] = [];
 						}
@@ -151,7 +151,7 @@ Model.extend(function NotificationMessageModel() {
 				//ADD SELECTED USERS TO CONDITIONS
 				if(typeof record.user_id !== 'undefined'){
 					for(var i = 0; i<record.user_id.length; i++){
-						var user_id = new RegExp('.*?' + record.user_id[i] + '.*?', 'i');
+						var user_id = record.user_id[i];
 						if(typeof or['User._id'] == 'undefined'){
 							or['User._id'] = [];
 						}
@@ -162,9 +162,9 @@ Model.extend(function NotificationMessageModel() {
 				if (!empty(or)) {
 					conditions['$or'] = or;
 				}
-
+				
 				//FIND USERS
-				Model.get('User').find('all', {fields: ['User._id', 'User.email', 'NotificationSetting.can_mail', 'NotificationSetting.get_notifications'], conditions: conditions}, function(err, items) {
+				Model.get('User').find('all', {conditions: conditions}, function(err, items) {
 					var notifications = [];
 					var mail_to = [];
 					//LOOP USERS AND ADD THEM TO NOTIFICATIONS OBJECT
@@ -284,18 +284,15 @@ Model.extend(function NotificationMessageModel() {
 			}
 			
 			or = {};
-			or['acl_group_id'] = new RegExp('.*?' + root_acl_id + '.*?', 'i');
+			or['acl_group_id'] = root_acl_id;
 			conditions['$or'] = or;
-			
-			pr(conditions);
-			
+						
 			//find superadmin _id for message written_by
 			Model.get('User').find('first', {fields: ['User._id'], conditions: conditions, sort: {username: 'ASC'}}, function(err, record) {
-				pr(record);
 				notification_message.written_by = record[0].User._id;
 				
 				or = {};
-				or['acl_group_id'] = new RegExp('.*?' + users_acl_group + '.*?', 'i');
+				or['acl_group_id'] = users_acl_group;
 				conditions['$or'] = or;
 				
 				//find users belonging to "who" usergroup
