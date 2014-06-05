@@ -206,7 +206,9 @@ var AdminController = Controller._extend(function AdminController (){
 		this.getModel('NotificationUser').find('first', {conditions: conditions}, function(err, record) {
 			
 			record[0].NotificationUser.read = true;
-			
+			delete record[0].NotificationMessage;
+			delete record[0].User;
+						
 			that.getModel('NotificationUser').save(record, function(err, result){
 				//pr(err);
 				return true;
