@@ -12,7 +12,6 @@ if(typeof(allGroupedFields) === 'undefined'){
 }
 
 emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: filters});
-
 %>
 <div class="filters">
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
@@ -53,7 +52,7 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 			</a>
 		</div>
 		<div class="col-sm-2">
-			<button type="button" class="btn btn-default  btn-block" id="clearbtn" ><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
+			<button type="button" class="btn btn-default btn-block <% if (filters && filters.length) echo('hasfilters') %>" id="clearbtn" ><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
 		</div>
 	</div>
 	
