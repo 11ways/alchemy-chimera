@@ -1,16 +1,28 @@
 <%
 
 var groupName,
+    fData,
+    aType,
     active = 'active',
     original = {},
     group,
     item,
     uid = ~~(Math.random()*1000),
     i,
-	readonly=true;
+    readonly=true;
 
-if (originalItem) {
+if (typeof originalItem != 'undefined' && originalItem) {
 	original = originalItem[modelName] || {};
+}
+
+if (typeof foreignData != 'undefined') {
+	fData = foreignData;
+}
+
+if (typeof actionType != 'undefined') {
+	aType = actionType;
+} else {
+	aType = 'write';
 }
 
 if (typeof nested === 'undefined') {
@@ -85,7 +97,7 @@ errors();
 					asset.script(item.scripts, {block: 'head'});
 				}
 
-				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item, original: original, foreign: foreignData}});
+				chimera.inputfield(item.view, {emptyResult: item.emptyResult, variables: {item: item, original: original, foreign: fData}});
 			}
 
 			echo('</div>');
@@ -94,7 +106,7 @@ errors();
 			</div>
 		</div>
 		<div class="panel-footer">
-			<% if (modelFlags[actionType]) { %>
+			<% if (modelFlags[aType]) { %>
 				<% if (modal) { %>
 					<button class="btn btn-primary savemodeledit modalsubmit"><% echo(options.saveButton) %></button>
 				<% } else if (typeof options.showSaveButton == 'undefined' || options.showSaveButton) { %>
