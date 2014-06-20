@@ -547,7 +547,11 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 				fieldPath: result.fieldPath
 			};
 
-			template = hawkejs.getTemplate('chimera_filter_input/' + result.filterFieldName + '_filter_input');
+			if (!result.filterFieldName) {
+				console.log(new Error('Filter error: no field name set ' + result.filterFieldName));
+			}
+
+			template = hawkejs.getTemplate('chimera_filter_input/' + (result.filterFieldName||'default') + '_filter_input');
 
 			// Remove hawkejs specific code
 			template = template.slice(32);
@@ -1090,7 +1094,12 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// Apply ckeditor to textarea's
-	$('#hawkejs-insert-block-admin-content .textfield').ckeditor();
+	try {
+		$('#hawkejs-insert-block-admin-content .textfield').ckeditor();
+	} catch(err) {
+		console.log('Error applying ckeditor:');
+		console.log(err);
+	}
 
 	// Add an "Add entry" button to arrayable fields
 	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]').each(function() {
