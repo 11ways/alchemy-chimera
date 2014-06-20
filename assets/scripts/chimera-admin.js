@@ -1078,12 +1078,20 @@ hawkejs.event.on('create-chimera-fields', function(query, payload) {
 
 function applyChimeraFields(query, payload) {
 
+	var $target;
+
+	if (payload.origin) {
+		$target = $("[data-hawkejs-from-template='" + payload.origin.replace('/','__') + "']");
+	} else {
+		$target = $(window.document);
+	}
+
 	var dataDo = function dataDo($element) {
 		hawkejs.event.emit($element.attr('data-emit'), $element);
 	};
 
 	// Make the enter button apply the inline pagination
-	$('input[data-pagination-filter]').keyup(function(e) {
+	$('input[data-pagination-filter]', $target).keyup(function(e) {
 
 		var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
 
@@ -1102,7 +1110,7 @@ function applyChimeraFields(query, payload) {
 	}
 
 	// Add an "Add entry" button to arrayable fields
-	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]').each(function() {
+	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]', $target).each(function() {
 
 		var $this     = $(this),
 		    $empty    = $('[data-chimera-empty-input]', $this),
@@ -1139,12 +1147,12 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// Emit events that have a 'data-emit' attribute
-	$('#hawkejs-insert-block-admin-content [data-emit]').each(function() {
+	$('#hawkejs-insert-block-admin-content [data-emit]', $target).each(function() {
 		dataDo($(this));
 	});
 
 	// Apply pagination
-	$('[data-apply-pagination]').click(function(e) {
+	$('[data-apply-pagination]', $target).click(function(e) {
 
 		var $this = $(this),
 		    conditions = {},
@@ -1169,10 +1177,10 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// Apply select2 on select fields
-	$('select.form-control').select2();
+	$('select.form-control', $target).select2();
 
 	// Apply the mentions field (wip)
-	$('textarea.mention').each(function() {
+	$('textarea.mention', $target).each(function() {
 
 		var $this   = $(this),
 		    items   = hawkejs.parse(($this.siblings('.mention-source').html())),
@@ -1202,7 +1210,7 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// i18n static string stuff
-	var $title = $('#mainTitle');
+	var $title = $('#mainTitle', $target);
 
 	if ($title.text().indexOf('Static String: Edit record') > -1) {
 
