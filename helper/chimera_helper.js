@@ -174,7 +174,9 @@ module.exports = function chimeraHelpers(hawkejs) {
 
 			hWrapper += 'data-array ';
 
-			addButton = '<button data-chimera-add-entry class="btn btn-default"><i class="fa fa-plus"></i> Add entry</button>';
+			if (!item.readonly) {
+				addButton = '<button data-chimera-add-entry class="btn btn-default"><i class="fa fa-plus"></i> Add entry</button>';
+			}
 
 			if (!Array.isArray(item.value)) {
 				item.value = [''];
