@@ -1,6 +1,6 @@
 <%
 start('wrapper');
-var val, i;
+var val, rtitle, i;
 
 %>
 <div class="form-group">
@@ -17,8 +17,22 @@ var val, i;
 <% for(i = 0; i < item.value.value.length; i++) {
 	val = item.value.value[i];
 %>
-	<li>
-		<span class="name"><%= val.name || val._id %></span>
+	<li><%
+			rtitle = val.name;
+
+			if (!val.name) {
+				if (typeof val.title == 'string') {
+					rtitle = val.title;
+				} else {
+					rtitle = 'Unnamed ';
+
+					if (item.assoc && typeof item.assoc.alias == 'string') {
+						rtitle += item.assoc.alias.singularize();
+					}
+				}
+			}
+		%>
+		<span class="name"><%= rtitle %></span>
 		<button data-modal-url="<%= val.modalUrl %>" class="btn btn-default"><i class="fa fa-pencil"></i> <% echo(__('chimera', 'Edit')) %></button>
 	</li>
 <% } %>
