@@ -1,0 +1,204 @@
+@media only screen (min-width: @screen-sm) and (max-width : @screen-lg) {
+	#wrapper{
+		#sidebar-wrapper{
+			&.collapsed{
+				
+			}
+		}
+	}
+}
+@media only screen and (max-width : @screen-sm) {
+	header{
+		.navbar{
+			background: @gray-darkest;
+			.navbar-nav{
+				&.navbar-user{
+					.collapse-sidebar{
+						color: @white;
+						&:hover{
+							color: @gray-lightest;
+						}
+					}
+					&.navbar-right{
+						li{
+							> a{
+								color: @white;
+							}
+						}
+					}
+				}
+				.open {
+					.dropdown-menu{
+						.dropdown-menu();
+						display: block;
+						left: auto;
+						right: 0px;
+					}
+				}
+			}
+		}
+		&.collapsed{
+			.navbar{
+				box-shadow: 0px 2px 2px @gray-lighter;
+			}
+		}
+	}
+	#wrapper{
+		#page-wrapper{
+			width: auto;
+			overflow: hidden;
+			position: fixed;
+		}
+		&.collapsed{
+			#sidebar-wrapper{	
+				display: none;
+			}
+			#page-wrapper{
+				overflow: inherit;
+				position: absolute;
+				width: 100%;
+				margin-left: 0px;
+				padding-left: 0px; 
+			}
+		}
+	}
+	.table-responsive{
+		width: inherit;
+		margin-bottom: inherit;
+		overflow-y: inherit;
+		overflow-x: inherit;
+		-ms-overflow-style: inherit;
+		border: inherit;
+		-webkit-overflow-scrolling: inherit;
+		> .table{
+			> thead,
+			> tbody,
+			> tfoot {
+				> tr {
+					> th,
+					> td {
+						white-space: inherit;
+					}
+				}
+			}
+		}
+	}
+	table{
+		&.responsive-table{
+			&,
+			tbody,
+			th,
+			td,
+			tr {
+				display: block; 
+			}
+			> thead{
+				display: none;
+			}
+			> tbody{
+				> tr{
+					margin-bottom: 20px;
+					&:hover{
+						> td{
+							background: none;
+						}
+					}
+					&:nth-child(odd){
+						&,
+						&:hover{
+							> td{
+								background: @gray-lightest;
+								color: @gray;
+								a{
+									color: @gray;
+								}
+								.btn{
+									color: @gray;
+								}
+							}
+						}
+					}
+					> td{
+						/* Behave  like a "row" */
+						border: none;
+						border-bottom: 1px solid #eee; 
+						position: relative;
+						padding-left: 50%;
+						&:before{
+							content: attr(data-title);
+							/* Now like a table header */
+							position: absolute;
+							/* Top/left values mimic padding */
+							top: 10px;
+							left: 10px;
+							width: 45%; 
+							padding-right: 10px; 
+							white-space: nowrap;
+						}
+						&[data-title="Acl group"]{
+							padding-left: 10px;
+							width: 100%;
+							display: block;
+							&:before{
+								display: block;
+								width: 100%;
+								left: 0px;
+								top: 0px;
+								position: relative;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+@media only screen and (max-width : @screen-xs-max) {
+	.nav-tabs{
+		margin-bottom: 15px;
+		> li{
+			width: 33% !important;
+			margin-bottom: 5px;
+			height: 70px;
+			&.active{
+				width: 33% !important;
+				margin-bottom: 5px;
+			}
+			> a{
+				margin-right: 5px;
+				border: none;
+				border-radius: 0px;
+			}
+			&:nth-child(4n){
+				> a{
+					margin-right: 0px;
+				}
+			}
+		}
+	}
+}
+@media only screen and (max-width : 400px) {
+	header{
+		.navbar{
+			.navbar-nav{
+				& + .nav + .navbar-right{
+					display: none;
+				}
+			}
+		}
+		&.collapsed{
+			.navbar{
+				.navbar-nav{
+					& + .nav + .navbar-right{
+						display: block;
+					}
+				}
+			}
+		}
+	}
+	.actions{
+		&.paginate-actions{
+			float: left;
+		}
+	}
+}

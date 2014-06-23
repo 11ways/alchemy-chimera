@@ -1,0 +1,555 @@
+html{
+	height: 100%;
+	body{
+		height: 100%;
+		background: @gray-lightest;
+		font-family: @open-sans;
+		font-size: 62.5%;
+	}
+}
+
+header{
+	position: relative;
+	z-index: 4000;
+	&.collapsed{
+		.navbar{
+			box-shadow: 50px 2px 2px @gray-lighter;
+			.navbar-nav{
+				&#navbar-sidebar{
+					position: absolute;
+					left: -250px;
+				}
+			}
+		}
+	}		
+	.navbar{
+		margin-bottom: 0px;
+		background: @white;
+		box-shadow: 250px 2px 2px @gray-lighter;
+		.navbar-nav{
+			margin: 0px;
+			float: left;
+			&#navbar-sidebar{
+				width: 250px;
+				background: @gray-dark-tint;
+				a{
+					color: @white;
+					font-family: @open-sans;//-regular;
+					&.navbar-brand{
+						font-size: 18px;
+						font-size: 1.8rem;
+						
+						// Code d'or logo
+						background-image: url('/public/img/admin_logo_transparent_invert.png');
+						background-repeat: no-repeat;
+						background-size: 65%;
+						background-position: center center;
+						text-indent: -9999;
+						color: transparent;
+						width: 190px;
+					}
+					&.btn{
+						margin: 8px 8px 7px 8px;
+						padding: 9px 12px;
+						background: @gray-darkest;
+						border: none;
+					}
+				}
+			}
+			&.navbar-user{
+				height: 50px;
+				.collapse-sidebar{
+					border: none;
+					background: none;
+					padding: 13px 20px;
+					font-size: 17px;
+					font-size: 1.7rem;
+					color: @gray-darkest;
+					transition: .2s all;
+					&:hover{
+						color: @gray;
+					}
+					&:active,
+					&:focus{
+						outline: none;
+					}
+				}
+				&.navbar-left{
+					float: left;
+				}
+				&.navbar-right{
+					float: right;
+					margin-right: 40px;
+					li{
+						display: inline-block;
+						> a{
+							background: none;
+							color: @gray-darkest;
+							font-size: 14px;
+							font-size: 1.4rem;
+							padding: 15px 20px;
+							display: block;
+							text-decoration: none;
+							span + .fa{
+								margin-left: 10px; 
+							}
+							&:hover{
+								text-decoration: none;
+							}
+						}
+						ul{
+							&.dropdown-menu{
+								top: 60px;
+							}
+						}
+						&.dropdown{
+							.arrow-container{
+								display: none;
+							}
+							&.open{
+								.arrow-container{
+									top: 53px;
+									left: 50%;
+									position: absolute;
+									display: block;
+									z-index: 1001;
+									width: 20px;
+									height: 10px;
+									overflow: hidden;
+									.arrow{
+										width: 15px;
+										height: 15px;
+										background: @white;
+										border-top: 1px solid @gray-lighter;
+										border-left: 1px solid @gray-lighter;
+										transform:rotate(45deg);
+										-ms-transform:rotate(45deg); /* IE 9 */
+										-webkit-transform:rotate(45deg); /* Opera, Chrome, and Safari */
+										margin-left: 3px;
+										margin-top: 3px;
+									}	
+								}
+								a.dropdown-toggle{
+									.fa-angle-left{
+										transform:rotate(-90deg);
+										-ms-transform:rotate(-90deg); /* IE 9 */
+										-webkit-transform:rotate(-90deg); /* Opera, Chrome, and Safari */	
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#wrapper{
+	height: 100%;
+	#sidebar-wrapper{
+		width: 250px;
+		height: 100%;
+		position: fixed;
+		top: 50px;
+		z-index: 3000;
+
+		#sidebar-wrapper-inner{
+			width: 250px;
+			height: 100%;
+			background: @gray-darkest;
+
+			// Code d'or logo
+			background-image: url('/public/img/codedor_logo.png');
+			background-repeat:no-repeat;
+			background-position: right bottom 0px;
+			background-color: #1b1e24;
+			#nano-container{
+				width: 250px;
+				overflow: hidden;
+				.nano-content{
+					padding-bottom: 50px;
+					width: 267px; // Remove original scrollbar 17px
+					&:focus{
+						outline: none;
+					}
+					ul{
+						// General styling of sidebar elements
+						list-style-type: none;
+						padding: 0px;
+						> li{
+							&.active{
+								> a{
+									color: @white;
+								}
+							}
+							&.open{
+								> a{
+									background: @green-light;
+									color: @white;
+								}
+							}
+						}
+						&.side-nav{
+							margin: 10px 0px 0px 0px;
+							width: 250px;
+							margin-bottom: 135px;
+							background: @gray-darkest;
+							a{
+								font-family: @open-sans;//-regular;
+								color: @gray-light;
+								transition: .1s all;
+								font-size: 14px;
+								i.fa{
+									margin-right: 10px;
+								}
+								&:hover{
+									color: @gray-lightest;
+									text-decoration: none;
+								}
+								& + div.tooltip{
+									display: none !important;
+								}
+							}
+							// Main items
+							> li.section{
+								width: 100%;
+								> a{
+									width: 100%;
+									background: none;
+									padding: 10px 10px 10px 30px;
+								}
+								// Sub items - 1
+								> ul.children{
+									display: none;
+								}
+								&.open{
+									// Sub items - 2
+									> ul.children{
+										display: block;
+										background: @gray-dark;
+										padding: 0px;
+										> li{
+											display: block;
+											> a{
+												margin: 5px 0px;
+												padding: 5px 5px 3px 40px;
+												display: block;
+												font-size: 12px;
+												i.fa{
+													position: absolute;
+													+.menu-item-text,
+													span{
+														padding-left: 20px;
+														display: block;
+													}
+												}
+												&:hover{
+													background: @gray-darkest;
+												}
+											}
+											> ul.children{
+												display: none;
+											}
+											&.open{
+												// Sub items - 3
+												> ul.children{
+													display: block;
+													background: none;
+													padding: 0px;
+													> li{
+														display: block;
+														> a{
+															margin: 5px 0px;
+															padding: 5px 5px 3px 50px;
+															display: block;
+															font-size: 12px;
+															i.fa{
+																position: absolute;
+																+.menu-item-text,
+																span{
+																	padding-left: 20px;
+																	display: block;
+																}
+															}
+															&:hover{
+																background: @gray-darkest;
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.nano-pane{
+			left: 240px;
+		}
+	}
+	&.collapsed{
+		#sidebar-wrapper{
+			width: 50px;
+			overflow: hidden;
+			&.overflow{
+				width: auto;
+				overflow: visible;
+			}
+			#sidebar-wrapper-inner{
+				width: 50px;
+				background: @green;
+				overflow: visible;
+				#nano-container{
+					.nano-content{
+						ul{
+							width: 50px;
+							&.side-nav{
+								margin-top: 0px;
+								// General styling of sidebar elements
+								a{
+									color: @white;
+									width: 50px !important;
+									text-align: center !important;
+									padding: 15px 0px !important;
+									margin: 0px !important;
+									.menu-item-text{
+										display: none !important;
+									}
+									i.fa{
+										position: relative !important;
+										margin-right: 0px;
+									}
+									&:hover{
+										color: @white;
+									}
+									& + div.tooltip{
+										position: absolute;
+										display: block !important;
+									}
+								}
+
+								> li.section{
+									> a{
+										&:hover{
+											background: @green-tint;
+										}
+									}
+									&.open{
+										> ul.children{
+											> li{
+												> a{
+													&:hover{
+														background: @gray-darkest;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				.nano-pane{
+					left: 40px;
+				}
+			}
+		}
+		#page-wrapper{
+			//margin-left: 50px;
+			padding-left: 50px;
+		}
+	}
+}
+#page-wrapper{
+	position: absolute;
+	z-index: 2000;
+	bottom: 0;
+	top: 50px;
+	padding: 30px 0px 30px 250px;
+	//padding-left: 250px;
+	height: auto;
+	width: 100%;
+	//background-image:url('/public/img/admin_logo_transparent.png');
+	//background-repeat: no-repeat;
+	//background-position: bottom right 260px;
+	//-o-background-size:35% auto;
+	//-webkit-background-size:35% auto;
+	//-moz-background-size:35% auto;
+	//background-size:35% auto;
+	> .container{
+		min-width: 400px;
+	}
+}
+
+
+
+		/*header{
+			position: fixed;
+			width: 100%;
+			background: @white;
+			z-index: 9000;
+			.navbar{
+				margin-bottom: 0px;
+				.navbar-ex1-collapse{
+					background-color: #fff;
+					border:none;
+				}
+				.navbar-brand{
+					width: 225px;
+					background-color: #22262e;
+					color: #FFFFFF !important;
+				}
+
+				.navbar-brand:hover{
+					background-color: #22262e !important;
+					color: #FFFFFF;
+				}
+
+				.navbar-home{
+					position: absolute;
+					background-color: #0d0f12;
+					border-radius: 2px;
+					width: 35px;
+					height: 32px;
+					color: #FFFFFF;
+					left: 180px;
+					top: 10px;
+					
+					.fa-home{
+						margin-left: 8px;
+						margin-top: 10px;
+					}
+					.fa-refresh{
+						margin-left: 8px;
+						margin-top: 10px;
+					}
+				}
+
+				.navbar-home:hover{
+					color: #FFFFFF;
+				}
+
+				&.navbar-inverse{
+					border: none;
+				}
+
+				&.navbar-inverse .navbar-nav > li > a {
+					color: #8b91a0;
+				}
+			}
+		}*/
+		
+			/*#sidebar-wrapper {
+				margin-left: -225px;
+				left: 225px;
+				width: 225px;
+				position: fixed;
+				top: 50px;
+				bottom: 0;
+				height: auto;
+
+				// Code d'or logo
+				background-image: url('/public/img/codedor_logo.png');
+				background-repeat:no-repeat;
+				background-position:left bottom -50px;
+				background-color: @gray-darkest;
+
+				li {
+					background: rgb(27, 30, 36);
+					background: rgba(27, 30, 36, .7);
+				}
+
+				.side-nav {
+					border-radius: 0;
+					border: none;
+					overflow-y: auto;
+
+					li.section {
+						
+						a{
+							text-shadow: none !important;
+						}
+						i.collapse {
+							display: none;
+						}
+
+						i.pull-right {
+							margin-top: 3px;
+						}
+
+						ul.children {
+							display: none;
+
+							top: 100%;
+							left: 0;
+							float: left;
+							
+							position: relative;
+							min-width: 225px;
+							margin: 0;
+							padding: 0 0 0 10px;
+							border: none;
+							border-radius: 0;
+							background-color: transparent;
+							box-shadow: none;
+							-webkit-box-shadow: none;
+
+							a {
+								background: none !important;
+							}
+
+							>li{
+								// border-bottom: 1px solid #DFDFDF;
+								// border-top: 1px solid #FFFFFF;
+								list-style-type: none;
+							}
+							>li.active {
+								color: #fff;
+								//background-color: #35C1A2;
+								> a{
+									color: #fff;
+									text-shadow: 0px 0px 9px rgba(255,255,255,0.5) !important;
+								}
+							}
+
+							>li>a {
+								color: #8b91a0;
+								padding: 15px 15px 15px 25px;
+								display: block;
+								clear: both;
+								font-weight: bold;
+								white-space: nowrap;
+								text-decoration: none;
+
+								&:hover {
+									color: #fff;
+									background-color: #080808;
+								}
+							}
+						}
+
+						&.open {
+							
+							i.collapse {
+								display: block;
+							}
+
+							i.expand {
+								display: none;
+							}
+
+							> ul.children {
+								display: block;
+							}
+						}
+					}
+				}
+			}*/
+		
+	

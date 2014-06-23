@@ -26,8 +26,8 @@ start(store('chimera-view-setting').contentblock) -%>
 			</div>
 		</div>
 	</header>
-	<div class="body no-border tablewrap">
-		<table class="table table-hover indextable" style="margin-bottom:0px;">
+	<div class="body no-border tablewrap table-responsive">
+		<table class="table table-hover indextable responsive-table" style="margin-bottom:0px;">
 			<thead>
 				<tr>
 					<th>Actions</th>
@@ -54,7 +54,7 @@ start(store('chimera-view-setting').contentblock) -%>
 			%>
 				<% if (!item) continue %>
 				<tr>
-					<td>
+					<td data-title="Actions">
 						<div class="actions record-actions">
 						<%
 							chimera.actions('record', {
@@ -67,8 +67,10 @@ start(store('chimera-view-setting').contentblock) -%>
 						%>
 						</div>
 					</td>
-					<% for (j = 0; j < fieldInfo.length; j++) { %>
-						<td><% chimera.field(item.fields, fieldInfo[j]) %></td>
+					<% for (j = 0; j < fieldInfo.length; j++) { 
+						field = fieldInfo[j];
+					%>
+						<td data-title="<%= field.title %>"><% chimera.field(item.fields, fieldInfo[j]) %></td>
 					<% } %>
 				</tr>
 			<% } %>

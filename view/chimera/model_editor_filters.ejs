@@ -33,7 +33,7 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 	</div>
 	<div class="clear"></div>
 
-	<div class="row" style="margin-bottom: 5px;">
+	<div class="row" style="margin-bottom: 15px;">
 		<div class="col-sm-12">
 			<div class="input-group">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
@@ -53,19 +53,21 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 					<div class="panel-heading" id="filters-collapse">
 						<h4 class="panel-title" >
 							<% echo(__('chimera', 'Filters')) %>
+							<span class="semi-bold"><% echo(__('chimera', 'Options')) %></span>
 						</h4>
 					</div>
 					<div id="collapse-filters" class="panel-collapse collapse">
 						<div class="panel-body">
+							<div class="col-sm-12">
+								<label for="chimera-filters-input" class="pull-left">Add</label>
+								<input type="hidden" id="chimera-filters-input">
+							</div>
+							<div class="clear"></div>
+							<br />
 							<div id="filters" class="pull-right col-sm-12">
 								<table class="col-sm-12">
 
 								</table>
-							</div>
-							<div class="clear"></div>
-							<br />
-							<div class="col-sm-12">
-								<input type="hidden" id="chimera-filters-input">
 							</div>
 							<div class="clear"></div>
 							<br />

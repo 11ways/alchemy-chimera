@@ -8,10 +8,13 @@ emit('chimera-notifications')
 <li class="dropdown">
 	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 		<span class="badge badge-important"><% if(typeof unread == 'number' && unread>0){%><%= unread %><% } %></span>
-		<%= name %> 
-		<i class="fa fa-angle-down"></i>
-    </a>
-    <ul class="dropdown-menu" style="max-height: 450px;overflow-y: auto;overflow-x: hidden;">
+		<%= name %>
+		<i class="fa fa-angle-left"></i>
+	</a>
+	<div class="arrow-container">
+		<div class="arrow"></div>
+	</div>
+	<ul class="dropdown-menu" style="max-height: 450px;overflow-y: auto;overflow-x: hidden;">
 		<% if(typeof notifications == 'object' && notifications.length>0){ %>
 			<% for(var i=0; i<notifications.length; i++){ %>
 				<% var notification = notifications[i]; %>
@@ -21,7 +24,7 @@ emit('chimera-notifications')
 						<% if(!notification.NotificationUser.read){%> data-usermessageid="<%= notification.NotificationUser._id %>" <% } %>
 						<% if(notification.NotificationMessage.external_link){%> target="_blank" <% } %>
 					>
-						<strong><%= notification.User.first_name %> <%= notification.User.last_name %></strong>
+						<%= notification.User.first_name %> <strong><%= notification.User.last_name %></strong>
 						<br />
 						<%= notification.NotificationMessage.message %>
 						<br />
@@ -37,8 +40,11 @@ emit('chimera-notifications')
 </li>
 <li class="dropdown">
 	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-		<i class="fa fa-cog fa-lg"></i>
+		<i class="fa fa-cog"></i>
 	</a>
+	<div class="arrow-container">
+		<div class="arrow"></div>
+	</div>
 	<ul class="dropdown-menu" style="min-width: 0px;">
 		<li><% add_link('/chimera/settings', {title: __('chimera', 'Website settings')}); %></li>
 		<li><% add_link('/chimera/my_settings', {title: __('chimera', 'My settings')}); %></li>
