@@ -1147,7 +1147,7 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// Emit events that have a 'data-emit' attribute
-	$('#hawkejs-insert-block-admin-content [data-emit]', $target).each(function() {
+	$target.find('[data-emit]').each(function() {
 		dataDo($(this));
 	});
 
