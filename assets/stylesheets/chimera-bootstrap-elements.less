@@ -1,3 +1,8 @@
+.fontsize() {
+	font-size: 14px;
+	font-size: 1.4rem;
+}
+
 // Badges
 .badge{
 	&.badge-important {
@@ -11,12 +16,13 @@
 .btn{
 	border: 1px solid @gray-lighter;
 	transition: .1s all;
-	font-family: @open-sans;//-light;
+	font-family: @open-sans;
 	font-weight: 300;
-	font-size: 12px;
-	font-size: 1.2rem;
 	line-height: 20px;
 	line-height: 2rem;
+
+	.fontsize();
+
 	.fa{
 		& + span,
 		& + hawkejs{
@@ -101,9 +107,10 @@
 // Form-control
 .form-control{
 	border-color: @gray-lighter;
-	font-size: 12px;
-	font-size: 1.2rem;
 	box-shadow: none;
+
+	.fontsize();
+
 	&[readonly],
 	&[disabled]{
 		background: @gray-lightest;
@@ -114,21 +121,18 @@
 .input-group{
 	.input-group-addon{
 		background: @white;
-		font-size: 12px;
-		font-size: 1.2rem;
+		.fontsize();
 	}
 	.search-input{
-		font-size: 12px;
-		font-size: 1.2rem;
 		color: @black;
-		.placeholder(@black);
+		.fontsize();
 	}
 }
 
 // Labels
 .label{
 	&.label-info{
-		background: @blue;	
+		background: @blue;
 	}
 	&.label-danger{
 		background: @red;
@@ -146,11 +150,12 @@
 	width: 100%;
 	> li{
 		height: 40px;
-		max-width: 180px;
 		margin: 0px;
+		margin-right: 5px;
 		box-sizing:border-box;
 		-moz-box-sizing:border-box; /* Firefox */
 		overflow: hidden;
+
 		> a{
 			border: 1px solid @gray-ultra-light-tint;
 			padding: 10px 15px;
@@ -160,7 +165,6 @@
 			color: @gray-light;
 		}
 		&.active{
-			width: 25% !important;
 			margin-bottom: -5px;
 			overflow: visible;
 			> a{
@@ -395,7 +399,6 @@
 	> thead{
 		> tr {
 			> th{
-				padding: 12px;
 				color: @table-header-color;
 				border-width: 1px !important;
 				&,
@@ -413,7 +416,6 @@
 	> tbody{
 		> tr{
 			> td{
-				padding: 12px;
 				border-top: 1px solid @table-border-color;
 				color: @table-tex-color;
 				word-break: break-word;
@@ -421,14 +423,10 @@
 		}
 	}
 }
-.table-responsive{
+.table-responsive {
 	width: 100%;
 	margin-bottom: 15px;
-	overflow-y: hidden;
-	overflow-x: scroll;
-	-ms-overflow-style: -ms-autohiding-scrollbar;
 	border: 1px solid #e5e9ec;
-	-webkit-overflow-scrolling: touch;
 }
 
 // Tooltip

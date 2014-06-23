@@ -35,13 +35,13 @@ asset.script([
 
 // Always add the admin less files
 asset.style([
-	//'chimera',
+	'chimera',
 	'jsoneditor2.3/jsoneditor',
 	'select2-3.4/select2',
 	'bootstrap-select1.5.4/bootstrap-select.min',
 	'nanoscroller/nanoscroller',
 	'mentionsInput/mentionsInput',
-	'admin'], {block: 'head'});
+	], {block: 'head'});
 
 start(store('chimera-view-setting').mainblock) %>
 	<% implement('admin/header') %>

@@ -146,21 +146,6 @@
 	}
 }
 
-// pcard
-.pcard {
-	padding: 0px;
-	margin: 0px;
-	header {
-		color: @gray-light !important;
-		//border-bottom: 1px solid @gray-light;
-		background-color: @white;
-		border: 1px solid @gray-light;
-		padding: 14px 15px 7px 15px;
-		margin-bottom: 0px;
-		border-bottom: 0px;
-	}
-}
-
 // Select 2
 .select2-container{
 	width: 100%;
@@ -193,17 +178,20 @@
 			background-image: none;
 		}
 	}
-	.select2-choice{
+
+	.select2-choice {
 		border: 1px solid @gray-lighter;
 		background-image: none;
-		height: 34px;
+		height: 34px !important;
+
 		.select2-chosen{
 			line-height: 34px;
 		}
+
 		.select2-arrow{
 			background-image: none;
 			background: @white;
-			border-left: none;	
+			border-left: none;
 		}
 	}
 }

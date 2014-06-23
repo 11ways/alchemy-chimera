@@ -66,16 +66,8 @@ errors();
 <div class="editform">
 	<div class="grouptabs">
 		<ul class="nav nav-tabs">
-		<% 
-			var tabs = 0;
-			for (groupName in options.groups) { 
-			tabs++;
-		} 
-		tabs = (75 / (tabs - 1)) + '%';
-
-		%>
 		<% for (groupName in options.groups) { %>
-			<li class="<%= active %>" style="width: <%= tabs %>;"><a href="#chitab-<%= groupName %>-<%= uid %>" data-toggle="tab"><%= options.groups[groupName].title || groupName.humanize() %></a></li>
+			<li class="<%= active %>"><a href="#chitab-<%= groupName %>-<%= uid %>" data-toggle="tab"><%= options.groups[groupName].title || groupName.humanize() %></a></li>
 		<%
 			active = '';
 		}
