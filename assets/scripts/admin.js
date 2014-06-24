@@ -45,19 +45,6 @@ $(window).load(function() {
 		}
 	);
 
-
-	$('#sidebar-wrapper li').on('click', function(){
-		var current_element = $(this);
-		current_element.addClass('clicked');
-
-		$('#sidebar-wrapper li:not(.clicked)').each(function(){
-			//console.log($.contains($(this), current_element));
-				$(this).removeClass('open');
-		});
-
-		current_element.removeClass('clicked');
-	});
-
 	if($(window).width() < 768) {
 		addCollapseClasses();
 	}
