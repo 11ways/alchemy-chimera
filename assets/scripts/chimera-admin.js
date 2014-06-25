@@ -1091,7 +1091,7 @@ function applyChimeraFields(query, payload) {
 	};
 
 	// Make the enter button apply the inline pagination
-	$('input[data-pagination-filter]', $target).keyup(function(e) {
+	$target.find('input[data-pagination-filter]').keyup(function(e) {
 
 		var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
 
@@ -1110,7 +1110,7 @@ function applyChimeraFields(query, payload) {
 	}
 
 	// Add an "Add entry" button to arrayable fields
-	$('#hawkejs-insert-block-admin-content hawkejs[data-chimera-field][data-array]', $target).each(function() {
+	$target.find('hawkejs[data-chimera-field][data-array]').each(function() {
 
 		var $this     = $(this),
 		    $empty    = $('[data-chimera-empty-input]', $this),
@@ -1152,7 +1152,7 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// Apply pagination
-	$('[data-apply-pagination]', $target).click(function(e) {
+	$target.find('[data-apply-pagination]').click(function(e) {
 
 		var $this = $(this),
 		    conditions = {},
@@ -1177,10 +1177,10 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// Apply select2 on select fields
-	$('select.form-control', $target).select2();
+	$target.find('select.form-control').select2();
 
 	// Apply the mentions field (wip)
-	$('textarea.mention', $target).each(function() {
+	$target.find('textarea.mention').each(function() {
 
 		var $this   = $(this),
 		    items   = hawkejs.parse(($this.siblings('.mention-source').html())),
@@ -1210,7 +1210,7 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// i18n static string stuff
-	var $title = $('#mainTitle', $target);
+	var $title = $target.find('#mainTitle');
 
 	if ($title.text().indexOf('Static String: Edit record') > -1) {
 
