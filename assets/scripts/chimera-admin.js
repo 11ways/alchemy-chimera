@@ -916,10 +916,10 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		filterFields.push({id: alias + '.__all', text: '<b>' + alias + '</b>', modelGroup: true, modelName: group.modelName});
 
 		Object.each(group.fields, function(field, name) {
-			if(field.model){
-				fieldMap[field.model+'.'+name] = field.key;
+			if(field.alias){
+				fieldMap[field.alias+'.'+name] = field.key;
 
-				filterFields.push({id: field.model + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field.key});
+				filterFields.push({id: field.alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field.key});
 			} else {
 				fieldMap[alias+'.'+name] = field;
 
