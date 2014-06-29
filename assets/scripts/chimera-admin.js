@@ -629,11 +629,11 @@ hawkejs.event.on('create-chimera-filters', function(query, payload) {
 			if(field.model){
 				fieldMap[field.model+'.'+name] = field.key;
 
-				filterFields.push({id: field.model + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field.key});
+				filterFields.push({id: field.model + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + hawkejs.helpers.__(field.domain, field.key)});
 			} else {
 				fieldMap[alias+'.'+name] = field;
 
-				filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field});
+				filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + hawkejs.helpers.__(field.domain, field.key)});
 			}
 		});
 	});
@@ -919,11 +919,11 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 			if(field.alias){
 				fieldMap[field.alias+'.'+name] = field.key;
 
-				filterFields.push({id: field.alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field.key});
+				filterFields.push({id: field.alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + hawkejs.helpers.__(field.domain, field.key)});
 			} else {
 				fieldMap[alias+'.'+name] = field;
 
-				filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field});
+				filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + hawkejs.helpers.__(field.domain, field.key)});
 			}
 		});
 	});
@@ -1026,11 +1026,11 @@ hawkejs.event.on('create-chimera-fields', function(query, payload) {
 			if(field.model){
 				fieldMap[field.model+'.'+name] = field.key;
 
-				fieldFields.push({id: field.model + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field.key});
+				fieldFields.push({id: field.model + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + hawkejs.helpers.__(field.domain, field.key)});
 			} else {
 				fieldMap[alias+'.'+name] = field;
 
-				fieldFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + field});
+				fieldFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + hawkejs.helpers.__(field.domain, field.key)});
 			}
 		});
 	});

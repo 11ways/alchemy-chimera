@@ -34,7 +34,7 @@ start(store('chimera-view-setting').contentblock) -%>
 					<% for (i = 0; i < fieldInfo.length; i++) {
 						field = fieldInfo[i];
 					%>
-					<th><% Paginate.sort({field: field.fieldPath, display: field.title, parentClass: 'activesort'}) %></th>
+					<th><% Paginate.sort({field: field.fieldPath, display: __('fieldTitles', field.title), parentClass: 'activesort'}) %></th>
 					<% } %>
 				</tr>
 				<tr>
@@ -44,7 +44,7 @@ start(store('chimera-view-setting').contentblock) -%>
 					<% for (i = 0; i < fieldInfo.length; i++) {
 						field = fieldInfo[i];
 					%>
-					<th><% Paginate.filter({field: field.fieldPath, display: field.title}) %></th>
+					<th><% Paginate.filter({field: field.fieldPath, display: __('fieldTitles', field.title)}) %></th>
 					<% } %>
 				</tr>
 			</thead>
