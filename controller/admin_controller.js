@@ -131,6 +131,8 @@ var AdminController = Controller._extend(function AdminController (){
 
 		temp = Prefix.all();
 
+		prefixes.push({_id: '', title: __('chimera', 'Browser default')});
+
 		for (key in temp) {
 			prefixes.push({_id: key, title: temp[key].title || temp[key].name});
 		}
@@ -146,7 +148,7 @@ var AdminController = Controller._extend(function AdminController (){
 
 				settings.can_mail = true;
 				settings.get_notifications = 'all';
-				settings.prefix_preference = render.prefix;
+				settings.prefix_preference = '';
 			} else {
 				settings = render.viewVars.settings = record[0].NotificationSetting;
 			}

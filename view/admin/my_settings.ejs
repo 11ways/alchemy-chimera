@@ -1,8 +1,10 @@
-<% expands('layouts/admin_main') %>
+<% expands('layouts/admin_main');
 
-<% start(store('chimera-view-setting').contentblock) %>
+start('chimera-page-title');
+echo('<h1>My Settings</h1>');
+end('chimera-page-title');
 
-<h1>My Settings</h1>
+start(store('chimera-view-setting').contentblock) %>
 
 <% form.create('my_settings', {id: 'UserSettings', action: '/chimera/my_settings', 'class':'form-horizontal'}) %>
 <div class="row">
@@ -30,11 +32,13 @@
 </div>
 
 <div class="row">
-
-<%
-	// form.fieldSelect('prefix_preference', {elements: prefixes, value: settings.prefix_preference, class: 'selectpicker'})
-%>
-
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<%= __('chimera', 'Always prefer this language') %>
+	</div>
+	<div class="clear"></div>
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<% form.fieldSelect('prefix_preference', {elements: prefixes, value: settings.prefix_preference, attributes: {class: 'selectpicker'}}) %>
+	</div>
 </div>
 
 <br />
