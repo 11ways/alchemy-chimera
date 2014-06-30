@@ -125,6 +125,7 @@ var AdminController = Controller._extend(function AdminController (){
 		    user = render.req.session.user,
 		    temp,
 		    prefixes = [],
+		    user_id,
 		    key;
 
 		conditions['NotificationSetting.user_id'] = user_id = render.req.session.user._id;
@@ -141,6 +142,8 @@ var AdminController = Controller._extend(function AdminController (){
 		
 		// Get current user settings
 		this.getModel('NotificationSetting').find('first', {conditions: conditions}, function(err, record) {
+
+			var document;
 			
 			// If no settings found, set defaults
 			if(record.length == 0){
@@ -163,10 +166,10 @@ var AdminController = Controller._extend(function AdminController (){
 				}
 
 				settings.prefix_preference = data.MySetting.prefix_preference;
-
 				settings.get_notifications = data.MySetting.get_notifications;
+				settings.user_id = user_id;
 
-				that.getModel('NotificationSetting').save(settings, function(err, result) {
+				that.getModel('NotificationSetting').save({NotificationSetting: settings}, function(err, result) {
 					that.getNotifications(render, true);
 				});
 			} else {
