@@ -45,6 +45,9 @@ Model.extend(function NotificationSettingModel() {
 			},
 			get_notifications: {
 				type: 'Enum'
+			},
+			prefix_preference: {
+				type: 'String'
 			}
 		};
 		

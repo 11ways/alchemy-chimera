@@ -165,7 +165,7 @@ var AdminController = Controller._extend(function AdminController (){
 				settings.prefix_preference = data.MySetting.prefix_preference;
 
 				settings.get_notifications = data.MySetting.get_notifications;
-				
+
 				that.getModel('NotificationSetting').save(settings, function(err, result) {
 					that.getNotifications(render, true);
 				});
