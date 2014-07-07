@@ -7,7 +7,8 @@
 		"url": "https://github.com/codedor/alchemy-chimera.git"
 	},
 	"dependencies": {
-		"excel-export": "0.3.11"
+		"excel-export": "0.3.11",
+		"msexcel-builder": "0.0.x"
 	},
 	"license": "MIT",
 	"engines": {

@@ -10,7 +10,7 @@ if(typeof(allGroupedFields) === 'undefined'){
 } else {
 	fieldInfo = allFieldTitles;
 }
-
+var andor;
 emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: filters});
 %>
 <div class="filters">
@@ -78,7 +78,7 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 						<div class="radio row">
 							<div class="col-sm-12">
 								<label>
-									<input type="radio" name="data[<%= modelName %>][andor]" value="or" <% if(andor && andor === "or"){%> checked <% } %>>
+									<input type="radio" name="data[logicalOperator]" value="or" <% if(logicalOperator === "or"){%> checked <% } %>>
 									<%= __('chimera', 'Match any condition') %>
 								</label>
 							</div>
@@ -86,7 +86,7 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 						<div class="radio row">
 							<div class="col-sm-12">
 								<label>
-									<input type="radio" name="data[<%= modelName %>][andor]" value="and" <% if(!andor){%> checked <% } %> <% if(andor && andor === "and"){%> checked <% } %>>
+									<input type="radio" name="data[logicalOperator]" value="and" <% if(logicalOperator === "and"){%> checked <% } %>>
 									<%= __('chimera', 'Match all conditions') %>
 								</label>
 							</div>
