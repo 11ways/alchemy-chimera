@@ -38,7 +38,7 @@ emit('create-chimera-fields', {fields: allGroupedFields})
 		<div class="col-sm-12">
 			<div class="input-group">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
-				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(search){ %><%= search %><% } %>">
+				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(scope.variables.search){ %><%= search %><% } %>">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><% echo(__('chimera', 'Search')) %></span>
 			</div>
 		</div>

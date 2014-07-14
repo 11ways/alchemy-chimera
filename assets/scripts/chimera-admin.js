@@ -539,7 +539,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 				fieldPath: result.fieldPath
 			};
 
-			template = hawkejs.getTemplate('chimera_filter_input/' + result.filterFieldName + '_filter_input');
+			template = hawkejs.getTemplate('chimera_filter_input/' + (result.filterFieldName||'default') + '_filter_input');
 
 			// Remove hawkejs specific code
 			template = template.slice(32);
@@ -563,7 +563,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 			}
 			
 			// Apply the previously set filters
-			if (filters && typeof filters == 'object') {
+			if (Array.isArray(filters)) {
 				filters.forEach(function(filter) {
 					if(filter.fieldPath === payload.fieldPath){
 						$('#'+payload.id).val(filter.value);
@@ -618,14 +618,24 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		filterFields.push({id: alias + '.__all', text: '<b>' + alias + '</b>', modelGroup: true, modelName: group.modelName});
 
 		Object.each(group.fields, function(field, name) {
+
+			var title;
+
+			if (typeof field === 'object') {
+				title = hawkejs.helpers.__(field.domain, field.key);
+			} else {
+				title = field;
+			}
+
 			if(field.alias){
 				fieldMap[field.alias+'.'+name] = field.key;
 
-				filterFields.push({id: field.alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + hawkejs.helpers.__(field.domain, field.key)});
+				filterFields.push({id: field.alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + title});
 			} else {
+
 				fieldMap[alias+'.'+name] = field;
 
-				filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + hawkejs.helpers.__(field.domain, field.key)});
+				filterFields.push({id: alias + '.' + name, text: '&nbsp;&nbsp;&nbsp;' + title});
 			}
 		});
 	});

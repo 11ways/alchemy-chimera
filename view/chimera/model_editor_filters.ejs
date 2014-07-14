@@ -10,9 +10,9 @@ if(typeof(allGroupedFields) === 'undefined'){
 } else {
 	fieldInfo = allFieldTitles;
 }
-
+var andor;
 // Emit the event that'll create the filter html
-emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, filters: filters})
+emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, filters: fieldConditions})
 %>
 <div class="filters">
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
@@ -37,7 +37,7 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 		<div class="col-sm-12">
 			<div class="input-group">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
-				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(search){ %><%= search %><% } %>">
+				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(scope.variables.search){ %><%= search %><% } %>">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><% echo(__('chimera', 'Search')) %></span>
 			</div>
 			<!--<option value="global_search" ><% //echo(__('chimera', 'Global Search')) %></option>-->
@@ -93,7 +93,7 @@ emit('create-chimera-filters', {fields: allGroupedFields, modelName: modelName, 
 							<br />
 							<div class="col-sm-12">
 								<button class="btn btn-primary disabled" id="applybtn"><i class="fa fa-check"></i> <% echo(__('chimera', 'Apply')) %></button>
-								<button class="btn btn-default  <% if (filters && filters.length) echo('hasfilters') %>" id="clearbtn"><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
+								<button class="btn btn-default  <% if (activeFilters) echo('hasfilters') %>" id="clearbtn"><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
 								<!--<button class="btn btn-default" id="filterbtn"><i class="fa fa-plus"></i> <% echo(__('chimera', 'Add filter')) %></button>-->
 							</div>
 						</div>

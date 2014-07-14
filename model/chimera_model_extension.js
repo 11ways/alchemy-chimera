@@ -69,3 +69,6 @@ Model.prototype.getModelEditorField = function getModelEditorField(name, cache) 
 		return type;
 	}
 };
+
+// Use the filter modal everywhere, because the inline filter is broken
+Model.prototype.useSeparateFilterPage = true;

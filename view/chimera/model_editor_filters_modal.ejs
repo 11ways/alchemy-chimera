@@ -11,7 +11,7 @@ if(typeof(allGroupedFields) === 'undefined'){
 	fieldInfo = allFieldTitles;
 }
 var andor;
-emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: filters});
+emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: fieldConditions});
 %>
 <div class="filters">
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
@@ -36,7 +36,7 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 		<div class="col-sm-12">
 			<div class="input-group">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
-				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(search){ %><%= search %><% } %>">
+				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(scope.variables.search){ %><%= search %><% } %>">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><% echo(__('chimera', 'Search')) %></span>
 			</div>
 			<!--<option value="global_search" ><% //echo(__('chimera', 'Global Search')) %></option>-->
@@ -52,7 +52,7 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 			</a>
 		</div>
 		<div class="col-xs-6 col-sm-2">
-			<button type="button" class="btn btn-default btn-block <% if (filters && filters.length) echo('hasfilters') %>" id="clearbtn" ><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
+			<button type="button" class="btn btn-default btn-block <% if (activeFilters) echo('hasfilters') %>" id="clearbtn" ><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
 		</div>
 	</div>
 	
