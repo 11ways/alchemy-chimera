@@ -11,7 +11,7 @@ if(typeof allGroupedFields === 'undefined'){
 	fieldInfo = allFieldTitles;
 }
 var andor;
-emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: scope.variables.fieldConditions});
+emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: fieldConditions});
 %>
 <div class="filters">
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
