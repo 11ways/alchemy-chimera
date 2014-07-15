@@ -4,6 +4,7 @@ Model.prototype.getModelEditorField = function getModelEditorField(name, cache) 
 
 	var info,
 	    type,
+	    model,
 	    config,
 	    augment,
 	    assocType;
@@ -14,8 +15,14 @@ Model.prototype.getModelEditorField = function getModelEditorField(name, cache) 
 	// Get info on the wanted field
 	info = alchemy.getFieldInfo(name, this);
 
+	if (info.modelName == this.modelName) {
+		model = this;
+	} else {
+		model = this.getModel(info.modelName);
+	}
+
 	// Get the blueprint config
-	config = this.blueprint[info.field];
+	config = model.blueprint[info.field];
 
 	if (config) {
 
@@ -65,6 +72,15 @@ Model.prototype.getModelEditorField = function getModelEditorField(name, cache) 
 
 		// augment the view instance
 		type = alchemy.augment(type, augment);
+
+		// Attach the model
+		type.model = model;
+
+		// Attach the config
+		type.config = config;
+
+		// Attach the info
+		type.info = info;
 
 		return type;
 	}
