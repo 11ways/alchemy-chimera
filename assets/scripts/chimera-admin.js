@@ -705,9 +705,10 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		applyFormFilters();
 	});
 	
-	$('.search-input').on('keyup', function(e){
+	$('.search-input').on('keydown', function(e){
 		if(e.keyCode === 13){
 			e.preventDefault();
+			e.stopPropagation();
 			applyFormFilters();
 		}
 	});
