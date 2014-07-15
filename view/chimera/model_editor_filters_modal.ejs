@@ -1,6 +1,6 @@
 <% 
 //IF JSON VIEW USE FIELDS ELSE USE ALLFIELDS
-if(typeof(allGroupedFields) === 'undefined'){
+if(typeof allGroupedFields === 'undefined'){
 	fieldInfo = [];
 	for(var i in fields){
 		var field = {};
@@ -11,7 +11,7 @@ if(typeof(allGroupedFields) === 'undefined'){
 	fieldInfo = allFieldTitles;
 }
 var andor;
-emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: fieldConditions});
+emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: modelName, filters: scope.variables.fieldConditions});
 %>
 <div class="filters">
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
