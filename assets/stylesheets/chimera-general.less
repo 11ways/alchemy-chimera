@@ -18,7 +18,7 @@
 	&.paginate-actions{
 		margin-bottom: 10px;
 		display: inline;
-		float: right;
+
 		.btn{
 			margin-bottom: 5px;
 		}
@@ -32,6 +32,12 @@
 			margin-right: 0px;
 		}
 	}
+}
+
+.noreflink {
+	cursor: pointer;
+	text-decoration: underline;
+	color: @gray-light;
 }
 
 // Alchemy-error
@@ -261,15 +267,15 @@ table{
 	padding: 25px;
 	margin-bottom: 20px;
 	background: @white;
+
 	.listinfo {
 		padding-top: 3px;
 		padding-bottom: 3px;
 		font-size: 12px;
-		float: right;
 		display: inline-block;
 		padding-right: 14px;
 		color: @gray-light;
-		border-right: 1px solid @gray-lighter;
+		//border-right: 1px solid @gray-lighter;
 	}
 }
 

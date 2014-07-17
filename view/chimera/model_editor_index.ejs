@@ -16,13 +16,19 @@ start(store('chimera-view-setting').contentblock) -%>
 	<header class="no-border">
 		<div class="row">
 			<div class="col-md-4">
-				
+				<span style="margin-top: 9px;display: inline-block;"><%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> <%= modelName.pluralize() %></span>
 			</div>
-			<div class="col-md-4 center">
-				
+			<div class="col-md-4 center" style="text-align:center">
+				<label for="data[<%= modelName %>][show]" style="margin:0;font-weight:normal;"><% echo(__('chimera', 'Show')) %></label>
+				<select id="show" name="data[<%= modelName %>][show]" class="selectpicker" data-width="70px">
+					<% for(var i in pageSizes){ %>
+						<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
+					<% } %>
+				</select>
+				<label for="data[<%= modelName %>][show]" style="margin:0;font-weight:normal;"><% echo(__('chimera', 'per page')) %></label>
 			</div>
 			<div class="col-md-4 right" style="text-align:right;">
-				<%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> <%= modelName.pluralize() %>
+				<% chimera.actions('list') %>
 			</div>
 		</div>
 	</header>
@@ -76,12 +82,12 @@ start(store('chimera-view-setting').contentblock) -%>
 			<% } %>
 		</table>
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-12" style="text-align:center;padding-top:16px">
+				<div class="listinfo">
+					<span><%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> entries</span>
+				</div>
 				<div class="pagination">
 					<% Paginate.show() %>
-				</div>
-				<div class="listinfo">
-					<%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> entries
 				</div>
 			</div>
 		</div>

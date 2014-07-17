@@ -235,6 +235,10 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 		});
 	});
 
+	hawkejs.spot.introduced('.selectpicker', function(elements) {
+		$(elements).selectpicker();
+	});
+
 	hawkejs.spot.introduced('#tempeditor .btn.modalsubmit', function(elements) {
 
 		$(elements).click(function(e) {
@@ -572,8 +576,6 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 					}
 				});
 			}
-			
-			$('.selectpicker').selectpicker();
 
 			//BIND EVENTS:
 			//CONDITION SELECT CHANGE EVENT: SHOWS/HIDES INPUT

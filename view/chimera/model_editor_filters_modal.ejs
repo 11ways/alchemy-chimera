@@ -15,31 +15,17 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 %>
 <div class="filters">
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
-	<!-- SHOW X ITEMS PER PAGE -->
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="form-group">
-				<label for="data[<%= modelName %>][show]" class="col-sm-9" style="line-height: 30px; text-align:right;"><% echo(__('chimera', 'Show')) %></label>
-				<div class="col-sm-3">
-					<select id="show" name="data[<%= modelName %>][show]" class="selectpicker" data-width="100%">
-						<% for(var i in pageSizes){ %>
-							<option value="<%= pageSizes[i] %>" <% if(show==pageSizes[i]){ %> selected <% } %>><%= pageSizes[i] %></option>
-						<% } %>
-					</select>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="clear"></div>
 
 	<div class="row" style="margin-bottom: 15px;">
-		<div class="col-sm-12">
+		<div class="col-sm-8">
 			<div class="input-group">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
 				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(scope.variables.search){ %><%= search %><% } %>">
 				<span class="input-group-addon search-btn" style="cursor: pointer;"><% echo(__('chimera', 'Search')) %></span>
 			</div>
-			<!--<option value="global_search" ><% //echo(__('chimera', 'Global Search')) %></option>-->
+		</div>
+		<div class="col-sm-4">
+			<button type="button" class="btn btn-default btn-block <% if (activeFilters) echo('hasfilters') %>" id="clearbtn" ><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear last search')) %></button>
 		</div>
 	</div>
 	<div class="clear"></div>
@@ -47,12 +33,9 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 	<!-- FILTERS -->
 	<div class="row" style="margin-bottom: 15px;">
 		<div class="col-xs-6 col-sm-10">
-			<a class="btn btn-default btn-block"  data-toggle="modal" data-target="#filterModal" id="add-filters-btn">
-				<% echo(__('chimera', 'Add Filters')) %>
+			<a class="noreflink"  data-toggle="modal" data-target="#filterModal" id="add-filters-btn">
+				<% echo(__('chimera', 'Advanced search with filters')) %>
 			</a>
-		</div>
-		<div class="col-xs-6 col-sm-2">
-			<button type="button" class="btn btn-default btn-block <% if (activeFilters) echo('hasfilters') %>" id="clearbtn" ><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear')) %></button>
 		</div>
 	</div>
 	
