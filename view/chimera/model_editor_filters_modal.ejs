@@ -17,15 +17,23 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 	<% form.create(modelName, {action: 'here', 'class': 'form-horizontal'}) %>
 
 	<div class="row" style="margin-bottom: 15px;">
-		<div class="col-sm-8">
-			<div class="input-group">
-				<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
-				<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(scope.variables.search){ %><%= search %><% } %>">
-				<span class="input-group-addon search-btn" style="cursor: pointer;"><% echo(__('chimera', 'Search')) %></span>
-			</div>
-		</div>
-		<div class="col-sm-4">
-			<button type="button" class="btn btn-default btn-block <% if (activeFilters) echo('hasfilters') %>" id="clearbtn" ><i class="fa fa-refresh"></i> <% echo(__('chimera', 'Clear last search')) %></button>
+		<div class="col-md-12">
+			<span class="title" style="font-size:20px;"><% echo(__('chimera', 'Search :modelTitle', {modelTitle: modelTitle})) %></span>
+			<div class="clearfix"></div>
+			<table style="width:100%">
+				<tr>
+					<td>
+						<div class="input-group" style="width:100%">
+							<span class="input-group-addon search-btn" style="cursor: pointer;"><i class="fa fa-search"></i></span>
+							<input type="text" class="form-control search-input" name="data[<%= modelName %>][search]" placeholder="Search all" value="<% if(scope.variables.search){ %><%= search %><% } %>">
+							<span class="input-group-addon search-btn" style="cursor: pointer;"><% echo(__('chimera', 'Search')) %></span>
+						</div>
+					</td>
+					<td style="width:135px;padding-left:5px;">
+						<button type="button" class="btn btn-search <% if (activeFilters) echo('hasfilters') %>" id="clearbtn" ><% echo(__('chimera', 'Clear last search')) %></button>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 	<div class="clear"></div>

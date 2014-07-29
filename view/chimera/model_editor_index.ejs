@@ -16,7 +16,7 @@ start(store('chimera-view-setting').contentblock) -%>
 	<header class="no-border">
 		<div class="row">
 			<div class="col-md-4">
-				<span style="margin-top: 9px;display: inline-block;"><%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> <%= modelName.pluralize() %></span>
+				<span style="margin-top: 9px;display: inline-block;font-style:italic"><%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> <%= modelName.pluralize() %></span>
 			</div>
 			<div class="col-md-4 center" style="text-align:center">
 				<label for="data[<%= modelName %>][show]" style="margin:0;font-weight:normal;"><% echo(__('chimera', 'Show')) %></label>
@@ -28,7 +28,7 @@ start(store('chimera-view-setting').contentblock) -%>
 				<label for="data[<%= modelName %>][show]" style="margin:0;font-weight:normal;"><% echo(__('chimera', 'per page')) %></label>
 			</div>
 			<div class="col-md-4 right" style="text-align:right;">
-				<% chimera.actions('list') %>
+				<% chimera.actions('list', {modelTitle: modelTitle, newItem: newItemName}) %>
 			</div>
 		</div>
 	</header>
@@ -68,6 +68,8 @@ start(store('chimera-view-setting').contentblock) -%>
 								routeVars: {
 									id: item._id
 								},
+								modelTitle: modelTitle,
+								newItem: newItemName,
 								content: false
 							});
 						%>
@@ -83,11 +85,14 @@ start(store('chimera-view-setting').contentblock) -%>
 		</table>
 		<div class="row">
 			<div class="col-md-12" style="text-align:center;padding-top:16px">
-				<div class="listinfo">
-					<span><%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> entries</span>
-				</div>
-				<div class="pagination">
-					<% Paginate.show() %>
+				<div style="display:inline-block">
+					<div class="listinfo" style="float:left;">
+						<span><%= __('chimera', 'Showing') %> <%= items.length %> <%= __('chimera', 'of') %> <%= _PageInfo[modelName].items %> entries</span>
+					</div>
+					<div class="pagination" style="float:left;">
+						<% Paginate.show() %>
+					</div>
+					<div class="clearfix"></div>
 				</div>
 			</div>
 		</div>

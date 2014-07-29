@@ -4,11 +4,11 @@
 			<span class="title" id="mainTitle"><%= modelTitle || modelName %>: Index</span>
 			<div class="clear"></div>
 			<div class="actions paginate-actions">
-				<% chimera.actions('paginate') %>
+				<% chimera.actions('paginate', {modelTitle: modelTitle, newItem: newItemName}) %>
 			</div>
 		</div>
-		<div class="col-md-2"></div>
-		<div class="col-md-4">
+		
+		<div class="col-md-6">
 			<% if (!useSeparateFilterPage) {
 				print_element('chimera/model_editor_filters');
 			} else {

@@ -113,12 +113,16 @@ module.exports = function chimeraHelpers(hawkejs) {
 					// See if an icon is defined
 					if (action.icon) {
 						prepend = '<i class="fa fa-' + action.icon + '"></i>';
-					} else {
+					} else if (action.icon !== false) {
 						prepend = '<i class="fa fa-circle-o"></i>';
 					}
 
 					if (typeof options.title === 'undefined' || options.title === true) {
-						title = action.title;
+						if (options.modelTitle) {
+							title = hawkejs.helpers.__addPlaceholders(action.title, {modelTitle: ''+options.modelTitle, newItem: ''+options.newItem});
+						} else {
+							title = action.title;
+						}
 					} else {
 						title = false;
 					}
