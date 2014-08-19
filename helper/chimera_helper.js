@@ -230,6 +230,15 @@ module.exports = function chimeraHelpers(hawkejs) {
 			}
 		}
 
+		// Re-emit any user-specified events
+		if (result && result.payload && result.payload.request && result.payload.request.events) {
+			if (result.payload.request.events.length) {
+				for (nr = 0; nr < result.payload.request.events.length; nr++) {
+					this.emit.apply(this, result.payload.request.events[nr]);
+				}
+			}
+		}
+
 		wrapper = blocks.wrapper;
 
 		if (wrapper) {
