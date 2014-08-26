@@ -33,8 +33,6 @@ hawkejs.spot.introduced('.fillwidth', function(elements) {
 			usedWidth += $($siblings[i]).outerWidth();
 		}
 
-		pr('Width calculation: ' + totalWidth + ' - ' + usedWidth + ': ' + (totalWidth-usedWidth));
-
 		$this.width(totalWidth-usedWidth);
 	});
 
@@ -456,14 +454,24 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 
 		var url = window.location.origin + window.location.pathname,
 		    filters = [],
-		    options = {};
+		    options = {},
+		    seenFields = {},
+		    cookie;
 
 		$('.filters tr').each(function(){
 			
 			var filter = {},
-			    $this  = $(this);
+			    $this  = $(this),
+			    fieldPath;
 
-			filter.fieldPath = $this.find('.filter[data-filter-field]').data('filter-field');
+			// Get the fieldPath
+			fieldPath = $this.find('.filter[data-filter-field]').data('filter-field');
+
+			// Add it to the seenFields, where we keep track of what fields have been shown in the modal dialog
+			seenFields[fieldPath] = true;
+
+			// And now add it to the filter object
+			filter.fieldPath = fieldPath;
 			filter.condition = $this.find('select').val();
 			filter.value = $this.find('.filter[data-filter-field]').val();
 
@@ -471,6 +479,31 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 				filters.push(filter);
 			}
 		});
+
+		// Get the cookie data
+		cookie = document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(modelName + '_cfilters').replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1");
+
+		// If the cookie is found, see if we need to apply any previous settings not shown in the modal dialog
+		if (cookie) {
+			cookie = decodeURIComponent(cookie);
+			cookie = '{' + cookie.after('{');
+
+			try {
+				cookie = JSON.parse(cookie);
+
+				cookie.filters.forEach(function(cfilter) {
+
+					// If the fieldpath in the condition was not seen when traversing
+					// over the tr's, this means the user did not open that tab and so
+					// the settings should be re-applied
+					if (!seenFields[cfilter.fieldPath]) {
+						filters.push(cfilter);
+					}
+				});
+			} catch(err) {
+				console.error(err);
+			}
+		}
 
 		// Get the amount of items to show, default to 20
 		options.show = $('select[name="data[' + modelName + '][show]"]').val() || 20;
