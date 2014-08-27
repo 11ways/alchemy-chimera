@@ -4,7 +4,7 @@ start('chimera-page-title'); -%>
 <div class="adminActionHead">
 	<span class="title" id="mainTitle"><%= modelTitle || modelName %>: <%= editTitle %> <%= scope.variables.titleContent || '' %></span>
 	<div class="actions paginate-actions right">
-		<% chimera.actions(showActions) %>
+		<% chimera.actions(showActions, {modelTitle: modelTitle, newItem: newItemName}) %>
 	</div>
 	<div class="clear"></div>
 </div>
