@@ -742,7 +742,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		applyFormFilters();
 	});
 
-	$modal.on('click', '.search-btn', function(e){
+	$('.search-btn').on('click', function(e){
 		e.preventDefault();
 		applyFormFilters();
 	});
