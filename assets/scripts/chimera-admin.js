@@ -451,7 +451,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 	/**
 	 * Apply the filter & show settings to the current index
 	 */
-	function applyFormFilters(){
+	function applyFormFilters(doSearch, doClear){
 
 		var url = window.location.origin + window.location.pathname,
 		    filters = [],
@@ -459,58 +459,72 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		    seenFields = {},
 		    cookie;
 
-		$('.filters tr').each(function(){
-			
-			var filter = {},
-			    $this  = $(this),
-			    fieldPath;
+		if (doSearch == null) {
+			doSearch = true;
+		}
 
-			// Get the fieldPath
-			fieldPath = $this.find('.filter[data-filter-field]').data('filter-field');
+		if (doClear == null) {
+			doClear = false;
+		}
 
-			// Add it to the seenFields, where we keep track of what fields have been shown in the modal dialog
-			seenFields[fieldPath] = true;
+		if (!doClear) {
+			$('.filters tr').each(function(){
 
-			// And now add it to the filter object
-			filter.fieldPath = fieldPath;
-			filter.condition = $this.find('select').val();
-			filter.value = $this.find('.filter[data-filter-field]').val();
+				var filter = {},
+				    $this  = $(this),
+				    fieldPath;
 
-			if (filter.fieldPath && filter.value!== '') {
-				filters.push(filter);
-			}
-		});
+				// Get the fieldPath
+				fieldPath = $this.find('.filter[data-filter-field]').data('filter-field');
 
-		// Get the cookie data
-		cookie = document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(modelName + '_cfilters').replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1");
+				// Add it to the seenFields, where we keep track of what fields have been shown in the modal dialog
+				seenFields[fieldPath] = true;
 
-		// If the cookie is found, see if we need to apply any previous settings not shown in the modal dialog
-		if (cookie) {
-			cookie = decodeURIComponent(cookie);
-			cookie = '{' + cookie.after('{');
+				// And now add it to the filter object
+				filter.fieldPath = fieldPath;
+				filter.condition = $this.find('select').val();
+				filter.value = $this.find('.filter[data-filter-field]').val();
 
-			try {
-				cookie = JSON.parse(cookie);
+				if (filter.fieldPath && filter.value!== '') {
+					filters.push(filter);
+				}
+			});
 
-				cookie.filters.forEach(function(cfilter) {
+			// Get the cookie data
+			cookie = document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(modelName + '_cfilters').replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1");
 
-					// If the fieldpath in the condition was not seen when traversing
-					// over the tr's, this means the user did not open that tab and so
-					// the settings should be re-applied
-					if (!seenFields[cfilter.fieldPath]) {
-						filters.push(cfilter);
-					}
-				});
-			} catch(err) {
-				console.error(err);
+			// If the cookie is found, see if we need to apply any previous settings not shown in the modal dialog
+			if (cookie) {
+				cookie = decodeURIComponent(cookie);
+				cookie = '{' + cookie.after('{');
+
+				try {
+					cookie = JSON.parse(cookie);
+
+					cookie.filters.forEach(function(cfilter) {
+
+						// If the fieldpath in the condition was not seen when traversing
+						// over the tr's, this means the user did not open that tab and so
+						// the settings should be re-applied
+						if (!seenFields[cfilter.fieldPath]) {
+							filters.push(cfilter);
+						}
+					});
+				} catch(err) {
+					console.error(err);
+				}
 			}
 		}
 
 		// Get the amount of items to show, default to 20
 		options.show = $('select[name="data[' + modelName + '][show]"]').val() || 20;
-		
+
 		// Get the search query
-		options.search = $('input[name="data[' + modelName + '][search]"]').val() || false;
+		if (doSearch) {
+			options.search = $('input[name="data[' + modelName + '][search]"]').val() || false;
+		} else {
+			options.search = false;
+		}
 
 		// Do an AND or an OR search?
 		options.andor = $('#andor input:checked').val() || 'and';
@@ -723,32 +737,28 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		}
 	});
 
-	//WHEN CLICKING CLEAR: REMOVE ALL FILTERS, ENABLE APPLY BUTTON
-	$modal.on('click', '#clearbtn', function(e){
-		e.preventDefault();
-		$('#clearbtn i').addClass('fa-spin');
-		$('.filters input').each(function(){
-			$(this).val('');
-		});
-		$('#applybtn').click();
-	});
-
 	$modal.on('click', '#applybtn', function(e){
 		e.preventDefault();
 		applyFormFilters();
-	});
-	
-	$modal.on('keydown', '.search-input', function(e){
-		if(e.keyCode === 13){
-			e.preventDefault();
-			e.stopPropagation();
-			applyFormFilters();
-		}
 	});
 
 	$modal.on('click', '.search-btn', function(e){
 		e.preventDefault();
 		applyFormFilters();
+	});
+
+	//WHEN CLICKING CLEAR: REMOVE ALL FILTERS
+	$('#clearbtn').on('click', function(e){
+		e.preventDefault();
+		applyFormFilters(false, true);
+	});
+
+	$('.search-input').on('keydown', function(e){
+		if(e.keyCode === 13){
+			e.preventDefault();
+			e.stopPropagation();
+			applyFormFilters(true, true);
+		}
 	});
 
 });
