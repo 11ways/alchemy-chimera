@@ -443,6 +443,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 	    $filters  = $('#filters'),
 	    $filterrows = $('tr', $filters),
 	    $filterInput = $('#chimera-filters-input'),
+	    $modal = $('#filterModal'),
 	    $filterselect,
 	    fieldMap = {},
 	    filterConditions = [];
@@ -512,7 +513,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		options.search = $('input[name="data[' + modelName + '][search]"]').val() || false;
 
 		// Do an AND or an OR search?
-		options.andor = $('input[name="data[' + modelName + '][andor]"]:checked').val() || 'and';
+		options.andor = $('#andor input:checked').val() || 'and';
 
 		// Add the actual filters
 		options.filters = filters;
@@ -626,10 +627,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 					disable = true;
 				}
 
-				if(disable){
-					$('#applybtn, #filterbtn').addClass("disabled");
-					$andor.hide();
-				} else {
+				if (!disable){
 					$('#applybtn, #filterbtn').removeClass("disabled");
 					$andor.show();
 				}
@@ -726,7 +724,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 	});
 
 	//WHEN CLICKING CLEAR: REMOVE ALL FILTERS, ENABLE APPLY BUTTON
-	$('#clearbtn').on('click', function(e){
+	$modal.on('click', '#clearbtn', function(e){
 		e.preventDefault();
 		$('#clearbtn i').addClass('fa-spin');
 		$('.filters input').each(function(){
@@ -735,19 +733,20 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		$('#applybtn').click();
 	});
 
-	$('#applybtn').on('click', function(e){
+	$modal.on('click', '#applybtn', function(e){
 		e.preventDefault();
 		applyFormFilters();
 	});
 	
-	$('.search-input').on('keydown', function(e){
+	$modal.on('keydown', '.search-input', function(e){
 		if(e.keyCode === 13){
 			e.preventDefault();
 			e.stopPropagation();
 			applyFormFilters();
 		}
 	});
-	$('.search-btn').on('click', function(e){
+
+	$modal.on('click', '.search-btn', function(e){
 		e.preventDefault();
 		applyFormFilters();
 	});
