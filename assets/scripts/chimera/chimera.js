@@ -274,7 +274,23 @@ TextChimeraField.setMethod(function initEdit() {
 	id = $(name, this.intake)[0].id;
 	
 	editor = new MediumEditor(name, {
-		buttons: ['bold', 'italic', 'underline', 'strikethrough', 'anchor', 'image', 'header1', 'header2', 'quote', 'pre']
+		buttons: ['bold', 'italic', 'underline', 'strikethrough', 'anchor', 'image', 'header1', 'header2', 'quote', 'pre'],
+		extensions: {
+			'h2': new MediumButton({label:'h2k', start:'<h2>', end:'</h2>'}),
+			'media': new MediumButton({label: 'Media', action: function initPickMedia() {
+
+				var elementId = 'media-' + Date.now();
+
+				pickMediaId(function (err, id) {
+
+					var img = $('#' + elementId);
+					img.attr('src', '/media/image/' + id);
+
+				});
+
+				return '<img id="' + elementId + '"></img>';
+			}})
+		}
 	});
 
 	$(name).on('input', function onTextEdit(){
