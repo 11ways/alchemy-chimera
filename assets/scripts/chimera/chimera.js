@@ -316,7 +316,7 @@ function applySave(el, variables) {
 	    $editor,
 	    $save;
 
-	isDraft = this.filter.implement === 'chimera/editor/add';
+	isDraft = this.filter.template === 'chimera/editor/add';
 
 	$editor = $('.chimeraEditor', el).first();
 	$save = $('.action-save', $editor);
