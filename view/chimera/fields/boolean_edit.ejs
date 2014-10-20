@@ -1,0 +1,14 @@
+<% start('field') %>
+<label class="chimeraEditor-boolean">
+	<input
+		class="chimeraEditor-input chimeraEditor-edit-boolean"
+		type="checkbox"
+		name="data.<%= data.field.path %>"
+		<%= data.value ? 'checked': '' %>
+	>
+	<div class="chimeraEditor-boolean-text">
+		<span class="u-yes">Yes</span>
+		<span class="u-no">No</span>
+	</div>
+</label>
+<% end('field') %>

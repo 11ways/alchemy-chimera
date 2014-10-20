@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="35.09169"
+   height="17.024893"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="radiobutton.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.6"
+     inkscape:cx="75.521771"
+     inkscape:cy="-24.068609"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="2498"
+     inkscape:window-height="1416"
+     inkscape:window-x="62"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Laag 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-63.27945,-60.001589)">
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:0.50763358;stroke:#afafaf;stroke-width:1.97233438;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path2996"
+       sodipodi:cx="104.77176"
+       sodipodi:cy="99.946167"
+       sodipodi:rx="6.0924826"
+       sodipodi:ry="6.0924826"
+       d="m 110.86424,99.946167 c 0,3.364783 -2.7277,6.092483 -6.09248,6.092483 -3.36479,0 -6.092484,-2.7277 -6.092484,-6.092483 0,-3.364785 2.727694,-6.092483 6.092484,-6.092483 3.36478,0 6.09248,2.727698 6.09248,6.092483 z"
+       transform="matrix(1.2026414,0,0,1.2026414,-54.203582,-51.693731)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:0.50763358;stroke:#afafaf;stroke-width:1.97233438;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path2996-6"
+       sodipodi:cx="104.77176"
+       sodipodi:cy="99.946167"
+       sodipodi:rx="6.0924826"
+       sodipodi:ry="6.0924826"
+       d="m 110.86424,99.946167 c 0,3.364783 -2.7277,6.092483 -6.09248,6.092483 -3.36479,0 -6.092484,-2.7277 -6.092484,-6.092483 0,-3.364785 2.727694,-6.092483 6.092484,-6.092483 3.36478,0 6.09248,2.727698 6.09248,6.092483 z"
+       transform="matrix(1.2026414,0,0,1.2026414,-36.136783,-51.693731)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#afafaf;fill-opacity:0.50588223;stroke:none"
+       id="path3784"
+       sodipodi:cx="89.508926"
+       sodipodi:cy="68.701462"
+       sodipodi:rx="4.1517859"
+       sodipodi:ry="4.1517859"
+       d="m 93.660712,68.701462 c 0,2.292968 -1.858818,4.151786 -4.151786,4.151786 -2.292968,0 -4.151785,-1.858818 -4.151785,-4.151786 0,-2.292968 1.858817,-4.151786 4.151785,-4.151786 2.292968,0 4.151786,1.858818 4.151786,4.151786 z"
+       transform="matrix(1.1075269,0,0,1.1075269,-9.2674718,-7.5830498)" />
+  </g>
+</svg>

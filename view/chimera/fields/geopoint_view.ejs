@@ -1,0 +1,11 @@
+<%
+if (data.value && data.value.coordinates) {
+	lat = data.value.coordinates[0];
+	lng = data.value.coordinates[1];
+}
+
+id = 'map-' + Date.now() + '-' + Number.random(0,100);
+%>
+<% start('field') %>
+<div id="<%= id %>" class="geopoint-div geopoint-view" data-lat="<%= lat %>" data-lng="<%= lng %>"></div>
+<% end('field') %>

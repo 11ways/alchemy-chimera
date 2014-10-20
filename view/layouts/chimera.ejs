@@ -1,0 +1,31 @@
+<% expands('layouts/chimera_base') %>
+<% style('chimera/chimera') %>
+<% style(['vex/vex', 'vex/vex.default', 'vex/vex.flat']) %>
+
+<% script(['vex/vex', 'vex/vex.dialog', 'chimera/chimera']) %>
+
+<% start('body') %>
+<!-- Chimera: Non-semantic div, flexbox wrapper -->
+<div id="layout">
+	<!-- First semantic block of the page: the header,
+	     even though it's on the side of the page. -->
+	<header class="pageSidebar">
+		<div class="pageSidebar-fixed">
+			<div class="pageSidebar-branding u-stretch">
+				<h1 class="pageSidebar-title u-child">lorem ipsum</h1>
+				<p class="u-child">Logo</p>
+			</div>
+			<% implement('chimera/sidebar') %>
+		</div>
+	</header>
+	<div class="pageCentral">
+		<div class="pageCentral-child pageCentral-topBar u-stretch">
+			<span class="u-child">Dashboard &gt; Website</span>
+			<span class="u-child">Voornaam Naam</span>
+		</div>
+		<div class="pageCentral-child pageCentral-main">
+			<% assign('pageCentral') %>
+		</div>
+	</div>
+</div>
+<% end('body') %>

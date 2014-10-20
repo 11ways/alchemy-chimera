@@ -1,0 +1,46 @@
+<% expands('layouts/chimera') %>
+
+<% start('pageCentral') %>
+	<main>
+		<article class="chimeraEditor">
+			<header class="chimeraEditor-header u-stretch">
+				<h1 class="pageTitle u-child"><%= pageTitle %>:</h1>
+				<nav class="u-child">
+					<% Chimera.printActions('model', {className: 'btn-top'}, record) %>
+					<% Chimera.printActions('record', {className: 'btn-top'}, record) %>
+				</nav>
+			</header>
+
+			<div class="radioTabs">
+
+				<%
+					counter = 0;
+
+					for (name in groups) {
+						record = groups[name][0];
+						fields = record.fields;
+						id = record.id;
+
+						print('<input class="radioTabs-input" name="etab" type="radio" id="r' + counter + '"');
+						if (counter === 0) print(' checked');
+						print('>');
+						print('<label class="radioTabs-label" for="r' + counter + '"><section>');
+						print('<h1 class="radioTabs-title">');
+						print(name);
+						print('</h1>');
+						print('<div class="radioTabs-content">');
+
+						for (i = 0; i < fields.length; i++) {
+							Chimera.printField(fields[i]);
+						}
+
+						print('</div>');
+						print('</section></label>');
+
+						counter++;
+					}
+				%>
+			</div>
+		</article>
+	</main>
+<% end('pageCentral') %>

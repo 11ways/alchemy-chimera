@@ -1,0 +1,6 @@
+<% start('field') %>
+<input type="hidden" name="data.<%= data.field.path %>" value="">
+<div id="field-<%= data.field.path %>" class="medium-editor me-<%= data.field.path %>" data-fieldpath="<%= data.field.path %>" contenteditable="true">
+	<%= data.value || '' %>
+</div>
+<% end('field') %>
