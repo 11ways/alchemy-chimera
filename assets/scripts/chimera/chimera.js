@@ -343,10 +343,12 @@ function applySave(el, variables) {
 			}
 		});
 
-		console.log(obj)
+		var editurl = document.location.href;
 
 		hawkejs.scene.openUrl($save.attr('href'), null, obj, function(err, result) {
+
 			console.log(err, result);
+			window.location = editurl;
 		});
 
 		e.preventDefault();
