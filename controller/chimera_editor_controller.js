@@ -148,10 +148,6 @@ Editor.setMethod(function edit(conduit) {
 				return conduit.error(err);
 			}
 
-			pr('Group fields:')
-			console.log(groups.general[0].fields);
-			//console.log(groups.general[0].fields[1].field)
-
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
 			that.set('modelName', modelName);
