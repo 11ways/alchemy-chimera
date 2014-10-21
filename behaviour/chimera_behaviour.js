@@ -115,3 +115,22 @@ Chimera.setMethod(function getFields(type) {
 
 	return this.model.blueprint.clone();
 });
+
+/**
+ * Get a specific field
+ *
+ * @author   Jelle De Loecker   <jelle@codedor.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @return   {ChimeraField}
+ */
+Chimera.setMethod(function getField(actionName, fieldName) {
+
+	if (fieldName == null) {
+		fieldName = actionName;
+		actionName = 'edit';
+	}
+
+	return this.actionGroups[actionName].getField(fieldName);
+});

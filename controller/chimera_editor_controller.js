@@ -19,7 +19,6 @@ var Editor = Function.inherits('ChimeraController', function EditorChimeraContro
 	this.addAction('record', 'edit');
 	this.addAction('record', 'view');
 	this.addAction('record', 'save', {handleManual: true});
-
 });
 
 /**
@@ -158,6 +157,29 @@ Editor.setMethod(function edit(conduit) {
 			that.render('chimera/editor/edit');
 		});
 	});
+});
+
+/**
+ * The related_data action
+ *
+ * @param   {Conduit}   conduit
+ */
+Editor.setMethod(function related_data(conduit) {
+
+	var that = this,
+	    modelName = conduit.routeParam('subject'),
+	    model = Model.get(modelName),
+	    chimera = model.behaviours.chimera,
+	    id = conduit.routeParam('id'),
+	    field;
+
+	field = chimera.getField(conduit.param('field'));
+
+	if (!field) {
+		conduit.notFound('Could not find field "' + conduit.param('field') + '"');
+	} else {
+		field.sendRelatedData(conduit);
+	}
 });
 
 /**

@@ -242,7 +242,6 @@ function applyGeopoint($el, lat, lng, _options) {
 	return [map, marker];
 }
 
-
 /**
  * The Text ChimeraField class
  *
@@ -255,7 +254,7 @@ function applyGeopoint($el, lat, lng, _options) {
  * @param    {DOMElement}   container
  * @param    {Object}       variables
  */
-TextChimeraField = ChimeraField.extend(function TextChimeraField(container, variables) {
+var TextChimeraField = ChimeraField.extend(function TextChimeraField(container, variables) {
 	TextChimeraField.super.call(this, container, variables);
 });
 
@@ -273,7 +272,7 @@ TextChimeraField.setMethod(function initEdit() {
 	// Use CKEDITOR instead of medium editor
 	CKEDITOR.disableAutoInline = true;
 
-	var editor = CKEDITOR.inline(that.intake.find('.medium-editor').attr('id'), {
+	var editor = CKEDITOR.inline(that.intake.find('.chimeraField-wysiwyg')[0], {
 		filebrowserBrowseUrl: '/boeckeditor'
 	});
 
@@ -331,8 +330,108 @@ TextChimeraField.setMethod(function initEdit() {
 			that.setValue($(this)[0].innerHTML);
 		}
 	});
-
 });
+
+/**
+ * The BelongsTo ChimeraField class
+ *
+ * @constructor
+ *
+ * @author   Jelle De Loecker <jelle@codedor.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {DOMElement}   container
+ * @param    {Object}       variables
+ */
+var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(container, variables) {
+	BelongstoChimeraField.super.call(this, container, variables);
+});
+
+/**
+ * Initialize the field
+ *
+ * @param    {Mixed}   value
+ */
+BelongstoChimeraField.setMethod(function initEdit() {
+
+	var that = this,
+	    $input = $('.chimeraField-prime', this.intake),
+	    coordinates,
+	    modelName,
+	    baseUrl,
+	    initted,
+	    Router,
+	    url;
+
+	// Create a new Router helper instance
+	Router = new hawkejs.constructor.helpers.Router();
+	modelName = this.field.fieldType.options.modelName;
+
+	baseUrl = Blast.Collection.URL.parse(Router.routeUrl('RecordAction', {
+		controller: 'editor',
+		subject: this.variables.urlparams.subject,
+		action: 'related_data',
+		id: this.variables.urlparams.id
+	}));
+
+	$input.selectize({
+		valueField: '_id',
+		labelField: 'title',
+		searchField: 'title',
+		preload: true,
+		create: false,
+		render: {
+			item: function selectedItem(item) {
+				return '<div><span>' + item.title + '</span></div>';
+			},
+			option: function shownOption(item, escape) {
+				return '<div><span>' + item.title + '</span></div>';
+			}
+		},
+		load: function load(query, callback) {
+
+			var url = baseUrl.clone(),
+			    thisSelect = this,
+			    setInitValue;
+
+			url.addQuery('field', that.field.fieldType.name);
+
+			if (!initted) {
+				initted = true;
+				setInitValue = true;
+			}
+
+			$.get(url, function gotResult(response) {
+
+				var result = [],
+				    item,
+				    i;
+
+				for (i = 0; i < response.length; i++) {
+
+					item = response[i][modelName];
+
+					result.push({
+						_id: item._id,
+						title: item.title,
+						data: response[i]
+					});
+				}
+
+				callback(result);
+
+				if (setInitValue && that.variables.data.value) {
+					thisSelect.addItem(that.variables.data.value);
+				}
+			}, 'json');
+		},
+		onChange: function changed(value) {
+			that.setValue(value);
+		}
+	});
+});
+
 
 
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/edit'}, applySave);

@@ -43,11 +43,18 @@
 		width: ~"calc(100% - 10rem)";
 	}
 
-	&-prime {
+	&-string {
 		padding: 0.375rem 0.75rem;
 		border: none;
 		height: 2rem;
 		width: 100%;
+	}
+
+	&-wysiwyg {
+		.clearfix();
+		padding: 0.375rem 0.75rem;
+		min-height: 10rem;
+		background-color: white;
 	}
 }
 
@@ -243,8 +250,4 @@
 
 .modelList-record .chimeraField-intake {
 	width: 100%;
-}
-
-.medium-editor {
-	.clearfix();
 }
