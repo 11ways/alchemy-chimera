@@ -10,7 +10,6 @@
 var Setting = Model.extend(function SettingModel(options) {
 
 	var chimera,
-	    list,
 	    edit;
 
 	SettingModel.super.call(this, options);
@@ -18,15 +17,13 @@ var Setting = Model.extend(function SettingModel(options) {
 	// Create the chimera behaviour
 	chimera = this.addBehaviour('chimera');
 
-	// Get the list group
-	list = chimera.getActionFields('list');
-	list.addField('email');
-
 	// Get the edit group
 	edit = chimera.getActionFields('edit');
 	edit.addField('email');
+	edit.addField('google_analytics');
 
 
 });
 
 Setting.addField('email', 'String');
+Setting.addField('google_analytics', 'String', {default: 'UA-XXXXX-Y'});
