@@ -221,6 +221,11 @@ Editor.setMethod(function save(conduit) {
 
 	chimera = model.behaviours.chimera;
 	data = conduit.body.data;
+
+	if (Object.isEmpty(data)) {
+		return conduit.error(new Error('Nothing to save!'));
+	}
+
 	id = conduit.routeParam('id');
 
 	actionFields = chimera.getActionFields('edit');
