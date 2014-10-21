@@ -46,7 +46,7 @@ var ChimeraField = Function.inherits(function ChimeraField(container, variables)
 	// Set the value path
 	this.intake.data('path', variables.data.field.path);
 
-	action = String(this.action).classify();
+	action = Blast.Bound.String.classify(String(this.action));
 
 	this['init' + action]();
 });
@@ -63,7 +63,7 @@ ChimeraField.setStatic(function create(viewname, container, variables) {
 	    fnc;
 
 	Classes = __Protoblast.Classes;
-	className = viewname.classify() + 'ChimeraField';
+	className = Blast.Bound.String.classify(viewname) + 'ChimeraField';
 
 	if (Classes[className]) {
 		fnc = Classes[className];
@@ -270,13 +270,32 @@ TextChimeraField.setMethod(function initEdit() {
 	    name,
 	    editor, id;
 
+	// Use CKEDITOR instead of medium editor
+	CKEDITOR.disableAutoInline = true;
+
+	var editor = CKEDITOR.inline(that.intake.find('.medium-editor').attr('id'), {
+		filebrowserBrowseUrl: '/boeckeditor'
+	});
+
+	editor.on('focus', function () {
+		editor.setReadOnly(false);
+	});
+
+	this.ckeditor = editor;
+
+	editor.on('change', function onCkChange() {
+		that.setValue(editor.getData());
+	});
+
+	return;
+
 	name = '.medium-editor';
 	id = $(name, this.intake)[0].id;
-	
+
 	editor = new MediumEditor(name, {
-		buttons: ['bold', 'italic', 'underline', 'strikethrough', 'anchor', 'image', 'header1', 'header2', 'quote', 'pre'],
+		buttons: ['bold', 'italic', 'underline', 'strikethrough', 'anchor', 'media', 'image', 'header1', 'header2', 'quote', 'pre'],
 		extensions: {
-			'h2': new MediumButton({label:'h2k', start:'<h2>', end:'</h2>'}),
+			'h2k': new MediumButton({label:'h2k', start:'<h2>', end:'</h2>'}),
 			'media': new MediumButton({label: 'Media', action: function initPickMedia() {
 
 				var elementId = 'media-' + Date.now();
@@ -290,6 +309,20 @@ TextChimeraField.setMethod(function initEdit() {
 
 				return '<img id="' + elementId + '"></img>';
 			}})
+		}
+	});
+
+	var Router = new hawkejs.constructor.helpers.Router(),
+	    uploadUrl = Router.routeUrl('Media::uploadsingle');
+
+	$(name).mediumInsert({
+		editor: editor,
+		addons: {
+			images: {
+				imagesUploadScript: uploadUrl
+			},
+			embeds: {},
+			tables: {}
 		}
 	});
 

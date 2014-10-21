@@ -236,7 +236,12 @@ Editor.setMethod(function save(conduit) {
 		options.create = true;
 	}
 
-	model.save(record, options, function afterSave(err) {
+	model.save(record, options, function afterSave(err, result) {
+
+		if (err != null) {
+			return conduit.error(err);
+		}
+
 		that.edit(conduit);
 	});
 });

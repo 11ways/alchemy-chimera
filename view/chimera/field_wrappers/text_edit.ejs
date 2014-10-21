@@ -1,8 +1,23 @@
 <%
 // This currently breaks rendering
 //expands('chimera/field_wrappers/default_edit');
-style(['medium-editor1.9.4/medium-editor', 'medium-editor1.9.4/themes/flat']);
-script(['medium-editor1.9.4/medium-editor.min', 'chimera/medium-button']);
+style(['medium-editor1.9.4/medium-editor', 'medium-editor1.9.4/themes/flat', 'medium-insert/medium-insert']);
+
+// Loaded in base view, for now
+script(['medium-editor1.9.4/medium-editor.min',
+
+	// Medium button
+	'chimera/medium-button',
+
+	// Medium insert plugin
+	'medium-insert/insert-plugin',
+
+	// Insert plugin extensions
+	'medium-insert/embeds', 'medium-insert/images', 'medium-insert/maps', 'medium-insert/tables'
+]);
+
+script('/public/ckeditor/4.4/ckeditor');
+
 %>
 <div class="chimeraEditor-fieldGroup">
 	<label class="chimeraEditor-fieldLabel">
