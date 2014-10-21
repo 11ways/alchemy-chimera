@@ -7,6 +7,8 @@ chimera.add(['get', 'post'], 'RecordAction', '/:controller/:subject/:action/:id'
 chimera.add(['get', 'post'], 'DraftAction', '/:controller/:subject/:action/:id', '{controller}ChimeraController#{action}');
 chimera.add(['get', 'post'], 'ModelAction', '/:controller/:subject/:action', '{controller}ChimeraController#{action}');
 
+chimera.add(['get', 'post'], 'SettingsAction', '/:subject', 'SettingsChimeraController#index');
+
 //chimera.get('ListAction', '/:controller/:model/:action')
 
 

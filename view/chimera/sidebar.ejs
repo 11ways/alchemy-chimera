@@ -7,7 +7,7 @@
 					<% for(var model_name in sections[section_name]){ %>
 						<% model = sections[section_name][model_name]; %>
 						<li class="sideNav-link">
-							<% if(urlparams.controller == model.parameters.controller && urlparams.subject == model.parameters.subject){ %>
+							<% if(urlparams.subject == model.parameters.subject){ %>
 								<% Router.printRoute(model.type, model.parameters, {title: model.title, className: 'sideNav-text active'}) %>
 							<% } else { %>
 								<% Router.printRoute(model.type, model.parameters, {title: model.title, className: 'sideNav-text'}) %>
