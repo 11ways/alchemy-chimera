@@ -94,8 +94,13 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 			if (options.className) {
 				className += ' ' + options.className;
 			}
+			
+			name = action.name;
+			if(action.title){
+				name = action.title;
+			}
 
-			rOptions = {title: action.name, className: className};
+			rOptions = {title: name, className: className};
 
 			if (action.handleManual) {
 				rOptions.handleManual = true;

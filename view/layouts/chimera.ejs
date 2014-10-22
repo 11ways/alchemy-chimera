@@ -13,15 +13,15 @@
 	<header class="pageSidebar">
 		<div class="pageSidebar-fixed">
 			<div class="pageSidebar-branding u-stretch">
-				<h1 class="pageSidebar-title u-child">lorem ipsum</h1>
-				<p class="u-child">Logo</p>
+				<h1 class="pageSidebar-title u-child"><% if(project_title){ %> <%= project_title %> <% } else { %> project_title <% } %></h1>
+				<p class="u-child"><a href="/chimera" class="home-btn"><span class="fa fa-home"></span></a></p>
 			</div>
 			<% implement('chimera/sidebar') %>
 		</div>
 	</header>
 	<div class="pageCentral">
 		<div class="pageCentral-child pageCentral-topBar u-stretch">
-			<span class="u-child">Dashboard &gt; Website</span>
+			<span class="u-child">Dashboard <%if(urlparams.controller){ %> &gt; <%= urlparams.controller.humanize() %><% } %> <%if(urlparams.subject){ %> &gt; <%= urlparams.subject.humanize() %><% } %></span>
 			<span class="u-child">Voornaam Naam</span>
 		</div>
 		<div class="pageCentral-child pageCentral-main">
