@@ -432,8 +432,6 @@ BelongstoChimeraField.setMethod(function initEdit() {
 	});
 });
 
-
-
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/edit'}, applySave);
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/add'}, applySave);
 
