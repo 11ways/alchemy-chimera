@@ -1,0 +1,22 @@
+<% expands('layouts/chimera') %>
+
+<% start('pageCentral') %>
+	<main>
+		<article class="chimeraEditor">
+			<header class="chimeraEditor-header u-stretch">
+				<h1 class="pageTitle u-child"><%= pageTitle %>:</h1>
+				<nav class="u-child">
+					<% Chimera.printActions('model', {className: 'btn-top'}, record) %>
+					<% Chimera.printActions('record', {className: 'btn-top'}, record) %>
+				</nav>
+			</header>
+			<% model = modelName.singularize().camelize() %>
+			
+			<div class="chimera-remove">
+				<p>Are you sure you want to delete <% if(item[model].title){ %><%= item[model].title %><% } else { %><%= item[model]._id %><% } %></p>
+				<% Router.printRoute('RecordAction', {controller: 'editor', subject: modelName, action: 'remove', id: item[model]._id}, {title: 'Yes', className: 'btn remove-btn  btn-red'}) %>
+				<% Router.printRoute('ModelAction', {controller: 'editor', subject: modelName, action: 'index'}, {title: 'No', className: 'btn'}) %>
+			</div>
+		</article>
+	</main>
+<% end('pageCentral') %>

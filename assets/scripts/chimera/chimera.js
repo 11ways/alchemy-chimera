@@ -678,6 +678,23 @@ function sidebarCollapse(el) {
 	}
 }
 
+hawkejs.scene.on({type: 'set', template: 'chimera/editor/remove'}, removeRecord);
+
+function removeRecord(el) {
+
+	var url;
+
+	$('.remove-btn').on('click', function(e){
+		e.preventDefault();
+		url = $(this).attr('href');
+
+		hawkejs.scene.openUrl(url, null, {sure: 'yes'}, function(result) {
+			console.log(result);
+		});
+	});
+
+}
+
 $(document).ready(function() {
 	vex.defaultOptions.className = 'vex-theme-flat-attack';
 });

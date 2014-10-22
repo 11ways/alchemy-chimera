@@ -19,6 +19,8 @@ var Editor = Function.inherits('ChimeraController', function EditorChimeraContro
 	this.addAction('record', 'edit');
 	this.addAction('record', 'view');
 	this.addAction('record', 'save', {handleManual: true});
+	this.addAction('record', 'remove');
+
 });
 
 /**
@@ -243,11 +245,6 @@ Editor.setMethod(function save(conduit) {
 
 	chimera = model.behaviours.chimera;
 	data = conduit.body.data;
-
-	if (Object.isEmpty(data)) {
-		return conduit.error(new Error('Nothing to save!'));
-	}
-
 	id = conduit.routeParam('id');
 
 	actionFields = chimera.getActionFields('edit');
@@ -271,4 +268,56 @@ Editor.setMethod(function save(conduit) {
 
 		that.edit(conduit);
 	});
+});
+
+/**
+ * The remove action
+ *
+ * @param   {Conduit}   conduit
+ */
+Editor.setMethod(function remove(conduit) {
+
+	var that = this,
+	    modelName = conduit.routeParam('subject'),
+	    model = Model.get(modelName),
+	    chimera = model.behaviours.chimera,
+	    id = conduit.routeParam('id');
+
+	if(conduit.body.sure === 'yes'){
+
+		model.remove(alchemy.castObjectId(id), function(err) {
+
+			if (err) {
+				log.debug(err);
+			}
+
+			that.index(conduit);
+			return;
+
+		});
+
+	} else {
+
+		model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, items) {
+
+			if (err) {
+				return conduit.error(err);
+			}
+
+			if (!items.length) {
+				return conduit.notFound();
+			}
+
+			that.set('actions', that.getActions());
+			that.set('modelName', modelName);
+			that.set('pageTitle', modelName.humanize());
+			that.set('item', items[0]);
+			that.internal('modelName', modelName);
+			that.internal('recordId', id);
+
+			that.render('chimera/editor/remove');
+
+		});
+	}
+
 });
