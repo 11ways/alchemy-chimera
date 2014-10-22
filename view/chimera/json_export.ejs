@@ -74,7 +74,7 @@ emit('create-chimera-fields', {fields: allGroupedFields})
 									<div class="col-sm-12">
 										<label>
 											<input type="radio" name="data[<%= modelName %>][andor]" value="or" <% if(andor && andor === "or"){%> checked <% } %>>
-											<%= __('chimera', 'Match any condition') %>
+											<% echo(__('chimera', 'Match any condition')) %>
 										</label>
 									</div>
 								</div>
@@ -82,7 +82,7 @@ emit('create-chimera-fields', {fields: allGroupedFields})
 									<div class="col-sm-12">
 										<label>
 											<input type="radio" name="data[<%= modelName %>][andor]" value="and" <% if(!andor){%> checked <% } %> <% if(andor && andor === "and"){%> checked <% } %>>
-											<%= __('chimera', 'Match all conditions') %>
+											<% echo(__('chimera', 'Match all conditions')) %>
 										</label>
 									</div>
 								</div>

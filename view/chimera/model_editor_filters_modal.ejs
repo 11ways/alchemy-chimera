@@ -70,7 +70,7 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 							<div class="col-sm-12">
 								<label>
 									<input type="radio" name="data[logicalOperator]" value="or" <% if(logicalOperator === "or"){%> checked <% } %>>
-									<%= __('chimera', 'Match any condition') %>
+									<% echo(__('chimera', 'Match any condition')) %>
 								</label>
 							</div>
 						</div>
@@ -78,7 +78,7 @@ emit('create-chimera-filters-modal', {fields: allGroupedFields, modelName: model
 							<div class="col-sm-12">
 								<label>
 									<input type="radio" name="data[logicalOperator]" value="and" <% if(logicalOperator === "and"){%> checked <% } %>>
-									<%= __('chimera', 'Match all conditions') %>
+									<% echo(__('chimera', 'Match all conditions')) %>
 								</label>
 							</div>
 						</div>
