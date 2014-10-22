@@ -493,8 +493,8 @@ function applySave(el, variables) {
 
 		hawkejs.scene.openUrl($save.attr('href'), null, obj, function(err, result) {
 
-			console.log(err, result);
-			window.location = editurl;
+			// @todo: go to the correct url
+			hawkejs.scene.reload(editurl);
 		});
 
 		e.preventDefault();
