@@ -56,7 +56,7 @@ Editor.setMethod(function listing(conduit, type, view) {
 		fields.push(sorted[i].path);
 	}
 
-	this.components.paginate.find(model, {fields: fields}, function(err, items) {
+	this.components.paginate.find(model, {fields: fields, pageSize: 9999}, function(err, items) {
 
 		if (err) {
 			return conduit.error(err);
