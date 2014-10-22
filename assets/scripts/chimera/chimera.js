@@ -273,7 +273,8 @@ TextChimeraField.setMethod(function initEdit() {
 	CKEDITOR.disableAutoInline = true;
 
 	var editor = CKEDITOR.inline(that.intake.find('.chimeraField-wysiwyg')[0], {
-		filebrowserBrowseUrl: '/boeckeditor'
+		filebrowserBrowseUrl: '/boeckeditor',
+		allowedContent: 'img form input param pre flash br a td p span font em strong table tr th td style script iframe u s li ul div[*]{*}(*)'
 	});
 
 	editor.on('focus', function () {
