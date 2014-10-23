@@ -330,7 +330,21 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 
 // Show a modal when menu piece config data is loaded
 hawkejs.event.on({create: 'block', name: 'tempeditor'}, function(identifier, data) {
-	$('#tempeditor div.modal').modal();
+
+	var $modal = $('#tempeditor div.modal'),
+	    $title = $modal.find('.modal-title'),
+	    title;
+
+	if (data.editTitle) {
+		title = data.editTitle + ': ';
+	} else {
+		title = '';
+	}
+
+	title += data.newItemName || data.modelTitle || data.modelName;
+	$title.html(title);
+
+	$modal.modal();
 });
 
 $(document).ready(function() {
