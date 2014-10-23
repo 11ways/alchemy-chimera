@@ -778,6 +778,17 @@ function applyChimeraFields(query, payload) {
 		hawkejs.event.emit($element.attr('data-emit'), $element);
 	};
 
+	// Disable enter on the entire form
+	$target.find('form').keydown(function(e) {
+		var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+
+		if (key == 13) {
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
+		}
+	});
+
 	// Make the enter button apply the inline pagination
 	$target.find('input[data-pagination-filter]').keyup(function(e) {
 
