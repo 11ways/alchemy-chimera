@@ -788,7 +788,8 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 
 function applyChimeraFields(query, payload) {
 
-	var $target;
+	var $target,
+	    ckoptions;
 
 	if (payload.origin) {
 		$target = $("[data-hawkejs-from-template='" + payload.origin.replace('/','__') + "']");
@@ -824,7 +825,13 @@ function applyChimeraFields(query, payload) {
 
 	// Apply ckeditor to textarea's
 	try {
-		$('#hawkejs-insert-block-admin-content .textfield').ckeditor();
+		ckoptions = {};
+
+		if (payload.actionType == 'view') {
+			ckoptions.readOnly = true;
+		}
+
+		$('#hawkejs-insert-block-admin-content .textfield').ckeditor(ckoptions);
 	} catch(err) {
 		console.log('Error applying ckeditor:');
 		console.log(err);
