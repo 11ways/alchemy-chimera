@@ -5,6 +5,7 @@ start('chimera-page-title'); -%>
 	<span class="title" id="mainTitle"><%= modelTitle || modelName %>: <%= editTitle %> <%= scope.variables.titleContent || '' %></span>
 	<div class="actions paginate-actions right">
 		<% chimera.actions(showActions, {modelTitle: modelTitle, newItem: newItemName}) %>
+		<% assign('saveEditButton') %>
 	</div>
 	<div class="clear"></div>
 </div>

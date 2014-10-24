@@ -110,7 +110,10 @@ errors();
 				<% if (modal) { %>
 					<button class="btn btn-primary savemodeledit modalsubmit"><% echo(options.saveButton) %></button>
 				<% } else if (typeof options.showSaveButton == 'undefined' || options.showSaveButton) { %>
-					<% form.submit(options.saveButton, {'class': 'btn btn-primary savemodeledit'}) %>
+					<% start('saveEditButton') %>
+					<% form.submit(options.saveButton, {'class': 'btn btn-primary savemodeledit', force: true}) %>
+					<% end('saveEditButton') %>
+					<% assign('saveEditButton') %>
 				<% } %>
 			<% } %>
 		</div>

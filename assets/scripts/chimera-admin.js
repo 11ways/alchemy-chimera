@@ -250,6 +250,14 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 			// Get the parent form
 			var $form = $this.parents('form');
 
+			if (!$form || $form.length === 0) {
+				$form = $('#' + $this.data('target-id'));
+			}
+
+			if (!$form || $form.length === 0) {
+				throw new Error('Parent form not found')
+			}
+
 			// Get the wanted action
 			var action = $form.attr('action');
 
