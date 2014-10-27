@@ -324,6 +324,7 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 				// Get the variables we need to build this page
 				$.ajax(href, {
 					type: 'GET',
+					cache: false,
 					success: handleModalResponse,
 					headers: {
 						'x-hawkejs-request': true
