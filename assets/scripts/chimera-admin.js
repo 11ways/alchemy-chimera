@@ -476,11 +476,13 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 	 */
 	function applyFormFilters(doSearch, doClear){
 
-		var url = window.location.origin + window.location.pathname,
+		var url = window.location.href + '',
 		    filters = [],
 		    options = {},
 		    seenFields = {},
 		    cookie;
+
+		url = url.split('?')[0];
 
 		if (doSearch == null) {
 			doSearch = true;
