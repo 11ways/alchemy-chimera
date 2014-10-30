@@ -21,7 +21,7 @@
 	</header>
 	<div class="pageCentral">
 		<div class="pageCentral-child pageCentral-topBar u-stretch">
-			<span class="u-child">Dashboard <%if(urlparams.controller){ %> &gt; <%= urlparams.controller.humanize() %><% } %> <%if(urlparams.subject){ %> &gt; <%= urlparams.subject.humanize() %><% } %></span>
+			<span class="u-child">Dashboard <% if (__urlparams.controller) { %> &gt; <%= __urlparams.controller.humanize() %><% } %> <% if (__urlparams.subject) { %> &gt; <%= __urlparams.subject.humanize() %><% } %></span>
 			<span class="u-child">Voornaam Naam</span>
 		</div>
 		<div class="pageCentral-child pageCentral-main">

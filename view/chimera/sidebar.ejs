@@ -1,13 +1,13 @@
 <nav class="sideNav">
 	<ul class="sideNav-collection">
-		<% for(var section_name in sections){ %>
+		<% for (var section_name in sections){ %>
 			<li class="sideNav-link is-parent">
 				<a class="sideNav-text section" href="#" data-childclass="<%= section_name.tableize() %>" data-after="&#9654;"><%= section_name %></a>
 				<ul class="sideNav-collection is-child <%= section_name.tableize() %> hidden">
-					<% for(var model_name in sections[section_name]){ %>
+					<% for (var model_name in sections[section_name]) { %>
 						<% model = sections[section_name][model_name]; %>
 						<li class="sideNav-link">
-							<% if(urlparams.subject == model.parameters.subject){ %>
+							<% if (__urlparams.subject == model.parameters.subject) { %>
 								<% Router.printRoute(model.type, model.parameters, {title: model.title, className: 'sideNav-text active'}) %>
 							<% } else { %>
 								<% Router.printRoute(model.type, model.parameters, {title: model.title, className: 'sideNav-text'}) %>

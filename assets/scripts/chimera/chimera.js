@@ -371,9 +371,9 @@ BelongstoChimeraField.setMethod(function initEdit() {
 
 	baseUrl = Blast.Collection.URL.parse(Router.routeUrl('RecordAction', {
 		controller: 'editor',
-		subject: this.variables.urlparams.subject,
+		subject: this.variables.__urlparams.subject,
 		action: 'related_data',
-		id: this.variables.urlparams.id
+		id: this.variables.__urlparams.id
 	}));
 
 	$input.selectize({
@@ -396,7 +396,7 @@ BelongstoChimeraField.setMethod(function initEdit() {
 			    thisSelect = this,
 			    setInitValue;
 
-			url.addQuery('field', that.field.fieldType.name);
+			url.addQuery('fieldpath', that.field.path);
 
 			if (!initted) {
 				initted = true;
@@ -411,11 +411,15 @@ BelongstoChimeraField.setMethod(function initEdit() {
 
 				for (i = 0; i < response.length; i++) {
 
-					item = response[i][modelName];
+					item = response[i];
+
+					if (item[modelName]) {
+						item = item[modelName];
+					}
 
 					result.push({
 						_id: item._id,
-						title: item.title,
+						title: item.title || item.name,
 						data: response[i]
 					});
 				}
@@ -431,6 +435,38 @@ BelongstoChimeraField.setMethod(function initEdit() {
 			that.setValue(value);
 		}
 	});
+});
+
+/**
+ * The HasOneParent ChimeraField class
+ *
+ * @constructor
+ *
+ * @author   Jelle De Loecker <jelle@codedor.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {DOMElement}   container
+ * @param    {Object}       variables
+ */
+var HasoneparentChimeraField = BelongstoChimeraField.extend(function HasoneparentChimeraField(container, variables) {
+	HasoneparentChimeraField.super.call(this, container, variables);
+});
+
+/**
+ * The Enum ChimeraField class
+ *
+ * @constructor
+ *
+ * @author   Jelle De Loecker <jelle@codedor.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {DOMElement}   container
+ * @param    {Object}       variables
+ */
+var EnumChimeraField = BelongstoChimeraField.extend(function EnumChimeraField(container, variables) {
+	EnumChimeraField.super.call(this, container, variables);
 });
 
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/edit'}, applySave);
@@ -495,7 +531,7 @@ function applySave(el, variables) {
 		hawkejs.scene.openUrl($save.attr('href'), null, obj, function(err, result) {
 
 			// @todo: go to the correct url
-			hawkejs.scene.reload(editurl);
+			//hawkejs.scene.reload(editurl);
 		});
 
 		e.preventDefault();

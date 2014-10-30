@@ -48,6 +48,10 @@ Editor.setMethod(function listing(conduit, type, view) {
 		view = type;
 	}
 
+	if (chimera == null) {
+		return conduit.error(new Error('Chimera behaviour not added to model ' + modelName));
+	}
+
 	var actionFields = chimera.getActionFields(type),
 	    general = actionFields.getGroup('general'),
 	    sorted = general.getSorted(false);
@@ -175,10 +179,10 @@ Editor.setMethod(function related_data(conduit) {
 	    id = conduit.routeParam('id'),
 	    field;
 
-	field = chimera.getField(conduit.param('field'));
+	field = chimera.getField(conduit.param('fieldpath'));
 
 	if (!field) {
-		conduit.notFound('Could not find field "' + conduit.param('field') + '"');
+		conduit.notFound('Could not find field "' + conduit.param('fieldpath') + '"');
 	} else {
 		field.sendRelatedData(conduit);
 	}

@@ -1,0 +1,9 @@
+<% start('field') %>
+schema edit
+<% console.log(data.value) %>
+<% 
+	for (i = 0; i < data.value.fields.length; i++) {
+		Chimera.printField(data.value.fields[i]);
+	}
+%>
+<% end('field') %>
