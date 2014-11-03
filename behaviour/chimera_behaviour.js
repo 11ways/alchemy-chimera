@@ -123,9 +123,13 @@ Chimera.setMethod(function getFields(type) {
  * @since    1.0.0
  * @version  1.0.0
  *
+ * @param    {String}   actionName   Like edit, list, ...
+ * @param    {String}   fieldName    Fieldname path
+ * @param    {Object}   record       Optional record
+ *
  * @return   {ChimeraField}
  */
-Chimera.setMethod(function getField(actionName, fieldName) {
+Chimera.setMethod(function getField(actionName, fieldName, record) {
 
 	var actionFields,
 	    subschema,
@@ -134,7 +138,8 @@ Chimera.setMethod(function getField(actionName, fieldName) {
 	    first,
 	    temp;
 
-	if (fieldName == null) {
+	if (fieldName == null || typeof fieldName == 'object') {
+		record = fieldName;
 		fieldName = actionName;
 		actionName = 'edit';
 	}
@@ -150,8 +155,9 @@ Chimera.setMethod(function getField(actionName, fieldName) {
 	field = this.actionGroups[actionName].getField(first);
 
 	while (pieces.length > 0) {
+
 		// Get the subschema of this field
-		subschema = field.fieldType.fieldSchema;
+		subschema = field.fieldType.getSubschema(record);
 
 		// Create a new actionfields object
 		actionFields = new alchemy.classes.ChimeraActionFields(subschema, actionName);

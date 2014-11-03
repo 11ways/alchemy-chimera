@@ -179,13 +179,18 @@ Editor.setMethod(function related_data(conduit) {
 	    id = conduit.routeParam('id'),
 	    field;
 
-	field = chimera.getField(conduit.param('fieldpath'));
+	// Some fields (like subschemas) require record info for related data
+	model.find('first', {conditions: {_id: id}}, function gotResult(err, items) {
 
-	if (!field) {
-		conduit.notFound('Could not find field "' + conduit.param('fieldpath') + '"');
-	} else {
-		field.sendRelatedData(conduit);
-	}
+		field = chimera.getField(conduit.param('fieldpath'), items[0]);
+
+		if (!field) {
+			conduit.notFound('Could not find field "' + conduit.param('fieldpath') + '"');
+		} else {
+			field.sendRelatedData(conduit);
+		}
+
+	});
 });
 
 /**

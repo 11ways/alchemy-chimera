@@ -357,7 +357,7 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(c
 BelongstoChimeraField.setMethod(function initEdit() {
 
 	var that = this,
-	    $input = $('.chimeraField-prime', this.intake),
+	    $input = $('.chimeraField-prime', this.intake).first(),
 	    coordinates,
 	    modelName,
 	    baseUrl,
