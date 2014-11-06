@@ -528,7 +528,7 @@ function applySave(el, variables) {
 
 		var editurl = document.location.href;
 
-		hawkejs.scene.openUrl($save.attr('href'), null, obj, function(err, result) {
+		hawkejs.scene.openUrl($save.attr('href'), {post: obj, history: false}, function(err, result) {
 
 			// @todo: go to the correct url
 			//hawkejs.scene.reload(editurl);
