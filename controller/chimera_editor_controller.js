@@ -11,15 +11,15 @@ var Editor = Function.inherits('ChimeraController', function EditorChimeraContro
 
 	this.addComponent('paginate');
 
-	this.addAction('model', 'index', {title: '<span class="fa fa-list"></span>'});
-	this.addAction('model', 'add', {title: '<span class="fa fa-plus"></span>'});
+	this.addAction('model', 'index', {title: '<span class="fi-list-bullet"></span>'});
+	this.addAction('model', 'add', {title: '<span class="fi-plus"></span>'});
 
-	this.addAction('draft', 'save', {title: '<span class="fa fa-floppy-o"></span>', handleManual: true});
+	this.addAction('draft', 'save', {title: '<span class="fi-save"></span>', handleManual: true});
 
-	this.addAction('record', 'edit', {title: '<span class="fa fa-pencil"></span>'});
-	this.addAction('record', 'view', {title: '<span class="fa fa-eye"></span>'});
-	this.addAction('record', 'save', {title: '<span class="fa fa-floppy-o"></span>', handleManual: true});
-	this.addAction('record', 'remove', {title: '<span class="fa fa-trash-o"></span>'});
+	this.addAction('record', 'edit', {title: '<span class="fi-pencil"></span>'});
+	this.addAction('record', 'view', {title: '<span class="fi-eye"></span>'});
+	this.addAction('record', 'save', {title: '<span class="fi-save"></span>', handleManual: true});
+	this.addAction('record', 'remove', {title: '<span class="fi-trash"></span>'});
 
 });
 

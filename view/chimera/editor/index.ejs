@@ -11,7 +11,7 @@
 			</header>
 			<table class="modelList">
 				<tr>
-					<th><!-- Radiobuttons --></th>
+					<th class="modelList-radio"><!-- Radiobuttons --></th>
 					<%
 						while (fields.hasNext()) {
 							field = fields.next().value;
@@ -21,7 +21,7 @@
 							print('</th>');
 						}
 					%>
-					<th>Actions</th>
+					<th class="modelList-right">Actions</th>
 				</tr>
 				<%
 					iterator = records.createIterator();
