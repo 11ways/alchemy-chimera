@@ -908,7 +908,22 @@ function applyChimeraFields(query, payload) {
 	});
 
 	// Apply select2 on select fields
-	$target.find('select.form-control').select2();
+	$target.find('select.form-control').select2({
+		sortResults: function(results, container, query) {
+
+			results.sort(function(a, b) {
+				if (a.text > b.text) {
+					return 1;
+				} else if (a.text < b.text) {
+					return -1;
+				} else {
+					return 0;
+				}
+			});
+
+			return results;
+		}
+	});
 
 	// Apply the mentions field (wip)
 	$target.find('textarea.mention').each(function() {
