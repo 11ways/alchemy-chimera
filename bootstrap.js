@@ -33,7 +33,7 @@ if (!alchemy.plugins.acl) {
 }
 
 // Set the acl placeholder variable
-alchemy.plugins.acl.placeholders.chimeraRouteName = alchemy.plugins.chimera.routename;
+//alchemy.plugins.acl.placeholders.chimeraRouteName = alchemy.plugins.chimera.routename;
 
 // Get the view settings
 var viewSettings = {

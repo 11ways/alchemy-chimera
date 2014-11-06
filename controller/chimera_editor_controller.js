@@ -249,6 +249,10 @@ Editor.setMethod(function save(conduit) {
 	    data,
 	    id;
 
+	if (conduit.method != 'post') {
+		return conduit.error('Use POST method to apply changes');
+	}
+
 	modelName = conduit.routeParam('subject');
 	model = Model.get(modelName);
 
