@@ -107,7 +107,7 @@ Editor.setMethod(function add(conduit) {
 	actionFields.processRecords(model, [item], function groupedRecords(err, groups) {
 
 		if (err) {
-			pr(err);
+			throw err;
 		}
 
 		that.set('groups', groups);

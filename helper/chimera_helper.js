@@ -3,7 +3,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 	var Chimera = Hawkejs.Helper.extend(function ChimeraHelper(view) {
 		Hawkejs.Helper.call(this, view);
 	});
-
+var i = 0;
 	Chimera.setMethod(function printField(recordValue) {
 
 		var that = this,
@@ -13,6 +13,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 		    fblock;
 
 		variables = {
+			test: i++,
 			data: recordValue,
 			template: {
 				field: recordValue.field.viewname,

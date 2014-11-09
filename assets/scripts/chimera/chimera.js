@@ -142,7 +142,8 @@ GeopointChimeraField.setMethod(function initEdit() {
 
 	var that = this,
 	    $input = $('.chimeraField-prime', this.intake),
-	    coordinates;
+	    coordinates,
+	    value;
 
 	options = {
 		minZoom: 1,
@@ -151,7 +152,9 @@ GeopointChimeraField.setMethod(function initEdit() {
 		editable: true
 	};
 
-	coordinates = this.value.coordinates || [];
+	value = this.value || {};
+
+	coordinates = value.coordinates || [];
 
 	result = applyGeopoint($input, coordinates[0], coordinates[1], options);
 
@@ -179,13 +182,16 @@ GeopointChimeraField.setMethod(function initList() {
 	var that = this,
 	    $input = $('.geopoint-list', this.intake),
 	    options,
-	    coordinates;
+	    coordinates,
+	    value;
 
 	options = {
 		dragging: false
 	};
 
-	coordinates = this.value.coordinates || [];
+	value = this.value || {};
+
+	coordinates = value.coordinates || [];
 
 	result = applyGeopoint($input, coordinates[0], coordinates[1], options);
 });
@@ -243,6 +249,43 @@ function applyGeopoint($el, lat, lng, _options) {
 }
 
 /**
+ * The Password ChimeraField class
+ *
+ * @constructor
+ *
+ * @author   Kjell Keisse   <kjell@codedor.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {DOMElement}   container
+ * @param    {Object}       variables
+ */
+var PasswordChimeraField = ChimeraField.extend(function PasswordChimeraField(container, variables) {
+	PasswordChimeraField.super.call(this, container, variables);
+});
+
+/**
+ * Initialize the field
+ *
+ * @param    {Mixed}   value
+ */
+PasswordChimeraField.setMethod(function initEdit() {
+
+	var that = this,
+	    $first = $('.chimeraPassword-first', this.intake),
+	    $second = $('.chimeraPassword-second', this.intake);
+
+	$first.add($second).change(function onFirstChange() {
+
+		if ($first.val() == $second.val()) {
+			that.setValue($first.val());
+		} else {
+			that.setValue(null);
+		}
+	});
+});
+
+/**
  * The Text ChimeraField class
  *
  * @constructor
@@ -269,8 +312,6 @@ TextChimeraField.setMethod(function initEdit() {
 	    name,
 	    editor, id;
 
-	// Use CKEDITOR instead of medium editor
-	CKEDITOR.disableAutoInline = true;
 
 	var editor = CKEDITOR.inline(that.intake.find('.chimeraField-wysiwyg')[0], {
 		filebrowserBrowseUrl: '/boeckeditor',
@@ -427,7 +468,7 @@ BelongstoChimeraField.setMethod(function initEdit() {
 				callback(result);
 
 				if (setInitValue && that.variables.data.value) {
-					thisSelect.addItem(that.variables.data.value);
+					thisSelect.setValue(that.variables.data.value);
 				}
 			}, 'json');
 		},
@@ -467,6 +508,22 @@ var HasoneparentChimeraField = BelongstoChimeraField.extend(function Hasoneparen
  */
 var EnumChimeraField = BelongstoChimeraField.extend(function EnumChimeraField(container, variables) {
 	EnumChimeraField.super.call(this, container, variables);
+});
+
+/**
+ * The HasAndBelongsToMany ChimeraField class
+ *
+ * @constructor
+ *
+ * @author   Jelle De Loecker <jelle@codedor.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {DOMElement}   container
+ * @param    {Object}       variables
+ */
+var HABTMChimeraField = BelongstoChimeraField.extend(function HabtmChimeraField(container, variables) {
+	HabtmChimeraField.super.call(this, container, variables);
 });
 
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/edit'}, applySave);
