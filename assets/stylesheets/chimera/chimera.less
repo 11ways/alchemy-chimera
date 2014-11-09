@@ -1,5 +1,6 @@
 @import "chimera/core.less";
 @import "font-awesome4.1/font-awesome.less";
+@import "foundation/foundation-icons.less";
 
 @color-text--modelList: @light-gray;
 @color-row--modelList: @lightest-gray;
@@ -18,6 +19,7 @@
 	color: @color--pageTitle;
 	text-transform: uppercase;
 	line-height: 1.5rem;
+	font-weight: 400;
 }
 
 .chimeraField {
@@ -61,7 +63,7 @@
 
 // .chimeraEditor should not be used for fields anymore, those go in .chimeraField
 .chimeraEditor {
-	margin-top: 1.75rem;
+	margin-top: 2.3rem;
 
 	&-header {
 		align-items: flex-end;
@@ -97,15 +99,27 @@
 		width: 3rem;
 		text-align: center;
 		color: white;
+		text-transform: uppercase;
+		font-size: 0.9rem;
 	}
 
 	&-actions--inline {
-		text-align: center;
+		text-align: right;
 		width: 12rem;
 
 		// @todo: temporary fix to remove save action from listing
 		.action-save {
 			display: none;
+		}
+
+		.btn-inline {
+			background-color: transparent;
+			border-bottom: 0;
+			color: @color-text--modelList;
+			font-size: 1.5rem;
+			&:hover {
+				color: @color--btn-background;
+			}
 		}
 	}
 }
@@ -122,8 +136,8 @@
 	.select(none);
 	transition: all 0.3s ease;
 	width: 3rem;
-	line-height: 2rem;
-	height: 2rem;
+	line-height: 1.5rem;
+	height: 1.5rem;
 }
 
 .chimeraEditor-boolean-text {
@@ -158,8 +172,8 @@
 	.flexParent(row);
 
 	&-card {
-		width: 22rem;
-		height: 19rem;
+		width: 17rem;
+		height: 17rem;
 		padding: 1.25rem;
 		margin-bottom: 1.25rem;
 		background-color: @lightest-gray;
@@ -169,10 +183,12 @@
 		height: 12rem;
 		background-size: cover !important;
 		background-position: 50% !important;
+		margin-bottom: 1rem;
 	}
 
 	&-actions {
 		height: 4.5rem;
+		text-align: center;
 	}
 }
 
@@ -184,6 +200,25 @@
 	width: 100%;
 	border-collapse: collapse;
 
+	th {
+		text-align: left;
+		height: 3rem;
+		padding: 5px;
+		background-color: @light-gray;
+		color: @white;
+		font-size: 0.9rem;
+		font-weight: 400;
+		text-transform: uppercase;
+		&.modelList-right {
+			text-align: right;
+			padding-right: 0.75rem;
+		}
+	}
+
+	&-radio {
+		width: 4rem;
+	}
+
 	&-record {
 		height: 3rem;
 		text-align: left;
@@ -191,6 +226,10 @@
 
 		&:nth-child(even) {
 			background-color: @color-row--modelList;
+		}
+
+		td {
+			padding: 5px;
 		}
 	}
 }

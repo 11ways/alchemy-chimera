@@ -4,7 +4,8 @@
 // Main colours
 @dark-gray: #4C4C4C;
 @gray: #656565;
-@blue: #56BCCF;
+@blue: #6BA7D1;
+@dark-blue: #5399CA;
 @green: #35C1A3;
 @dark-green: #3AAC91;
 @yellow: #FCCC89;
@@ -38,7 +39,7 @@ html {
 
 	// The basis for rem units
 	// Regular text (like in an article) should be 1rem
-	font-size: 16px;
+	font-size: 14px;
 	color: @color-gray;
 
 	// We use the Lato font
@@ -85,6 +86,11 @@ x-hawkejs {
 	flex: 1 0 18rem; // Turn it into a flex item
 	order: -1; // Display as first
 	background-color: @nav-bg-color;
+	background-image: url('/public/chimera/codedor.svg');
+	background-position: center bottom;
+	background-repeat: no-repeat;
+	background-size: 18rem;
+	padding-bottom: 10rem;
 
 	// The sidebar is 18rems wide (so 18x16px)
 	max-width: @width--pageSidebar;
@@ -106,6 +112,7 @@ x-hawkejs {
 		.fontStyle(larger, bold, normal);
 		letter-spacing: -0.048rem;
 		color: white;
+		font-weight: 400;
 	}
 	
 	.home-btn{
@@ -177,16 +184,21 @@ x-hawkejs {
 		// Animate transitions
 		transition: all 0.1s ease-in 0.01s;
 
-		.fontStyle(large, normal, normal);
+		.fontStyle(large, light, normal);
 		text-decoration: none;
 		text-transform: uppercase;
 		color: white;
 		letter-spacing: -0.06rem;
 		line-height: ~"calc(3rem - 1px)"; // Let the browser handle calc, not less
 		padding-left: 1.652rem;
+		line-height: 2.91rem;
 
 		&:hover {
-			background-color: @green;
+			background-color: @dark-green;
+		}
+
+		&.section {
+			font-weight: 400;
 		}
 	}
 }
@@ -194,6 +206,11 @@ x-hawkejs {
 // pageCentral component
 .pageCentral {
 	flex: 1 0 ~"calc(100% - 18rem)";
+	background-image: url('/public/chimera/chimera.svg');
+	background-position: right bottom;
+	background-repeat: no-repeat;
+	background-size: 30rem 30rem;
+	padding-bottom: 4rem;
 	.flexParent(column);
 
 	&-child {
@@ -204,9 +221,10 @@ x-hawkejs {
 	&-topBar {
 		letter-spacing: -0.02rem;
 		padding-top: 1.25rem;
-		.fontStyle(larger);
+		.fontStyle(larger, light, normal);
 		.flexChild(0 0 4.2rem);
 		.flexParent();
+		
 	}
 }
 
@@ -214,24 +232,27 @@ x-hawkejs {
 	height: 2.5rem;
 	display: inline-block;
 	background-color: @color--btn-background;
-	border-bottom: 0.1875rem solid @color--btn-border;
-	padding: 0.625rem 1.562rem;
+	border-bottom: 0.3rem solid @color--btn-border;
+	padding: 0 1.562rem;
 	color: @color--btn-text;
 	text-decoration: none;
 	text-transform: uppercase;
 	font-weight: @fontWeight-bold;
+	font-size: 1.3rem;
+	line-height: 2.5rem;
 }
 
 .btn-inline {
 	display: inline-block;
 	background-color: @color--btn-background;
-	border-bottom: 0.1875rem solid @color--btn-border;
-	padding: 0.3125rem 0.75rem;
-	color: @color--btn-text;
+	border-bottom: 0.2em solid @color--btn-border;
+	padding: 0 0.75rem;
+	color: @white;
 	text-decoration: none;
 	text-transform: uppercase;
 	font-weight: @fontWeight-normal;
-	font-size: @fontSize-small;
+	font-size: 1rem;
+	line-height: 1.7rem;
 }
 
 .cbx {
@@ -254,13 +275,18 @@ x-hawkejs {
 		display: inline-block;
 		width: 1rem;
 		height: 1rem;
-		background: url('/public/chimera/radiobutton.svg') left top no-repeat;
+		background: url('/public/chimera/radiobutton2.svg') left top no-repeat;
 		background-size: 2rem 1rem;
+		&:hover {
+			cursor: pointer;
+			background-position: -1.04165rem;
+		}
 	}
 
 	&-input:checked + &-label &-span {
 		background-position: -1.04165rem;
 	}
+
 }
 
 // Stretch - Group: unite & divide

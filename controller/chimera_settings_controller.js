@@ -12,7 +12,7 @@ var Settings = Function.inherits('ChimeraController', function SettingsChimeraCo
 	this.addComponent('paginate');
 
 	//this.addAction('draft', 'save', {handleManual: true});
-	this.addAction('record', 'save', {handleManual: true});
+	this.addAction('record', 'save', {title: '<span class="fi-save"></span>', handleManual: true});
 
 });
 
