@@ -13,3 +13,11 @@ chimera.add(['get', 'post'], 'SettingsAction', '/:subject', 'SettingsChimeraCont
 
 
 chimera.get('PageEditor', '/page_editor', 'ChimeraStatic#pageEditor');
+
+Router.get('ChimeraCmsRedirect', '/cms', function(conduit) {
+	conduit.redirect('/' + alchemy.plugins.chimera.routename);
+});
+
+Router.get('ChimeraAdminRedirect', '/admin', function(conduit) {
+	conduit.redirect('/' + alchemy.plugins.chimera.routename);
+});
