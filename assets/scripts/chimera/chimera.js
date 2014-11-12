@@ -782,7 +782,7 @@ function removeRecord(el) {
 		e.preventDefault();
 		url = $(this).attr('href');
 
-		hawkejs.scene.openUrl(url, null, {sure: 'yes'}, function(result) {
+		hawkejs.scene.openUrl(url, {post: {sure: 'yes'}}, function(result) {
 			console.log(result);
 		});
 	});

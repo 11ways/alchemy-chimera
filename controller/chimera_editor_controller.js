@@ -304,9 +304,9 @@ Editor.setMethod(function remove(conduit) {
 				log.debug(err);
 			}
 
+			conduit.setHeader('x-history-url', '/chimera/editor/' + modelName + '/index');
 			that.index(conduit);
 			return;
-
 		});
 
 	} else {
