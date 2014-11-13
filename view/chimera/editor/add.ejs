@@ -41,6 +41,14 @@
 					}
 				%>
 			</div>
+
+			<footer class="chimeraEditor-footer u-stretch">
+				<div class="u-child"></div>
+				<nav class="u-child">
+					<% Chimera.printActions('model', {className: 'btn-top'}, record) %>
+					<% Chimera.printActions('draft', {className: 'btn-top'}, record) %>
+				</nav>
+			</footer>
 		</article>
 	</main>
 <% end('pageCentral') %>

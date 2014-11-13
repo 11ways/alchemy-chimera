@@ -413,6 +413,9 @@
 	top: auto;
 	bottom: 0;
 	right: 0;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
 	overflow: visible;
 }
 /* line 19, ../sass/vex-theme-bottom-right-corner.sass */
@@ -439,12 +442,12 @@
 }
 /* line 28, ../sass/vex-theme-bottom-right-corner.sass */
 .vex.vex-theme-bottom-right-corner .vex-content {
-	-moz-border-radius: 5px 0 0 0;
-	-webkit-border-radius: 5px;
-	border-radius: 5px 0 0 0;
+	-moz-border-radius: 0 0 0 0;
+	-webkit-border-radius: 0;
+	border-radius: 0 0 0 0;
 	font-family: "Helvetica Neue", sans-serif;
-	background: #f0f0f0;
-	color: #444444;
+	background: #f4f4f4;
+	color: #656565;
 	padding: 1em;
 	max-width: 100%;
 	width: 450px;
@@ -461,9 +464,6 @@
 }
 /* line 46, ../sass/vex-theme-bottom-right-corner.sass */
 .vex.vex-theme-bottom-right-corner .vex-close {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -471,9 +471,6 @@
 }
 /* line 53, ../sass/vex-theme-bottom-right-corner.sass */
 .vex.vex-theme-bottom-right-corner .vex-close:before {
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
 	position: absolute;
 	content: "\00D7";
 	font-size: 26px;
@@ -502,9 +499,6 @@
 }
 /* line 80, ../sass/vex-theme-bottom-right-corner.sass */
 .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input textarea, .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="date"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="datetime"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="datetime-local"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="email"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="month"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="number"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="password"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="search"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="tel"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="text"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="time"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="url"], .vex.vex-theme-bottom-right-corner .vex-dialog-form .vex-dialog-input input[type="week"] {
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
 	background: white;
 	width: 100%;
 	padding: 0.25em 0.67em;
@@ -534,9 +528,6 @@
 }
 /* line 99, ../sass/vex-theme-bottom-right-corner.sass */
 .vex.vex-theme-bottom-right-corner .vex-dialog-button {
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
 	border: 0;
 	float: right;
 	margin: 0 0 0 0.5em;
@@ -574,13 +565,31 @@
 }
 /* line 123, ../sass/vex-theme-bottom-right-corner.sass */
 .vex.vex-theme-bottom-right-corner .vex-dialog-button.vex-dialog-button-primary {
-	background: #3288e6;
-	color: white;
+	height: 2.5rem;
+	display: inline-block;
+	background-color: #35c1a3;
+	border-bottom: 0.3rem solid #3aac91;
+	padding: 0 1.562rem;
+	color: #ffffff;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: 400;
+	font-size: 1.3rem;
+	line-height: 2.5rem;
 }
 /* line 127, ../sass/vex-theme-bottom-right-corner.sass */
 .vex.vex-theme-bottom-right-corner .vex-dialog-button.vex-dialog-button-secondary {
-	background: #e0e0e0;
-	color: #777777;
+	height: 2.5rem;
+	display: inline-block;
+	background-color: #3aac91;
+	border-bottom: 0.3rem solid #35c1a3;
+	padding: 0 1.562rem;
+	color: #ffffff;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: 400;
+	font-size: 1.3rem;
+	line-height: 2.5rem;
 }
 
 /* line 131, ../sass/vex-theme-bottom-right-corner.sass */
