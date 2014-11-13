@@ -14,27 +14,7 @@ hawkejs.scene.on({type: 'rendered'}, function rendered(variables, renderData) {
 	var key;
 
 	Object.each(variables.__newFlashes, function eachFlash(flash) {
-
-		var className,
-		    element,
-		    obj;
-
-		if (flash.className) {
-			className = ' ' + flash.className;
-		} else {
-			className = '';
-		}
-
-		obj = {
-			className: 'vex-theme-bottom-right-corner vex-chimera-flash' + className,
-			message: flash.message
-		};
-
-		element = vex.dialog.alert(obj);
-
-		setTimeout(function closeVexFlash() {
-			vex.close(element.data('id'))
-		}, 2000);
+		chimeraFlash(flash);
 	});
 });
 
@@ -816,6 +796,30 @@ function removeRecord(el) {
 		});
 	});
 
+}
+
+function chimeraFlash(flash) {
+
+	var className,
+	    element,
+	    obj;
+
+	if (flash.className) {
+		className = ' ' + flash.className;
+	} else {
+		className = '';
+	}
+
+	obj = {
+		className: 'vex-theme-bottom-right-corner vex-chimera-flash' + className,
+		message: flash.message
+	};
+
+	element = vex.dialog.alert(obj);
+
+	setTimeout(function closeVexFlash() {
+		vex.close(element.data('id'))
+	}, flash.timeout || 2000);
 }
 
 $(document).ready(function() {
