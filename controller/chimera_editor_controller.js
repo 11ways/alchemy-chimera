@@ -276,9 +276,11 @@ Editor.setMethod(function save(conduit) {
 	model.save(record, options, function afterSave(err, result) {
 
 		if (err != null) {
+			conduit.flash('Could not save record: ' + err, {className: 'chimera-fail'});
 			return conduit.error(err);
 		}
 
+		conduit.flash('Record has been saved', {className: 'chimera-success'});
 		that.edit(conduit);
 	});
 });
@@ -305,6 +307,7 @@ Editor.setMethod(function remove(conduit) {
 			}
 
 			conduit.setHeader('x-history-url', '/chimera/editor/' + modelName + '/index');
+			conduit.flash('Record has been removed', {className: 'chimera-success'});
 			that.index(conduit);
 			return;
 		});

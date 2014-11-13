@@ -9,6 +9,35 @@ hawkejs.scene.on({type: 'set', template: 'chimera/field_wrappers/_wrapper'}, fun
 	ChimeraField.create(viewname, element, variables);
 });
 
+hawkejs.scene.on({type: 'rendered'}, function rendered(variables, renderData) {
+
+	var key;
+
+	Object.each(variables.__newFlashes, function eachFlash(flash) {
+
+		var className,
+		    element,
+		    obj;
+
+		if (flash.className) {
+			className = ' ' + flash.className;
+		} else {
+			className = '';
+		}
+
+		obj = {
+			className: 'vex-theme-bottom-right-corner vex-chimera-flash' + className,
+			message: flash.message
+		};
+
+		element = vex.dialog.alert(obj);
+
+		setTimeout(function closeVexFlash() {
+			vex.close(element.data('id'))
+		}, 2000);
+	});
+});
+
 /**
  * The client side base ChimeraField class
  *

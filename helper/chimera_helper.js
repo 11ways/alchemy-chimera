@@ -83,6 +83,10 @@ var i = 0;
 		while (actions.hasNext()) {
 			action = actions.next().value;
 
+			if (!action) {
+				continue;
+			}
+
 			temp = {
 				controller: action.controller,
 				action: action.name,
