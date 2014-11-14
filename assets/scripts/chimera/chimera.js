@@ -90,6 +90,10 @@ ChimeraField.setStatic(function create(viewname, container, variables) {
  * @param    {Mixed}   value
  */
 ChimeraField.setMethod(function setValue(value) {
+	if (value === null) {
+		value = false;
+	}
+
 	this.intake.data('new-value', value);
 });
 
