@@ -756,10 +756,22 @@ function sidebarCollapse(el) {
 
 	var childclass = '',
 	    $active = $(el.querySelectorAll('.sideNav .active')),
-	    $section = $('.section');
+	    $section = $('.section'),
+	    $links = $('a', el);
 
 	// Open active section
 	toggleMenu($active.parent().parent().prev());
+
+	$links.click(function(e) {
+		var $this = $(this);
+
+		if ($this.hasClass('section')) {
+			return;
+		}
+
+		$links.removeClass('active');
+		$this.addClass('active');
+	});
 	
 	// Open clicked section
 	$section.on('click', function onMenuParentClick(e){
