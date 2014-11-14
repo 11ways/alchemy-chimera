@@ -560,8 +560,10 @@ function applySave(el, variables) {
 		    data,
 		    obj;
 
+		e.preventDefault();
+
 		if (preventDuplicate === true) {
-			throw new Error('Already pressed save button');
+			return chimeraFlash('Save ignored:<br>Save already in progress');
 		}
 
 		$intakes = $('.chimeraField-intake', $editor);
@@ -592,15 +594,23 @@ function applySave(el, variables) {
 			}
 		});
 
+		if (Object.isEmpty(obj.data)) {
+			return chimeraFlash('Save ignored:<br>No modifications were made');
+		}
+
 		var editurl = document.location.href;
 
 		hawkejs.scene.openUrl($save.attr('href'), {post: obj, history: false}, function(err, result) {
+
+			if (err != null && result != null) {
+				preventDuplicate = false;
+				chimeraFlash('Something went wrong: ' + result);
+			}
 
 			// @todo: go to the correct url
 			//hawkejs.scene.reload(editurl);
 		});
 
-		e.preventDefault();
 		preventDuplicate = true;
 	});
 }
@@ -815,6 +825,12 @@ function chimeraFlash(flash) {
 	var className,
 	    element,
 	    obj;
+
+	if (typeof flash == 'string') {
+		flash = {
+			message: flash
+		}
+	}
 
 	if (flash.className) {
 		className = ' ' + flash.className;
