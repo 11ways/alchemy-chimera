@@ -323,6 +323,7 @@ TextChimeraField.setMethod(function initEdit() {
 
 
 	var editor = CKEDITOR.inline(that.intake.find('.chimeraField-wysiwyg')[0], {
+		extraPlugins: 'sourcedialog',
 		filebrowserBrowseUrl: '/boeckeditor',
 		allowedContent: 'img form input param pre flash br a td p span font em strong table tr th td style script iframe u s li ul div[*]{*}(*)'
 	});
@@ -589,7 +590,7 @@ function applySave(el, variables) {
 			var $wrapper = $(this),
 			    value = $wrapper.data('new-value');
 
-			if (value != null) {
+			if (value != null || value === null) {
 				Object.setPath(obj, 'data.' + $wrapper.data('path'), value);
 			}
 		});

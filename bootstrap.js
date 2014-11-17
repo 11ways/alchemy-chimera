@@ -96,7 +96,7 @@ ChimeraController.setMethod(function getActions(type) {
 	return this.actions[type];
 });
 
-// Send the acl layout options to the client
+// Send the ACL layout options to the client
 alchemy.hawkejs.on({type: 'viewrender', status: 'begin', client: false}, function onBegin(viewRender) {
 	viewRender.expose('chimera-view-setting', viewSettings);
 });
