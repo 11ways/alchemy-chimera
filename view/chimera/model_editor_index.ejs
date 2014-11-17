@@ -39,6 +39,9 @@ start(store('chimera-view-setting').contentblock) -%>
 					<th>Actions</th>
 					<% for (i = 0; i < fieldInfo.length; i++) {
 						field = fieldInfo[i];
+						if (!field.title) {
+							field.title = field.field.humanize();
+						}
 					%>
 					<th><% Paginate.sort({field: field.fieldPath, display: __('fieldTitles', field.title), parentClass: 'activesort'}) %></th>
 					<% } %>
