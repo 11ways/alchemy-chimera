@@ -208,15 +208,23 @@ Editor.setMethod(function view(conduit) {
 	    chimera = model.behaviours.chimera,
 	    id = conduit.routeParam('id');
 
-	var actionFields = chimera.getActionFields('view'),
+	var actionFields = chimera.getActionFields('edit'),
 	    groups = actionFields.groups.clone();
 
 	model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, items) {
 
+		if (err) {
+			return conduit.error(err);
+		}
+
+		if (!items.length) {
+			return conduit.notFound();
+		}
+
 		actionFields.processRecords(model, items, function groupedRecords(err, groups) {
 
 			if (err) {
-				pr(err);
+				return conduit.error(err);
 			}
 
 			that.set('groups', groups);
@@ -225,6 +233,7 @@ Editor.setMethod(function view(conduit) {
 			that.set('pageTitle', modelName.humanize());
 			that.internal('modelName', modelName);
 			that.internal('recordId', id);
+			that.internal('chimeraReadOnly', true);
 
 			that.render('chimera/editor/view');
 		});

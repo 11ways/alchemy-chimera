@@ -49,6 +49,8 @@ var ChimeraField = Function.inherits(function ChimeraField(container, variables)
 	// Action type
 	this.action = this.field.viewaction;
 
+	this.readOnly = variables.__chimeraReadOnly === true;
+
 	// The intake x-hawkejs element
 	this.intake = $(container.getElementsByClassName('chimeraField-intake')[0]);
 
@@ -58,6 +60,10 @@ var ChimeraField = Function.inherits(function ChimeraField(container, variables)
 	action = Blast.Bound.String.classify(String(this.action));
 
 	this['init' + action]();
+
+	if (this.readOnly) {
+		this.setReadOnly(true);
+	}
 });
 
 /**
@@ -124,6 +130,23 @@ ChimeraField.setMethod(function initAdd() {
  */
 ChimeraField.setMethod(function initList() {
 	return;
+});
+
+/**
+ * Set the new value for this field.
+ * Only new values will be sent to the server on save.
+ *
+ * @param    {Mixed}   value
+ */
+ChimeraField.setMethod(function setReadOnly(value) {
+	var $prime = $('.chimeraField-prime', this.intake);
+	$prime.attr('disabled', value);
+
+	if (value) {
+		$prime.addClass('chimera-read-only');
+	} else {
+		$prime.removeClass('chimera-read-only');
+	}
 });
 
 /**
@@ -329,7 +352,7 @@ TextChimeraField.setMethod(function initEdit() {
 	});
 
 	editor.on('focus', function () {
-		editor.setReadOnly(false);
+		editor.setReadOnly(!!that.readOnly);
 	});
 
 	this.ckeditor = editor;
@@ -382,6 +405,16 @@ TextChimeraField.setMethod(function initEdit() {
 			that.setValue($(this)[0].innerHTML);
 		}
 	});
+});
+
+/**
+ * Make the CKEditor instance read-only
+ *
+ * @param    {Boolean}   value
+ */
+TextChimeraField.setMethod(function setReadOnly(value) {
+	var that = this;
+	this.readOnly = value;
 });
 
 /**
@@ -486,6 +519,18 @@ BelongstoChimeraField.setMethod(function initEdit() {
 			that.setValue(value);
 		}
 	});
+
+	this.selectizeInstance = $input[0].selectize;
+});
+
+/**
+ * Set the new value for this field.
+ * Only new values will be sent to the server on save.
+ *
+ * @param    {Mixed}   value
+ */
+BelongstoChimeraField.setMethod(function setReadOnly(value) {
+	this.selectizeInstance.disable(value);
 });
 
 /**
@@ -536,6 +581,7 @@ var HABTMChimeraField = BelongstoChimeraField.extend(function HabtmChimeraField(
 	HabtmChimeraField.super.call(this, container, variables);
 });
 
+hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/view'}, applySave);
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/edit'}, applySave);
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/add'}, applySave);
 
@@ -554,6 +600,11 @@ function applySave(el, variables) {
 
 	$editor = $('.chimeraEditor', el).first();
 	$save = $('.action-save', $editor);
+
+	if (variables.__chimeraReadOnly) {
+		$save.remove();
+		return;
+	}
 
 	$save.click(function onClick(e) {
 
@@ -753,6 +804,8 @@ function applyDateField(that, type, options) {
 
 	// Apply `rome`
 	calender = rome($wrapper[0], options);
+
+	this.romeCalender = calender;
 
 	calender.on('data', function dateChange(dateString) {
 		var newdate = calender.getDate();
