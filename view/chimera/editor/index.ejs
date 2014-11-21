@@ -17,7 +17,7 @@
 							field = fields.next().value;
 
 							print('<th>');
-							print(field.fieldType.title);
+							Pagination.sort({field: field.path, content: field.fieldType.title});
 							print('</th>');
 						}
 					%>
@@ -51,18 +51,12 @@
 			</table>
 
 			<footer class="chimeraEditor-footer u-stretch">
+				<% Pagination.show({class: 'u-child'}) %>
 				<div class="u-child"></div>
 				<nav class="u-child">
 					<% Chimera.printActions('model', {className: 'btn-top'}) %>
 				</nav>
 			</footer>
-
-			<!--
-			<% Pagination.getPageNumber() %>
-			<% Pagination.page({}) %>
-			<% Pagination.show() %>
-			-->
-
 		</article>
 	</main>
 <% end('pageCentral') %>
