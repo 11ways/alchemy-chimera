@@ -14,6 +14,11 @@ chimera.add(['get', 'post'], 'SettingsAction', '/:subject', 'SettingsChimeraCont
 
 chimera.get('PageEditor', '/page_editor', 'ChimeraStatic#pageEditor');
 
+chimera.use(function setUserData(req, res, next) {
+	req.conduit.internal('UserData', req.conduit.session('UserData') || {});
+	next();
+});
+
 Router.get('ChimeraCmsRedirect', '/cms', function(conduit) {
 	conduit.redirect('/' + alchemy.plugins.chimera.routename);
 });

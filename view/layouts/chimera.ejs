@@ -22,7 +22,14 @@
 	<div class="pageCentral">
 		<div class="pageCentral-child pageCentral-topBar u-stretch">
 			<span class="u-child">Dashboard <% if (__urlparams.controller) { %> &gt; <%= __urlparams.controller.humanize() %><% } %> <% if (__urlparams.subject) { %> &gt; <%= __urlparams.subject.humanize() %><% } %></span>
-			<p class="u-child">Voornaam Naam <a href="/logout" class="logout"><span class="fi-power"></span></a></p>
+			<p class="u-child">
+			<% userData = __UserData || {} %>
+			<% if (userData.name) {
+				print(userData.name);
+			} else {
+				// No name found, print nothing
+			} %>
+			<a href="/logout" class="logout"><span class="fi-power"></span></a></p>
 		</div>
 		<div class="pageCentral-child pageCentral-main">
 			<% assign('pageCentral') %>
