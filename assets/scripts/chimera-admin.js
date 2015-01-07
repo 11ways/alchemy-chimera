@@ -510,7 +510,7 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 				filter.condition = $this.find('select').val();
 				filter.value = $this.find('.filter[data-filter-field]').val();
 
-				if (filter.fieldPath && filter.value!== '') {
+				if (filter.fieldPath && (filter.value!== '' || filter.condition == 'isempty' || filter.condition == 'isnotempty')) {
 					filters.push(filter);
 				}
 			});
@@ -597,6 +597,8 @@ hawkejs.event.on('create-chimera-filters-modal', function(query, payload) {
 		html +=	'<option value="is">Equals</option>';
 		html +=	'<option value="notlike">Doesn\'t contain</option>';
 		html +=	'<option value="isnot">Is not equal to</option>';
+		html +=	'<option value="isempty">Is empty</option>';
+		html +=	'<option value="isnotempty">Is not empty</option>';
 		html +=	'</select>';
 		html +=	'</td>';
 		
