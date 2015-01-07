@@ -91,7 +91,7 @@ errors();
 						for (i = 0; i < group.fields.length; i++) {
 
 							item = group.fields[i];
-							item.readonly = readonly || item.disabled;
+							item.readonly = readonly || item.readonly || item.disabled;
 
 							if (item.scripts) {
 								asset.script(item.scripts, {block: 'head'});
