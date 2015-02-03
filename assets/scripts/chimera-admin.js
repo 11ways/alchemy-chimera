@@ -94,8 +94,7 @@ hawkejs.spot.introduced('.timeago', function(elements) {
 });
 
 // Apply select2 once the inputs appear
-hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, function(elements) {
-
+hawkejs.spot.introduced('input.select2-form-control[data-url]', {parent: true}, function(elements) {
 	$(elements).each(function() {
 
 		var $this      = $(this),
@@ -146,11 +145,21 @@ hawkejs.spot.appeared('input.select2-form-control[data-url]', {parent: true}, fu
 
 				if (id) {
 					$.post(assocUrl, {init: true, id: id}, function(data) {
+						var results = [];
 						if (multiple) {
-							callback(data.results)
+							for (var i = 0; i < data.results.length; i++) {
+								if ($.inArray(data.results[i].id, id) !== -1) {
+									results.push(data.results[i]);
+								}
+							};
 						} else {
-							callback(data.results[0]);
+							for (var i = 0; i < data.results.length; i++) {
+								if (data.results[i].id == id) {
+									results.push(data.results[i]);
+								}
+							}
 						}
+						callback(results);
 					});
 				}
 			},
