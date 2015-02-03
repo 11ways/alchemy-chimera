@@ -332,7 +332,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 
 		var value = record[fieldName];
 
-		if (typeof value == 'object' && typeof value.value !== 'undefined') {
+		if (typeof value === 'object' && value && typeof value.value !== 'undefined') {
 			value = value.value;
 		}
 		

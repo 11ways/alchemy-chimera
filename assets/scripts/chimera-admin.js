@@ -151,11 +151,11 @@ hawkejs.spot.introduced('input.select2-form-control[data-url]', {parent: true}, 
 								if ($.inArray(data.results[i].id, id) !== -1) {
 									results.push(data.results[i]);
 								}
-							};
+							}
 						} else {
 							for (var i = 0; i < data.results.length; i++) {
 								if (data.results[i].id == id) {
-									results.push(data.results[i]);
+									results = data.results[i];
 								}
 							}
 						}
