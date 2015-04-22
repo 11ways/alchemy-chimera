@@ -138,6 +138,7 @@ module.exports = function chimeraHelpers(hawkejs) {
 						content: content,
 						'class': cssClass,
 						prepend: prepend,
+						history: action.history,
 						match: {
 							'class': 'active',
 							greedy: true
