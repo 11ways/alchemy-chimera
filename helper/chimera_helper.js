@@ -96,6 +96,10 @@ module.exports = function chimeraHelpers(hawkejs) {
 
 				if (action) {
 
+					if (action.route === '/export' && this.searchData) {
+						action.path = action.path + '?filter=' + encodeURIComponent(JSON.stringify(this.searchData));
+					}
+
 					// Every link is a btn
 					if (options['class']) {
 						cssClass = options['class'] + ' ';
