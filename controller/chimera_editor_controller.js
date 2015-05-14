@@ -41,7 +41,7 @@ Editor.setMethod(function listing(conduit, type, view) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
-	    model = Model.get(modelName),
+	    model = this.getModel(modelName),
 	    chimera = model.behaviours.chimera;
 
 	if (view == null) {
@@ -95,7 +95,7 @@ Editor.setMethod(function add(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
-	    model = Model.get(modelName),
+	    model = this.getModel(modelName),
 	    chimera = model.behaviours.chimera;
 
 	var actionFields = chimera.getActionFields('edit'),
@@ -130,7 +130,7 @@ Editor.setMethod(function edit(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
-	    model = Model.get(modelName),
+	    model = this.getModel(modelName),
 	    chimera = model.behaviours.chimera,
 	    id = conduit.routeParam('id');
 
@@ -174,7 +174,7 @@ Editor.setMethod(function related_data(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
-	    model = Model.get(modelName),
+	    model = this.getModel(modelName),
 	    chimera = model.behaviours.chimera,
 	    id = conduit.routeParam('id'),
 	    field;
@@ -204,7 +204,7 @@ Editor.setMethod(function view(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
-	    model = Model.get(modelName),
+	    model = this.getModel(modelName),
 	    chimera = model.behaviours.chimera,
 	    id = conduit.routeParam('id');
 
@@ -263,7 +263,7 @@ Editor.setMethod(function save(conduit) {
 	}
 
 	modelName = conduit.routeParam('subject');
-	model = Model.get(modelName);
+	model = this.getModel(modelName);
 
 	chimera = model.behaviours.chimera;
 	data = conduit.body.data;
@@ -303,7 +303,7 @@ Editor.setMethod(function remove(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
-	    model = Model.get(modelName),
+	    model = this.getModel(modelName),
 	    chimera = model.behaviours.chimera,
 	    id = conduit.routeParam('id');
 

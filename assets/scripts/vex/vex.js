@@ -1,4 +1,5 @@
 (function() {
+
 	var vexFactory;
 
 	vexFactory = function($) {
@@ -187,4 +188,6 @@
 		window.vex = vexFactory(jQuery);
 	}
 
-}).call(this);
+	vex.defaultOptions.className = 'vex-theme-flat-attack';
+	hawkejs.require('vex/vex.dialog');
+});
