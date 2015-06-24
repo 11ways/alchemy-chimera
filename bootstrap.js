@@ -37,8 +37,8 @@ if (!alchemy.plugins.acl) {
 
 // Get the view settings
 var viewSettings = {
-	baselayout: alchemy.layoutify(options.baselayout),
-	bodylayout: alchemy.layoutify(options.bodylayout),
+	baselayout: 'layouts/' + options.baselayout,
+	bodylayout: 'layouts/' + options.bodylayout,
 	bodyblock: options.bodyblock,
 	mainblock: options.mainblock,
 	contentblock: options.contentblock,
