@@ -1,19 +1,33 @@
 <%
 
+fieldWrapper = [
+	// The expected wrapper to use
+	'chimera/field_wrappers/' + template.wrapper + '_' + template.action,
+	// The fallback wrapper
+	'chimera/field_wrappers/default_' + template.action
+];
+
+fieldElement = [
+	// The expected element to use
+	'chimera/fields/' + template.field + '_' + template.action,
+	// The fallback element
+	'chimera/fields/default_' + template.action
+];
+
 // Render the wrapper
-implement('chimera/field_wrappers/' + template.wrapper + '_' + template.action, {changeMain: true, wrapper: false});
+implement(fieldWrapper, {changeMain: true, wrapper: false});
 
 // See if it's an arrayable field
 if (data.field.fieldType.isArray) {
-
 	value = Array.cast(data.value);
 
 	for (i = 0; i < value.length; i++) {
-		newData = {data: Object.assign({}, data, {value: value[i]})};
-		implement('chimera/fields/' + template.field + '_' + template.action, null, newData);
+		newData = {data: __Protoblast.Bound.Object.assign({}, data, {value: value[i]})};
+		console.log('Implementing', fieldElement);
+		implement(fieldElement, null, newData);
 	}
 } else {
-	implement('chimera/fields/' + template.field + '_' + template.action);
+	implement(fieldElement);
 }
 
 %>

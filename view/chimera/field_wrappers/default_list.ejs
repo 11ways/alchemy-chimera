@@ -1,1 +1,7 @@
 <% assign('field') %>
+
+<% onCreate(function(el) {
+	console.log(this, el, vars);
+}); %>
+
+<% emit('default_list_event') %>

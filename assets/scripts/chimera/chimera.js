@@ -6,6 +6,8 @@ hawkejs.scene.on({type: 'set', template: 'chimera/field_wrappers/_wrapper'}, fun
 
 	viewname = variables.data.field.viewname;
 
+	console.log('Should ceatinge CF:', viewname, element, variables);
+
 	ChimeraField.create(viewname, element, variables);
 });
 
