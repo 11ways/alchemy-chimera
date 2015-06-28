@@ -51,7 +51,7 @@ Settings.setMethod(function edit(conduit) {
 	var that = this,
 	    modelName = 'settings',
 	    model = Model.get(modelName),
-	    chimera = model.behaviours.chimera,
+	    chimera = model.constructor.chimera,
 	    id;
 		
 	model.find('first', function gotResult(err, settings){
@@ -59,7 +59,7 @@ Settings.setMethod(function edit(conduit) {
 		id = settings[0].Setting._id;
 		
 		var actionFields = chimera.getActionFields('edit'),
-	    groups = actionFields.groups.clone();
+		    groups = actionFields.groups.clone();
 
 		actionFields.processRecords(model, settings, function groupedRecords(err, groups) {
 
@@ -103,7 +103,7 @@ Settings.setMethod(function save(conduit) {
 	modelName = 'settings';
 	model = Model.get(modelName);
 
-	chimera = model.behaviours.chimera;
+	chimera = model.constructor.chimera;
 	data = conduit.body.data;
 	actionFields = chimera.getActionFields('edit');
 	groups = actionFields.groups.clone();
