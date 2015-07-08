@@ -5,11 +5,13 @@ style('//cdn.leafletjs.com/leaflet-0.7.3/leaflet.css');
 script('//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js');
 %>
 <div class="chimeraEditor-fieldGroup">
-	<label class="chimeraEditor-fieldLabel">
-		<% assign('title') %>
-		<% print(data.field.fieldType.title) %>
-		<% assign_end('title') %>
-	</label>
+	<div class="chimeraField-left">
+		<label class="chimeraEditor-fieldLabel">
+			<% assign('title') %>
+			<% print(data.field.fieldType.title) %>
+			<% assign_end('title') %>
+		</label>
+	</div>
 	<div class="chimeraEditor-fieldWrap">
 		<% assign('field') %>
 	</div>

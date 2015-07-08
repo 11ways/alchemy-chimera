@@ -17,17 +17,19 @@ fieldElement = [
 // Render the wrapper
 implement(fieldWrapper, {changeMain: true, wrapper: false});
 
-// See if it's an arrayable field
-if (data.field.fieldType.isArray) {
-	value = Array.cast(data.value);
+// // See if it's an arrayable field
+// if (data.field.fieldType.isArray) {
+// 	value = Array.cast(data.value);
+// 	i = 0;
 
-	for (i = 0; i < value.length; i++) {
-		newData = {data: __Protoblast.Bound.Object.assign({}, data, {value: value[i]})};
-		console.log('Implementing', fieldElement);
-		implement(fieldElement, null, newData);
-	}
-} else {
-	implement(fieldElement);
-}
+// 	do {
+// 		newData = {data: __Protoblast.Bound.Object.assign({}, data, {value: value[i]})};
+// 		console.log('Implementing', fieldElement);
+// 		implement(fieldElement, null, newData);
+// 		i++;
+// 	} while (i < value.length);
+// } else {
+// 	implement(fieldElement);
+// }
 
 %>

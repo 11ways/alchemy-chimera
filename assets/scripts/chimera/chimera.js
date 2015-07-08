@@ -6,9 +6,11 @@ hawkejs.scene.on({type: 'set', template: 'chimera/field_wrappers/_wrapper'}, fun
 
 	viewname = variables.data.field.viewname;
 
-	console.log('Should ceatinge CF:', viewname, element, variables);
+	//console.log('Should create CF:', viewname, element, variables);
 
-	ChimeraField.create(viewname, element, variables);
+	new ChimeraFieldWrapper(viewname, element, variables)
+
+	//ChimeraField.create(viewname, element, variables);
 });
 
 hawkejs.scene.on({type: 'rendered'}, function rendered(variables, renderData) {
@@ -21,6 +23,354 @@ hawkejs.scene.on({type: 'rendered'}, function rendered(variables, renderData) {
 });
 
 /**
+ * The client side ChimeraFieldWrapper class
+ *
+ * @constructor
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {DOMElement}   container
+ * @param    {Object}       variables
+ */
+var ChimeraFieldWrapper = Function.inherits(function ChimeraFieldWrapper(viewname, container, variables) {
+
+	// The viewname to render
+	this.viewname = viewname;
+
+	// The container element, with the 'chimeraField-container' CSS class
+	this.container = container;
+
+	// Get the intake element, where the actual inputs should go
+	this.intake = $(container.getElementsByClassName('chimeraField-intake')[0]);
+
+	// Store this instance on the intake element
+	this.intake[0].CFWrapper = this;
+
+	// The variables passed to the rendering element
+	this.variables = variables;
+
+	// Available prefixes array
+	this.prefixes = variables.prefixes;
+
+	// Prefix containers
+	this.prefixContainers = null;
+
+	// The currently showing prefix
+	this.activePrefix = null;
+
+	// Field data
+	this.field = variables.data.field;
+
+	// The action name
+	this.action = this.field.viewaction;
+
+	// Is this an arrayable field?
+	this.isArray = this.field.fieldType.isArray;
+
+	// Is this a translatable field?
+	this.isTranslatable = this.field.fieldType.isTranslatable;
+
+	// Field instances
+	this.fields = [];
+
+	// Is this a read-only field?
+	this.readOnly = variables.__chimeraReadOnly === true;
+
+	this.initFields();
+	this.addButtons();
+
+	console.log('WRAPPER', this.viewname, this.action, this.container, variables);
+
+});
+
+/**
+ * The fieldClass property (Class Constructor)
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraFieldWrapper.prepareProperty(function fieldClass() {
+
+	var className,
+	    Classes,
+	    fnc;
+
+	Classes = __Protoblast.Classes;
+	className = Blast.Bound.String.classify(this.viewname) + 'ChimeraField';
+
+	if (Classes[className]) {
+		fnc = Classes[className];
+	} else {
+		fnc = ChimeraField;
+	}
+
+	return fnc;
+});
+
+/**
+ * Create ChimeraField instances
+ *
+ * @param    {String}   name
+ */
+ChimeraFieldWrapper.setMethod(function initFields() {
+
+	var instance,
+	    values,
+	    prefix,
+	    value,
+	    html,
+	    key,
+	    el,
+	    i;
+
+	if (this.isTranslatable) {
+		this.prefixContainers = {};
+
+		for (i = 0; i < this.prefixes.length; i++) {
+			prefix = this.prefixes[i];
+
+			// Create a prefix intake
+			html = '<div class="chimeraField-prefix-intake" data-prefix="' + prefix + '"';
+
+			if (i > 0) {
+				html += ' style="display:none;"';
+			} else {
+				this.activePrefix = prefix;
+			}
+
+			html += '></div>';
+			el = Blast.parseHTML(html);
+
+			// Store this DOM element in the object
+			this.prefixContainers[prefix] = el;
+
+			// Add it to the intake
+			this.intake.append(el);
+		}
+	}
+
+	if (this.isArray) {
+		values = Array.cast(this.variables.data.value);
+	} else {
+		values = [];
+
+		if (this.variables.data.value != null) {
+			values[0] = this.variables.data.value;
+		}
+	}
+
+	i = 0;
+
+	do {
+		this.addValue(values[i]);
+		i++;
+	} while (i < values.length);
+});
+
+/**
+ * Add translate buttons
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraFieldWrapper.setMethod(function addButtons() {
+
+	var that = this,
+	    $intake = $(this.intake),
+	    $left = $('.chimeraField-left', that.container),
+	    el,
+	    i;
+
+	if (this.isArray) {
+		el = Blast.parseHTML('<button class="chimeraField-add-entry">+</button>');
+		$left.append(el);
+
+		$(el).on('click', function onClickAdd(e) {
+			that.addValue();
+		});
+	}
+
+	if (this.isTranslatable) {
+		this.prefixes.forEach(function eachPrefix(prefix) {
+
+			var el = Blast.parseHTML('<button class="chimeraField-prefix-selector">' + prefix + '</button>');
+			$left.append(el);
+
+			$(el).on('click', function onClickPrefix(e) {
+				that.showPrefix(prefix);
+			});
+		});
+	}
+
+});
+
+/**
+ * Get all the fields of a single prefix
+ *
+ * @param    {String}   prefix
+ */
+ChimeraFieldWrapper.setMethod(function getPrefixFields(prefix) {
+
+	var result = [],
+	    field,
+	    i;
+
+	for (i = 0; i < this.fields.length; i++) {
+		field = this.fields[i];
+
+		if (field.prefix == prefix) {
+			result.push(field);
+		}
+	}
+
+	return result;
+});
+
+/**
+ * Get the data
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {Boolean}   changesOnly
+ */
+ChimeraFieldWrapper.setMethod(function getData(changesOnly) {
+
+	var that = this,
+	    result = {};
+
+	this.fields.forEach(function eachField(field) {
+
+		if (changesOnly && field.value == field.originalValue) {
+			return;
+		}
+
+		Object.setPath(result, field.path, field.value);
+	});
+
+	return result;
+});
+
+/**
+ * Enable the given prefix
+ *
+ * @param    {String}   prefix
+ */
+ChimeraFieldWrapper.setMethod(function showPrefix(prefix) {
+
+	var key,
+	    el;
+
+	if (this.activePrefix == prefix) {
+		return;
+	}
+
+	for (key in this.prefixContainers) {
+		el = this.prefixContainers[key];
+
+		if (key == prefix) {
+			el.style.display = '';
+		} else {
+			el.style.display = 'none';
+		}
+	}
+
+	this.activePrefix = prefix;
+});
+
+/**
+ * Add a value
+ *
+ * @param    {Object}   value
+ */
+ChimeraFieldWrapper.setMethod(function addValue(value) {
+
+	var prefix;
+
+	if (this.isTranslatable) {
+		for (prefix in value) {
+			this.addPrefixValue(value[prefix], prefix)
+		}
+	} else {
+		this.addPrefixValue(value);
+	}
+});
+
+/**
+ * Add a prefix value
+ *
+ * @param    {Object}   value
+ */
+ChimeraFieldWrapper.setMethod(function addPrefixValue(value, prefix) {
+
+	var instance,
+	    fields;
+
+	fields = this.getPrefixFields(prefix);
+
+	if (this.fieldClass.multipleValues && this.fields.length) {
+		return fields[0].addValue(value);
+	}
+
+	console.log('Creating field with prefix', prefix, 'value:', value);
+
+	instance = new this.fieldClass(this, value, this.container, this.variables, prefix);
+});
+
+/**
+ * Remove the given child from the array
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {ChimeraField}   child
+ */
+ChimeraFieldWrapper.setMethod(function removeFromArray(child) {
+
+	var index;
+
+	if (!this.isArray) {
+		return;
+	}
+
+	index = this.fields.indexOf(child);
+
+	if (index < 0) {
+		return;
+	}
+
+	this.fields.splice(index, 1);
+});
+
+/**
+ * Add the child to the correct intake element
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {ChimeraField}   child
+ */
+ChimeraFieldWrapper.setMethod(function addEntry(child) {
+
+	var intake;
+
+	if (child.prefix) {
+		intake = $(this.prefixContainers[child.prefix]);
+	} else {
+		intake = this.intake;
+	}
+
+	intake.append(child.entry);
+});
+
+/**
  * The client side base ChimeraField class
  *
  * @constructor
@@ -29,12 +379,19 @@ hawkejs.scene.on({type: 'rendered'}, function rendered(variables, renderData) {
  * @since    1.0.0
  * @version  1.0.0
  *
+ * @param    {ChimeraFieldWrapper}   parent
  * @param    {DOMElement}   container
  * @param    {Object}       variables
  */
-var ChimeraField = Function.inherits(function ChimeraField(container, variables) {
+var ChimeraField = Function.inherits(function ChimeraField(parent, value, container, variables, prefix) {
 
 	var action;
+
+	// The parent wrapper
+	this.parent = parent;
+
+	// Make the instance self-register in the parent
+	this.parent.fields.push(this);
 
 	// The container element, with the 'chimeraField-container' CSS class
 	this.container = container;
@@ -43,24 +400,40 @@ var ChimeraField = Function.inherits(function ChimeraField(container, variables)
 	this.variables = variables;
 
 	// Field value
-	this.value = variables.data.value;
+	this.value = value;
+
+	// The original value
+	this.originalValue = value;
 
 	// Field data
 	this.field = variables.data.field;
 
-	// Action type
-	this.action = this.field.viewaction;
+	// The prefix of the field
+	this.prefix = prefix;
 
-	this.readOnly = variables.__chimeraReadOnly === true;
+	this.readOnly = parent.readOnly;
+	this.isArray = parent.isArray;
+	this.isTranslatable = parent.isTranslatable;
 
-	// The intake x-hawkejs element
-	this.intake = $(container.getElementsByClassName('chimeraField-intake')[0]);
+	// Construct another wrapper div
+	this.entry = Blast.parseHTML('<div class="chimeraField-entry"></div>');
+
+	// Add it to the parent
+	this.parent.addEntry(this)
+
+	// The prime element
+	this.input = null;
+	this.$input = null;
 
 	// Set the value path
-	this.intake.data('path', variables.data.field.path);
+	//this.intake.data('path', this.path);
 
-	action = Blast.Bound.String.classify(String(this.action));
+	action = Blast.Bound.String.classify(String(this.parent.action));
 
+	this.actionType = action;
+
+	this.render();
+	this.addButtons();
 	this['init' + action]();
 
 	if (this.readOnly) {
@@ -69,26 +442,208 @@ var ChimeraField = Function.inherits(function ChimeraField(container, variables)
 });
 
 /**
- * Create a ChimeraField instance
+ * Each ChimeraField handles a single value by default
  *
- * @param    {String}   name
+ * @type   {Boolean}
  */
-ChimeraField.setStatic(function create(viewname, container, variables) {
+ChimeraField.setStaticProperty('multipleValues', false);
 
-	var className,
-	    Classes,
-	    fnc;
+/**
+ * The index of this value inside the array.
+ * Is always false if it isn't an arrayable field
+ */
+ChimeraField.setProperty(function index() {
 
-	Classes = __Protoblast.Classes;
-	className = Blast.Bound.String.classify(viewname) + 'ChimeraField';
-
-	if (Classes[className]) {
-		fnc = Classes[className];
-	} else {
-		fnc = ChimeraField;
+	if (!this.parent.isArray) {
+		return false;
 	}
 
-	return new fnc(container, variables);
+	return this.parent.fields.indexOf(this);
+});
+
+/**
+ * The path of this value
+ */
+ChimeraField.setProperty(function path() {
+
+	var result = this.variables.data.field.path;
+
+	if (this.index !== false) {
+		result += '.' + this.index;
+	}
+
+	if (this.prefix) {
+		result += '.' + this.prefix;
+	}
+
+	return result;
+});
+
+/**
+ * Add element to the wrapper
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {Element}   element
+ */
+ChimeraField.setMethod(function addElement(element) {
+
+	var arr,
+	    i;
+
+	if (typeof element == 'string') {
+		element = Blast.parseHTML(element);
+	}
+
+	arr = Array.cast(element);
+
+	for (i = 0; i < arr.length; i++) {
+		this.entry.appendChild(arr[i]);
+	}
+
+	return arr[0];
+});
+
+/**
+ * Set the main element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {Element}   element
+ */
+ChimeraField.setMethod(function setMainElement(element) {
+
+	if (typeof element == 'string') {
+		element = Blast.parseHTML(element);
+	}
+
+	// Store the main element under the input property
+	this.input = element;
+	this.$input = $(element);
+
+	this.input.classList.add('chimeraField-prime');
+
+	// And add it to the wrapper
+	this.addElement(element);
+
+	return element;
+});
+
+/**
+ * Render the element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraField.setMethod(function render() {
+	this['render' + this.actionType]();
+});
+
+/**
+ * Add extra buttons
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraField.setMethod(function addButtons() {
+
+	var that = this,
+	    el;
+
+	if (this.isArray && this.actionType == 'Edit') {
+		el = this.addElement('<button class="chimeraField-remove-entry">x</button>');
+
+		$(el).on('click', function onClickRemoveEntry(e) {
+			that.remove();
+		});
+	}
+});
+
+/**
+ * Create the edit input element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraField.setMethod(function renderEdit() {
+
+	var html = '<input class="chimeraField-string" type="text">';
+
+	this.setMainElement(html);
+});
+
+/**
+ * Create the view input element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraField.setMethod(function renderView() {
+	return this.renderEdit();
+});
+
+/**
+ * Create the list input element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraField.setMethod(function renderList() {
+	var html = '<div>' + this.value + '</div>';
+	this.setMainElement(html);
+});
+
+/**
+ * Render the element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ *
+ * @param    {Function}   callback
+ */
+ChimeraField.setMethod(function _render(callback) {
+
+	var that = this,
+	    fieldElement,
+
+	fieldElement = [
+		// The expected element to use
+		'chimera/fields/' + this.parent.viewname + '_' + this.parent.action,
+		// The fallback element
+		'chimera/fields/default_' + this.parent.action
+	];
+
+	hawkejs.render(fieldElement, {value: this.value}, callback);
+});
+
+/**
+ * Remove this value (from an array field)
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraField.setMethod(function remove() {
+
+	if (!this.isArray) {
+		return;
+	}
+
+	// Remove the element
+	this.entry.remove();
+
+	// Remove the instance from the parent
+	this.parent.removeFromArray(this);
 });
 
 /**
@@ -98,7 +653,7 @@ ChimeraField.setStatic(function create(viewname, container, variables) {
  * @param    {Mixed}   value
  */
 ChimeraField.setMethod(function setValue(value) {
-	this.intake.data('new-value', value);
+	this.value = value;
 });
 
 /**
@@ -108,11 +663,14 @@ ChimeraField.setMethod(function setValue(value) {
  */
 ChimeraField.setMethod(function initEdit() {
 
-	var that = this,
-	    $input = $('.chimeraField-prime', this.intake);
+	var that = this;
 
-	$input.change(function onDefaultEdit() {
-		that.setValue($input.val());
+	// Set the value on the generated input
+	this.$input.val(this.value);
+
+	// Listen to changes
+	this.$input.change(function onDefaultEdit() {
+		that.setValue(that.$input.val());
 	});
 });
 
@@ -141,7 +699,8 @@ ChimeraField.setMethod(function initList() {
  * @param    {Mixed}   value
  */
 ChimeraField.setMethod(function setReadOnly(value) {
-	var $prime = $('.chimeraField-prime', this.intake);
+
+	var $prime = this.$input;
 	$prime.attr('disabled', value);
 
 	if (value) {
@@ -168,6 +727,20 @@ GeopointChimeraField = ChimeraField.extend(function GeopointChimeraField(contain
 });
 
 /**
+ * Create the edit input element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+GeopointChimeraField.setMethod(function renderEdit() {
+
+	var html = '<div class="geopoint-div geopoint-edit"></div>';
+
+	this.setMainElement(html);
+});
+
+/**
  * Initialize the field
  *
  * @param    {Mixed}   value
@@ -175,7 +748,7 @@ GeopointChimeraField = ChimeraField.extend(function GeopointChimeraField(contain
 GeopointChimeraField.setMethod(function initEdit() {
 
 	var that = this,
-	    $input = $('.chimeraField-prime', this.intake),
+	    $input = this.$input,
 	    coordinates,
 	    value;
 
@@ -296,6 +869,21 @@ function applyGeopoint($el, lat, lng, _options) {
  */
 var PasswordChimeraField = ChimeraField.extend(function PasswordChimeraField(container, variables) {
 	PasswordChimeraField.super.call(this, container, variables);
+});
+
+/**
+ * Create the edit input element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+PasswordChimeraField.setMethod(function renderEdit() {
+
+	var html = '<input class="chimeraField-string chimeraPassword-first" type="password" placeholder="Enter a new password">';
+	html += '<input class="chimeraField-string chimeraPassword-second" type="password" placeholder="Repeat the same password">';
+
+	this.setMainElement(html);
 });
 
 /**
@@ -641,11 +1229,9 @@ function applySave(el, variables) {
 		$intakes.each(function() {
 
 			var $wrapper = $(this),
-			    value = $wrapper.data('new-value');
+			    instance = this.CFWrapper;
 
-			if (value != null || value === null) {
-				Object.setPath(obj, 'data.' + $wrapper.data('path'), value);
-			}
+			Object.merge(data, instance.getData(true));
 		});
 
 		if (Object.isEmpty(obj.data)) {
@@ -881,6 +1467,11 @@ function chimeraFlash(flash) {
 	var className,
 	    element,
 	    obj;
+
+	if (typeof vex == 'undefined') {
+		console.log('"vex" not found, flash:', flash);
+		return;
+	}
 
 	if (typeof flash == 'string') {
 		flash = {

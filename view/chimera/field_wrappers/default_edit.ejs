@@ -1,8 +1,10 @@
 <div class="chimeraField-row">
-	<label class="chimeraField-label">
-		<% assign('title') %>
-		<% print(data.field.fieldType.title) %>
-		<% assign_end('title') %>
-	</label>
+	<div class="chimeraField-left">
+		<label class="chimeraField-label">
+			<% assign('title') %>
+			<% print(data.field.fieldType.title) %>
+			<% assign_end('title') %>
+		</label>
+	</div>
 	<% assign('field') %>
 </div>

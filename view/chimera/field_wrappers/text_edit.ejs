@@ -20,11 +20,13 @@ script('/public/ckeditor/4.4/ckeditor');
 
 %>
 <div class="chimeraEditor-fieldGroup">
-	<label class="chimeraEditor-fieldLabel">
-		<% assign('title') %>
-		<% print(data.field.fieldType.title) %>
-		<% assign_end('title') %>
-	</label>
+	<div class="chimeraField-left">
+		<label class="chimeraEditor-fieldLabel">
+			<% assign('title') %>
+			<% print(data.field.fieldType.title) %>
+			<% assign_end('title') %>
+		</label>
+	</div>
 	<div class="chimeraEditor-fieldWrap">
 		<% assign('field') %>
 	</div>

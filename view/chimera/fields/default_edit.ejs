@@ -1,3 +1,7 @@
-<% start('field') %>
-<input class="chimeraField-prime chimeraField-string" value="<%= data.value || '' %>" id="field-<%= data.field.path %>" type="text">
-<% end('field') %>
+<input
+	class="chimeraField-prime chimeraField-string"
+	value="<%= value || '' %>"
+	type="text"
+>
+<div class="chimeraField-translation"></div>
+<div class="chimeraField-array"></div>

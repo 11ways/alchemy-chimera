@@ -44,6 +44,8 @@ Editor.setMethod(function listing(conduit, type, view) {
 	    model = this.getModel(modelName),
 	    chimera = model.constructor.chimera;
 
+	model.disableTranslations();
+
 	if (view == null) {
 		view = type;
 	}
@@ -74,6 +76,7 @@ Editor.setMethod(function listing(conduit, type, view) {
 				return conduit.error(err);
 			}
 
+			that.set('prefixes', Prefix.getPrefixList());
 			that.conduit.set('fields', general);
 			that.conduit.set('records', results.general);
 			that.conduit.set('actions', that.getActions());
@@ -98,6 +101,8 @@ Editor.setMethod(function add(conduit) {
 	    model = this.getModel(modelName),
 	    chimera = model.constructor.chimera;
 
+	model.disableTranslations();
+
 	var actionFields = chimera.getActionFields('edit'),
 	    groups = actionFields.groups.clone();
 
@@ -110,6 +115,7 @@ Editor.setMethod(function add(conduit) {
 			throw err;
 		}
 
+		that.set('prefixes', Prefix.getPrefixList());
 		that.set('groups', groups);
 		that.set('actions', that.getActions());
 		that.set('modelName', modelName);
@@ -134,6 +140,8 @@ Editor.setMethod(function edit(conduit) {
 	    chimera = model.constructor.chimera,
 	    id = conduit.routeParam('id');
 
+	model.disableTranslations();
+
 	var actionFields = chimera.getActionFields('edit'),
 	    groups = actionFields.groups.clone();
 
@@ -153,6 +161,7 @@ Editor.setMethod(function edit(conduit) {
 				return conduit.error(err);
 			}
 
+			that.set('prefixes', Prefix.getPrefixList());
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
 			that.set('modelName', modelName);
@@ -178,6 +187,8 @@ Editor.setMethod(function related_data(conduit) {
 	    chimera = model.constructor.chimera,
 	    id = conduit.routeParam('id'),
 	    field;
+
+	model.disableTranslations();
 
 	// Some fields (like subschemas) require record info for related data
 	model.find('first', {conditions: {_id: id}}, function gotResult(err, items) {
@@ -208,6 +219,8 @@ Editor.setMethod(function view(conduit) {
 	    chimera = model.constructor.chimera,
 	    id = conduit.routeParam('id');
 
+	model.disableTranslations();
+
 	var actionFields = chimera.getActionFields('edit'),
 	    groups = actionFields.groups.clone();
 
@@ -227,6 +240,7 @@ Editor.setMethod(function view(conduit) {
 				return conduit.error(err);
 			}
 
+			that.set('prefixes', Prefix.getPrefixList());
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
 			that.set('modelName', modelName);
@@ -264,6 +278,7 @@ Editor.setMethod(function save(conduit) {
 
 	modelName = conduit.routeParam('subject');
 	model = this.getModel(modelName);
+	model.disableTranslations();
 
 	chimera = model.constructor.chimera;
 	data = conduit.body.data;
@@ -306,6 +321,8 @@ Editor.setMethod(function remove(conduit) {
 	    model = this.getModel(modelName),
 	    chimera = model.constructor.chimera,
 	    id = conduit.routeParam('id');
+
+	model.disableTranslations();
 
 	if(conduit.body.sure === 'yes'){
 
