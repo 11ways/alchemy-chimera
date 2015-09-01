@@ -175,7 +175,39 @@ Editor.setMethod(function edit(conduit) {
 });
 
 /**
- * The related_data action
+ * Associated model data
+ *
+ * @param   {Conduit}   conduit
+ */
+Editor.setMethod(function model_assoc_data(conduit) {
+
+	var model = Model.get(conduit.routeParam('subject')),
+	    options;
+
+	options = {
+		fields: ['_id', 'title', 'name'].concat(model.displayField),
+		document: false
+	};
+
+	model.find('list', options, function gotData(err, results) {
+
+		var response;
+
+		if (err) {
+			return conduit.error(err);
+		}
+
+		response = {
+			items: results,
+			displayField: model.displayField
+		};
+
+		conduit.end(response);
+	});
+});
+
+/**
+ * The related_data action for a certain field
  *
  * @param   {Conduit}   conduit
  */
@@ -185,22 +217,28 @@ Editor.setMethod(function related_data(conduit) {
 	    modelName = conduit.routeParam('subject'),
 	    model = this.getModel(modelName),
 	    chimera = model.constructor.chimera,
+	    options = {},
 	    id = conduit.routeParam('id'),
 	    field;
+
+	if (conduit.param('display_field_only')) {
+		options.display_field_only = true;
+	}
 
 	model.disableTranslations();
 
 	// Some fields (like subschemas) require record info for related data
-	model.find('first', {conditions: {_id: id}}, function gotResult(err, items) {
+	model.find('first', {conditions: {_id: id}, document: false}, function gotResult(err, items) {
+
+		console.log('Found related data of', modelName, 'with', id, 'at', conduit.param('fieldpath'), '=', err, items);
 
 		field = chimera.getField(conduit.param('fieldpath'), items[0]);
 
 		if (!field) {
 			conduit.notFound('Could not find field "' + conduit.param('fieldpath') + '"');
 		} else {
-			field.sendRelatedData(conduit);
+			field.sendRelatedData(conduit, items[0], options);
 		}
-
 	});
 });
 

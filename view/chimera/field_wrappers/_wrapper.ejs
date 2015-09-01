@@ -17,6 +17,17 @@ fieldElement = [
 // Render the wrapper
 implement(fieldWrapper, {changeMain: true, wrapper: false});
 
+if (data.field) {
+
+	if (data.field.script_file) {
+		script(['chimera/chimera'].concat(data.field.script_file));
+	}
+
+	if (data.field.style_file) {
+		style(data.field.style_file);
+	}
+}
+
 // // See if it's an arrayable field
 // if (data.field.fieldType.isArray) {
 // 	value = Array.cast(data.value);

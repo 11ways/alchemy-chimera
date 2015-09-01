@@ -105,7 +105,7 @@ var i = 0;
 				name = action.title;
 			}
 
-			rOptions = {title: name, className: className};
+			rOptions = {title: action.name, content: name, className: className};
 
 			if (action.handleManual) {
 				rOptions.handleManual = true;

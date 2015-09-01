@@ -246,11 +246,19 @@ ChimeraFieldWrapper.setMethod(function getData(changesOnly) {
 
 	this.fields.forEach(function eachField(field) {
 
-		if (changesOnly && field.value == field.originalValue) {
+		var value;
+
+		if (typeof field.getData == 'function') {
+			value = field.getData();
+		} else {
+			value = field.value;
+		}
+
+		if (changesOnly && Object.alike(value, field.originalValue)) {
 			return;
 		}
 
-		Object.setPath(result, field.path, field.value);
+		Object.setPath(result, field.path, value);
 	});
 
 	return result;
@@ -317,9 +325,11 @@ ChimeraFieldWrapper.setMethod(function addPrefixValue(value, prefix) {
 		return fields[0].addValue(value);
 	}
 
-	console.log('Creating field with prefix', prefix, 'value:', value);
-
-	instance = new this.fieldClass(this, value, this.container, this.variables, prefix);
+	try {
+		instance = new this.fieldClass(this, value, this.container, this.variables, prefix);
+	} catch (err) {
+		console.error('Failed to create field:', err)
+	}
 });
 
 /**
@@ -380,12 +390,15 @@ ChimeraFieldWrapper.setMethod(function addEntry(child) {
  * @version  1.0.0
  *
  * @param    {ChimeraFieldWrapper}   parent
- * @param    {DOMElement}   container
- * @param    {Object}       variables
+ * @param    {Mixed}                 value
+ * @param    {DOMElement}            container
+ * @param    {Object}                variables
+ * @param    {String}                prefix
  */
 var ChimeraField = Function.inherits(function ChimeraField(parent, value, container, variables, prefix) {
 
-	var action;
+	var that = this,
+	    action;
 
 	// The parent wrapper
 	this.parent = parent;
@@ -432,13 +445,17 @@ var ChimeraField = Function.inherits(function ChimeraField(parent, value, contai
 
 	this.actionType = action;
 
-	this.render();
-	this.addButtons();
-	this['init' + action]();
+	__Protoblast.setImmediate(function() {
 
-	if (this.readOnly) {
-		this.setReadOnly(true);
-	}
+		that.render();
+		that.addButtons();
+
+		that['init' + action]();
+
+		if (that.readOnly) {
+			that.setReadOnly(true);
+		}
+	});
 });
 
 /**
@@ -517,9 +534,19 @@ ChimeraField.setMethod(function addElement(element) {
  */
 ChimeraField.setMethod(function setMainElement(element) {
 
+	var elements;
+
 	if (typeof element == 'string') {
 		element = Blast.parseHTML(element);
 	}
+
+	// If there already is a main element, remove it now!
+	if (this.input) {
+		this.input.remove();
+	}
+
+	elements = Array.cast(element);
+	element = elements[0];
 
 	// Store the main element under the input property
 	this.input = element;
@@ -529,6 +556,10 @@ ChimeraField.setMethod(function setMainElement(element) {
 
 	// And add it to the wrapper
 	this.addElement(element);
+
+	if (elements[1]) {
+		this.addElement(elements[1]);
+	}
 
 	return element;
 });
@@ -573,7 +604,6 @@ ChimeraField.setMethod(function addButtons() {
  * @version  1.0.0
  */
 ChimeraField.setMethod(function renderEdit() {
-
 	var html = '<input class="chimeraField-string" type="text">';
 
 	this.setMainElement(html);
@@ -710,467 +740,6 @@ ChimeraField.setMethod(function setReadOnly(value) {
 	}
 });
 
-/**
- * The Geopoint ChimeraField class
- *
- * @constructor
- *
- * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-GeopointChimeraField = ChimeraField.extend(function GeopointChimeraField(container, variables) {
-	GeopointChimeraField.super.call(this, container, variables);
-});
-
-/**
- * Create the edit input element
- *
- * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
- */
-GeopointChimeraField.setMethod(function renderEdit() {
-
-	var html = '<div class="geopoint-div geopoint-edit"></div>';
-
-	this.setMainElement(html);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-GeopointChimeraField.setMethod(function initEdit() {
-
-	var that = this,
-	    $input = this.$input,
-	    coordinates,
-	    value;
-
-	options = {
-		minZoom: 1,
-		maxZoom: 16,
-		dragging: true,
-		editable: true
-	};
-
-	value = this.value || {};
-
-	coordinates = value.coordinates || [];
-
-	result = applyGeopoint($input, coordinates[0], coordinates[1], options);
-
-	if (!result) {
-		throw new Error('Map wrapper could not be created');
-	}
-
-	map = result[0];
-	marker = result[1];
-
-	marker.on('dragend', function afterDrag() {
-		var coordinates = marker.getLatLng();
-		that.setValue([coordinates.lat, coordinates.lng]);
-		//$el.data('new-value', [coordinates.lat, coordinates.lng]);
-	});
-});
-
-/**
- * Initialize the list field
- *
- * @param    {Mixed}   value
- */
-GeopointChimeraField.setMethod(function initList() {
-
-	var that = this,
-	    $input = $('.geopoint-list', this.intake),
-	    options,
-	    coordinates,
-	    value;
-
-	options = {
-		dragging: false
-	};
-
-	value = this.value || {};
-
-	coordinates = value.coordinates || [];
-
-	result = applyGeopoint($input, coordinates[0], coordinates[1], options);
-});
-
-function applyGeopoint($el, lat, lng, _options) {
-
-	var markOptions,
-	    options,
-	    marker,
-	    lat,
-	    lng,
-	    map;
-
-	if ($el == null) {
-		throw new Error('Wrapper element not found, can\'t create map');
-	}
-
-	// Skip this map if the coordinates are not numbers
-	if (!isFinite(lat) || !isFinite(lng)) {
-		lat = 51.044821;
-		lng = 3.738785;
-	}
-
-	options = {
-		dragging: false,
-		touchZoom: false,
-		center: [lat+0.0012, lng],
-		zoomControl: false,
-		attributionControl: false,
-		scrollWheelZoom: 'center',
-		minZoom: 13,
-		maxZoom: 15,
-		zoom: 14
-	};
-
-	Object.assign(options, _options);
-
-	// Add the point to the map
-	map = L.map($el[0], options);
-
-	L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-		attribution: '',
-		maxZoom: 16
-	}).addTo(map);
-
-	markOptions = {};
-
-	if (options.editable === true) {
-		markOptions.draggable = true;
-	}
-
-	marker = L.marker([lat, lng], markOptions).addTo(map);
-
-	return [map, marker];
-}
-
-/**
- * The Password ChimeraField class
- *
- * @constructor
- *
- * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-var PasswordChimeraField = ChimeraField.extend(function PasswordChimeraField(container, variables) {
-	PasswordChimeraField.super.call(this, container, variables);
-});
-
-/**
- * Create the edit input element
- *
- * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
- */
-PasswordChimeraField.setMethod(function renderEdit() {
-
-	var html = '<input class="chimeraField-string chimeraPassword-first" type="password" placeholder="Enter a new password">';
-	html += '<input class="chimeraField-string chimeraPassword-second" type="password" placeholder="Repeat the same password">';
-
-	this.setMainElement(html);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-PasswordChimeraField.setMethod(function initEdit() {
-
-	var that = this,
-	    $first = $('.chimeraPassword-first', this.intake),
-	    $second = $('.chimeraPassword-second', this.intake);
-
-	$first.add($second).change(function onFirstChange() {
-
-		if ($first.val() == $second.val()) {
-			that.setValue($first.val());
-		} else {
-			that.setValue(null);
-		}
-	});
-});
-
-/**
- * The Text ChimeraField class
- *
- * @constructor
- *
- * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-var TextChimeraField = ChimeraField.extend(function TextChimeraField(container, variables) {
-	TextChimeraField.super.call(this, container, variables);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-TextChimeraField.setMethod(function initEdit() {
-	
-	var that = this,
-	    name,
-	    editor, id;
-
-
-	var editor = CKEDITOR.inline(that.intake.find('.chimeraField-wysiwyg')[0], {
-		extraPlugins: 'sourcedialog',
-		filebrowserBrowseUrl: '/boeckeditor',
-		allowedContent: 'img form input param pre flash br a td p span font em strong table tr th td style script iframe u s li ul div[*]{*}(*)'
-	});
-
-	editor.on('focus', function () {
-		editor.setReadOnly(!!that.readOnly);
-	});
-
-	this.ckeditor = editor;
-
-	editor.on('change', function onCkChange() {
-		that.setValue(editor.getData());
-	});
-
-	return;
-
-	name = '.medium-editor';
-	id = $(name, this.intake)[0].id;
-
-	editor = new MediumEditor(name, {
-		buttons: ['bold', 'italic', 'underline', 'strikethrough', 'anchor', 'media', 'image', 'header1', 'header2', 'quote', 'pre'],
-		extensions: {
-			'h2k': new MediumButton({label:'h2k', start:'<h2>', end:'</h2>'}),
-			'media': new MediumButton({label: 'Media', action: function initPickMedia() {
-
-				var elementId = 'media-' + Date.now();
-
-				pickMediaId(function (err, id) {
-
-					var img = $('#' + elementId);
-					img.attr('src', '/media/image/' + id);
-
-				});
-
-				return '<img id="' + elementId + '"></img>';
-			}})
-		}
-	});
-
-	var Router = new hawkejs.constructor.helpers.Router(),
-	    uploadUrl = Router.routeUrl('Media::uploadsingle');
-
-	$(name).mediumInsert({
-		editor: editor,
-		addons: {
-			images: {
-				imagesUploadScript: uploadUrl
-			},
-			embeds: {},
-			tables: {}
-		}
-	});
-
-	$(name).on('input', function onTextEdit(){
-		if($(this)[0].id === id){
-			that.setValue($(this)[0].innerHTML);
-		}
-	});
-});
-
-/**
- * Make the CKEditor instance read-only
- *
- * @param    {Boolean}   value
- */
-TextChimeraField.setMethod(function setReadOnly(value) {
-	var that = this;
-	this.readOnly = value;
-});
-
-/**
- * The BelongsTo ChimeraField class
- *
- * @constructor
- *
- * @author   Jelle De Loecker <jelle@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(container, variables) {
-	BelongstoChimeraField.super.call(this, container, variables);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-BelongstoChimeraField.setMethod(function initEdit() {
-
-	var that = this,
-	    $input = $('.chimeraField-prime', this.intake).first(),
-	    coordinates,
-	    modelName,
-	    baseUrl,
-	    initted,
-	    Router,
-	    url;
-
-	// Create a new Router helper instance
-	Router = new hawkejs.constructor.helpers.Router();
-	modelName = this.field.fieldType.options.modelName;
-
-	baseUrl = Blast.Collection.URL.parse(Router.routeUrl('RecordAction', {
-		controller: 'editor',
-		subject: this.variables.__urlparams.subject,
-		action: 'related_data',
-		id: this.variables.__urlparams.id
-	}));
-
-	$input.selectize({
-		valueField: '_id',
-		labelField: 'title',
-		searchField: 'title',
-		preload: true,
-		create: false,
-		render: {
-			item: function selectedItem(item) {
-				return '<div><span>' + item.title + '</span></div>';
-			},
-			option: function shownOption(item, escape) {
-				return '<div><span>' + item.title + '</span></div>';
-			}
-		},
-		load: function load(query, callback) {
-
-			var url = baseUrl.clone(),
-			    thisSelect = this,
-			    setInitValue;
-
-			url.addQuery('fieldpath', that.field.path);
-
-			if (!initted) {
-				initted = true;
-				setInitValue = true;
-			}
-
-			$.get(url, function gotResult(response) {
-
-				var result = [],
-				    item,
-				    i;
-
-				for (i = 0; i < response.length; i++) {
-
-					item = response[i];
-
-					if (item[modelName]) {
-						item = item[modelName];
-					}
-
-					result.push({
-						_id: item._id,
-						title: item.title || item.name,
-						data: response[i]
-					});
-				}
-
-				callback(result);
-
-				if (setInitValue && that.variables.data.value) {
-					thisSelect.setValue(that.variables.data.value);
-				}
-			}, 'json');
-		},
-		onChange: function changed(value) {
-			that.setValue(value);
-		}
-	});
-
-	this.selectizeInstance = $input[0].selectize;
-});
-
-/**
- * Set the new value for this field.
- * Only new values will be sent to the server on save.
- *
- * @param    {Mixed}   value
- */
-BelongstoChimeraField.setMethod(function setReadOnly(value) {
-	this.selectizeInstance.disable(value);
-});
-
-/**
- * The HasOneParent ChimeraField class
- *
- * @constructor
- *
- * @author   Jelle De Loecker <jelle@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-var HasoneparentChimeraField = BelongstoChimeraField.extend(function HasoneparentChimeraField(container, variables) {
-	HasoneparentChimeraField.super.call(this, container, variables);
-});
-
-/**
- * The Enum ChimeraField class
- *
- * @constructor
- *
- * @author   Jelle De Loecker <jelle@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-var EnumChimeraField = BelongstoChimeraField.extend(function EnumChimeraField(container, variables) {
-	EnumChimeraField.super.call(this, container, variables);
-});
-
-/**
- * The HasAndBelongsToMany ChimeraField class
- *
- * @constructor
- *
- * @author   Jelle De Loecker <jelle@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-var HABTMChimeraField = BelongstoChimeraField.extend(function HabtmChimeraField(container, variables) {
-	HabtmChimeraField.super.call(this, container, variables);
-});
-
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/view'}, applySave);
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/edit'}, applySave);
 hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/add'}, applySave);
@@ -1254,153 +823,6 @@ function applySave(el, variables) {
 		preventDuplicate = true;
 	});
 }
-
-/**
- * The Boolean ChimeraField class
- *
- * @constructor
- *
- * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-BooleanChimeraField = ChimeraField.extend(function BooleanChimeraField(container, variables) {
-	BooleanChimeraField.super.call(this, container, variables);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-BooleanChimeraField.setMethod(function initEdit() {
-	
-	var that = this,
-	    $input = $('.chimeraEditor-input', this.intake);
-	
-	$input.change(function onBooleanEdit() {
-		that.setValue($input.is(':checked'));
-	});
-
-});
-
-/**
- * The Datetime ChimeraField class
- *
- * @constructor
- *
- * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-DatetimeChimeraField = ChimeraField.extend(function DatetimeChimeraField(container, variables) {
-	DatetimeChimeraField.super.call(this, container, variables);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-DatetimeChimeraField.setMethod(function initEdit() {
-	
-	var that = this;
-	
-	applyDateField(that, 'datetime');
-
-});
-
-/**
- * The Date ChimeraField class
- *
- * @constructor
- *
- * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-DateChimeraField = ChimeraField.extend(function DateChimeraField(container, variables) {
-	DateChimeraField.super.call(this, container, variables);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-DateChimeraField.setMethod(function initEdit() {
-	
-	var that = this;
-	
-	applyDateField(that, 'date', {time: false});
-
-});
-
-/**
- * The Time ChimeraField class
- *
- * @constructor
- *
- * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
- *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
- */
-TimeChimeraField = ChimeraField.extend(function TimeChimeraField(container, variables) {
-	TimeChimeraField.super.call(this, container, variables);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-TimeChimeraField.setMethod(function initEdit() {
-	
-	var that = this;
-	
-	applyDateField(that, 'time', {date: false});
-
-});
-
-
-function applyDateField(that, type, options) {
-
-	var $el = that.intake,
-	    $wrapper = $('.chimeraEditor-' + type + '-edit', $el),
-	    calender,
-	    value;
-
-	value = $wrapper.data('value');
-
-	if (value != null) {
-		value = new Date(value);
-	}
-
-	options = Object.assign({weekStart: 1, initialValue: value}, options);
-
-	// Apply `rome`
-	calender = rome($wrapper[0], options);
-
-	this.romeCalender = calender;
-
-	calender.on('data', function dateChange(dateString) {
-		var newdate = calender.getDate();
-		that.setValue(newdate);
-	});
-}
-
 
 hawkejs.scene.on({type: 'set', template: 'chimera/sidebar'}, sidebarCollapse);
 
