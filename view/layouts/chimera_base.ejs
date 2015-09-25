@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title></title>
-		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-		<% this.foundation() %>
-		<script>
-			var Blast = __Protoblast;
-			Blast.__init(true);
-		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<% this.foundation({protoblast: true}) %>
 	</head>
 	<body>
 		<% assign('body') %>
+		<% this.bottom() %>
 	</body>
 </html>

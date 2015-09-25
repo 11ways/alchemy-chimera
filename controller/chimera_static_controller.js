@@ -16,6 +16,7 @@ var ChimeraStatic = Function.inherits('Controller', function ChimeraStaticContro
  * @param   {Conduit}   conduit
  */
 ChimeraStatic.setMethod(function dashboard(conduit) {
+	this.set('pagetitle', 'Dashboard');
 	this.render('chimera/dashboard');
 });
 

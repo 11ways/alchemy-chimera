@@ -1,21 +1,40 @@
-<nav class="sideNav">
-	<ul class="sideNav-collection">
-		<% for (var section_name in sections){ %>
-			<li class="sideNav-link is-parent">
-				<a class="sideNav-text section" href="#" data-childclass="<%= section_name.tableize() %>" data-after="&#9654;"><%= section_name %></a>
-				<ul class="sideNav-collection is-child <%= section_name.tableize() %> hidden">
-					<% for (var model_name in sections[section_name]) { %>
-						<% model = sections[section_name][model_name]; %>
-						<li class="sideNav-link">
-							<% if (__urlparams.subject == model.parameters.subject) { %>
-								<% Router.printRoute(model.type, model.parameters, {title: model.title, className: 'sideNav-text active'}) %>
-							<% } else { %>
-								<% Router.printRoute(model.type, model.parameters, {title: model.title, className: 'sideNav-text'}) %>
-							<% } %>
-						</li>
-					<% } %>
-				</ul>
+<nav class="side-nav">
+	<ul class="side-nav-collection">
+		<% chimera_menu.forEach(function eachEntry(entry, index) { %>
+			<li class="side-nav-entry <% if (!Object.isEmpty(entry.children)) { print('is-parent') } %>">
+
+				<a class="js-he-link side-nav-link section"
+					href="<%
+					if (entry.route) {
+						print(Router.routeUrl(entry.route, entry.parameters));
+					} else if (entry.href) {
+						print(entry.href);
+					} else {
+						print('#');
+					}
+				%>">
+					<span class="link-icon">
+					<% if (entry.icon) {
+						if (entry.icon.svg) {
+							print(Media.svg(entry.icon.svg));
+						} else if (entry.icon.html) {
+							print(entry.icon.html);
+						} else {
+							print('&bull;');
+						}
+					} else {
+						print('&bull;');
+					} %>
+					</span>
+					<span class="link-title"><%= entry.title %></span>
+				</a>
+
+				<% if (!Object.isEmpty(entry.children)) { %>
+					<ul class="side-nav-collection is-child">
+						<% entry.children.forEach(eachEntry) %>
+					</ul>
+				<% } %>
 			</li>
-		<% } %>
+		<% }) %>
 	</ul>
 </nav>

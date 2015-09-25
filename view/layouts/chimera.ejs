@@ -1,39 +1,9 @@
-<% expands('layouts/chimera_base') %>
-<% style('chimera/chimera') %>
-<% style(['vex/vex', 'vex/vex.default', 'vex/vex.flat', 'vex/vex-theme-bottom-right-corner']) %>
-<% style('selectize/0.11/selectize.default') %>
+<%
+// Expand into the chimera body
+expands('layouts/chimera_body');
 
-<% script(['vex/vex', 'vex/vex.dialog', 'selectize/0.11/selectize', 'chimera/chimera']) %>
-
-<% start('body') %>
-<!-- Chimera: Non-semantic div, flexbox wrapper -->
-<div id="layout">
-	<!-- First semantic block of the page: the header,
-	     even though it's on the side of the page. -->
-	<header class="pageSidebar">
-		<div class="pageSidebar-fixed">
-			<div class="pageSidebar-branding u-stretch">
-				<h1 class="pageSidebar-title u-child"><% if(project_title){ %> <%= project_title %> <% } else { %> project_title <% } %></h1>
-				<p class="u-child"><a href="/chimera" class="home-btn"><span class="fi-home"></span></a></p>
-			</div>
-			<% implement('chimera/sidebar') %>
-		</div>
-	</header>
-	<div class="pageCentral">
-		<div class="pageCentral-child pageCentral-topBar u-stretch">
-			<span class="u-child">Dashboard <% if (__urlparams.controller) { %> &gt; <%= __urlparams.controller.humanize() %><% } %> <% if (__urlparams.subject) { %> &gt; <%= __urlparams.subject.humanize() %><% } %></span>
-			<p class="u-child">
-			<% userData = __UserData || {} %>
-			<% if (userData.name) {
-				print(userData.name);
-			} else {
-				// No name found, print nothing
-			} %>
-			<a href="/logout" class="logout"><span class="fi-power"></span></a></p>
-		</div>
-		<div class="pageCentral-child pageCentral-main">
-			<% assign('pageCentral') %>
-		</div>
-	</div>
-</div>
-<% end('body') %>
+if (pagetitle) {
+	start('chimera-title');
+	print(pagetitle);
+	end('chimera-title');
+}

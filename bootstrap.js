@@ -1,5 +1,8 @@
+var ChimeraController,
+    options;
+
 // Define the default options
-var options = {
+options = {
 
 	// The name of the base layout
 	baselayout: 'admin_base',
@@ -25,7 +28,7 @@ var options = {
 };
 
 // Inject the user-overridden options
-alchemy.plugins.chimera = Object.assign(options, alchemy.plugins.chimera);
+alchemy.plugins.chimera = Object.merge(options, alchemy.plugins.chimera);
 
 if (!alchemy.plugins.acl) {
 	alchemy.plugins.acl = {placeholders: {}}
@@ -35,8 +38,8 @@ if (!alchemy.plugins.acl) {
 // Set the acl placeholder variable
 //alchemy.plugins.acl.placeholders.chimeraRouteName = alchemy.plugins.chimera.routename;
 
-// Get the view settings
-var viewSettings = {
+// Construct the view settings
+options.view_settings = {
 	baselayout: 'layouts/' + options.baselayout,
 	bodylayout: 'layouts/' + options.bodylayout,
 	bodyblock: options.bodyblock,
@@ -44,6 +47,9 @@ var viewSettings = {
 	contentblock: options.contentblock,
 	title: options.title
 };
+
+// Create the menu deck
+options.menu = new Deck();
 
 var ChimeraController = Function.inherits('Controller', function ChimeraController(conduit, options) {
 
@@ -94,9 +100,4 @@ ChimeraController.setMethod(function getActions(type) {
 	}
 
 	return this.actions[type];
-});
-
-// Send the ACL layout options to the client
-alchemy.hawkejs.on({type: 'viewrender', status: 'begin', client: false}, function onBegin(viewRender) {
-	viewRender.expose('chimera-view-setting', viewSettings);
 });
