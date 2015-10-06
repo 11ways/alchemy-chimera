@@ -1,27 +1,31 @@
 <% expands('layouts/chimera') %>
 
 <% start('chimera-cage') %>
-	<main>
-		<article class="chimeraEditor">
-			<header class="chimeraEditor-header u-stretch">
-				<h1 class="pageTitle u-child"><%= pageTitle %>:</h1>
-				<nav class="u-child">
-					<% Chimera.printActions('model', {className: 'btn-top'}) %>
-				</nav>
-			</header>
-			<table class="modelList">
+<x-panel class="table-panel model-list-panel" role="main">
+	<x-panel-title></x-panel-title>
+	<x-panel-action>
+		<% Chimera.printActions('model', {className: 'btn-top'}) %>
+	</x-panel-action>
+	<x-panel-body>
+		<table class="table table-bordered table-hover model-list">
+			<thead>
 				<tr>
-					<th class="modelList-radio"><!-- Radiobuttons --></th>
+					<th class="model-list-checkbox">
+						<label class="cbx-label cbx-label-primary">
+							<input type="checkbox" class="check-all">
+							<span></span>
+						</label>
+					</th>
 					<%
-						while (fields.hasNext()) {
-							field = fields.next().value;
+					while (fields.hasNext()) {
+						field = fields.next().value;
 
-							print('<th>');
-							Pagination.sort({field: field.path, content: field.fieldType.title});
-							print('</th>');
-						}
+						print('<th>');
+						print(Pagination.sort({field: field.path, content: field.fieldType.title}));
+						print('</th>');
+					}
 					%>
-					<th class="modelList-right">Actions</th>
+					<th class="record-actions">Actions</th>
 				</tr>
 				<%
 					iterator = records.createIterator();
@@ -30,33 +34,29 @@
 						record = item.value;
 						fields = record.fields;
 
-						print('<tr class="modelList-record">');
+						print('<tr class="model-list-record">');
 
-						print('<td><div class="cbx">');
-						print('<input class="cbx-input" type="checkbox" id="cbx-r-' + item.index + '" value="' + record.id + '">');
-						print('<label class="cbx-label" for="cbx-r-' + item.index + '"><span class="cbx-span"></span></label>');
-						print('</div></td>');
+						print('<td class="model-list-checkbox"><label class="cbx-label cbx-label-primary">');
+						print('<input type="checkbox" value="' + record.id + '"><span></span>');
+						print('</label></td>');
 
 						for (i = 0; i < fields.length; i++) {
 							print('<td>');
 							Chimera.printField(fields[i]);
 							print('</td>');
 						}
-						print('<td class="chimeraEditor-actions--inline">');
+						print('<td class="record-actions">');
 						Chimera.printActions('record', {className: 'btn-inline'}, record);
 						print('</td>');
 						print('</tr>');
 					}
 				%>
-			</table>
-
-			<footer class="chimeraEditor-footer u-stretch">
-				<% Pagination.show({class: 'u-child'}) %>
-				<div class="u-child"></div>
-				<nav class="u-child">
-					<% Chimera.printActions('model', {className: 'btn-top'}) %>
-				</nav>
-			</footer>
-		</article>
-	</main>
+			</thead>
+		</table>
+	</x-panel-body>
+	<x-panel-footer class="chimeraEditor-footer u-stretch">
+		<%= Pagination.getInfo() %>
+		<% Pagination.show() %>
+	</x-panel-footer>
+</x-panel>
 <% end('chimera-cage') %>

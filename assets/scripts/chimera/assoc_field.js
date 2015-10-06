@@ -23,6 +23,10 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 		recordId = Object.path(variables, 'item.value.id');
 	}
 
+	if (!recordId) {
+		recordId = variables.__recordId || "000000000000000000000000";
+	}
+
 	BelongstoChimeraField.super.call(this, parent, value, container, variables, prefix);
 
 	// Store the modelname

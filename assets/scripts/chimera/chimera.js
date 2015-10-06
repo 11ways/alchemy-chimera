@@ -1,14 +1,17 @@
 hawkejs.scene.on({type: 'set', template: 'chimera/field_wrappers/_wrapper'}, function applyField(element, variables) {
 
-	var intake = element.getElementsByClassName('chimeraField-intake')[0],
-	    input = intake.getElementsByTagName('input')[0],
-	    viewname;
+	var options,
+	    intake = element.getElementsByClassName('chimeraField-intake')[0],
+	    input = intake.getElementsByTagName('input')[0];
 
-	viewname = variables.data.field.viewname;
+	// Create the wrap options
+	options = {
+		variables: variables,
+		container: element,
+		viewname: variables.data.field.viewname
+	};
 
-	//console.log('Should create CF:', viewname, element, variables);
-
-	new ChimeraFieldWrapper(viewname, element, variables)
+	new ChimeraFieldWrapper(options);
 
 	//ChimeraField.create(viewname, element, variables);
 });
@@ -31,37 +34,70 @@ hawkejs.scene.on({type: 'rendered'}, function rendered(variables, renderData) {
  * @since    1.0.0
  * @version  1.0.0
  *
- * @param    {DOMElement}   container
- * @param    {Object}       variables
+ * @param    {Object}   options
  */
-var ChimeraFieldWrapper = Function.inherits(function ChimeraFieldWrapper(viewname, container, variables) {
+var ChimeraFieldWrapper = Function.inherits(function ChimeraFieldWrapper(options) {
+
+	if (!options) {
+		throw new Error('No options given for Chimera field wrapper');
+	}
+
+	// Field data
+	if (options.field) {
+		this.field = options.field;
+	} else {
+		this.field = options.variables.data.field;
+	}
+
+	// The name of the field, for debugging purposes mainly
+	this.name = this.field.path;
 
 	// The viewname to render
-	this.viewname = viewname;
+	this.viewname = options.viewname;
+
+	// The value of this field
+	if ('value' in options) {
+		this.value = options.value;
+	} else {
+		this.value = options.variables.data.value;
+	}
+
+	// The variables passed to the rendering element
+	this.variables = options.variables;
 
 	// The container element, with the 'chimeraField-container' CSS class
-	this.container = container;
+	this.container = options.container;
 
 	// Get the intake element, where the actual inputs should go
-	this.intake = $(container.getElementsByClassName('chimeraField-intake')[0]);
+	if (options.intake) {
+		this.intake = $(options.intake);
+	} else {
+		this.intake = $(this.container.getElementsByClassName('chimeraField-intake')[0]);
+	}
+
+	// See if this field is nested inside another field
+	if (options.nested_in) {
+		this.nested_in = options.nested_in;
+	}
 
 	// Store this instance on the intake element
 	this.intake[0].CFWrapper = this;
 
-	// The variables passed to the rendering element
-	this.variables = variables;
+	// Store the initial value
+	this.original_value = this.value;
 
 	// Available prefixes array
-	this.prefixes = variables.prefixes;
+	if (options.prefixes) {
+		this.prefixes = options.prefixes;
+	} else {
+		this.prefixes = this.variables.prefixes;
+	}
 
 	// Prefix containers
 	this.prefixContainers = null;
 
 	// The currently showing prefix
 	this.activePrefix = null;
-
-	// Field data
-	this.field = variables.data.field;
 
 	// The action name
 	this.action = this.field.viewaction;
@@ -76,13 +112,25 @@ var ChimeraFieldWrapper = Function.inherits(function ChimeraFieldWrapper(viewnam
 	this.fields = [];
 
 	// Is this a read-only field?
-	this.readOnly = variables.__chimeraReadOnly === true;
+	if ('read_only' in options) {
+		this.readOnly = options.read_only;
+	} else {
+		this.readOnly = this.variables.__chimeraReadOnly === true;
+	}
 
 	this.initFields();
 	this.addButtons();
+});
 
-	console.log('WRAPPER', this.viewname, this.action, this.container, variables);
-
+/**
+ * Static create method
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraFieldWrapper.setStatic(function create(options) {
+	return new this(options);
 });
 
 /**
@@ -153,12 +201,12 @@ ChimeraFieldWrapper.setMethod(function initFields() {
 	}
 
 	if (this.isArray) {
-		values = Array.cast(this.variables.data.value);
+		values = Array.cast(this.value);
 	} else {
 		values = [];
 
-		if (this.variables.data.value != null) {
-			values[0] = this.variables.data.value;
+		if (this.value != null) {
+			values[0] = this.value;
 		}
 	}
 
@@ -184,6 +232,10 @@ ChimeraFieldWrapper.setMethod(function addButtons() {
 	    $left = $('.chimeraField-left', that.container),
 	    el,
 	    i;
+
+	if (!$left.length) {
+		$left = $(that.container);
+	}
 
 	if (this.isArray) {
 		el = Blast.parseHTML('<button class="chimeraField-add-entry">+</button>');
@@ -246,13 +298,7 @@ ChimeraFieldWrapper.setMethod(function getData(changesOnly) {
 
 	this.fields.forEach(function eachField(field) {
 
-		var value;
-
-		if (typeof field.getData == 'function') {
-			value = field.getData();
-		} else {
-			value = field.value;
-		}
+		var value = field.getData();
 
 		if (changesOnly && Object.alike(value, field.originalValue)) {
 			return;
@@ -298,12 +344,34 @@ ChimeraFieldWrapper.setMethod(function showPrefix(prefix) {
  */
 ChimeraFieldWrapper.setMethod(function addValue(value) {
 
-	var prefix;
+	var that = this,
+	    prefixes,
+	    prefix;
 
 	if (this.isTranslatable) {
-		for (prefix in value) {
-			this.addPrefixValue(value[prefix], prefix)
+
+		// Get the basic prefixes
+		prefixes = this.prefixes.slice(0);
+
+		// Add prefixes from within the value
+		if (Object.isObject(value)) {
+			for (prefix in value) {
+				if (prefix.length < 128 && prefixes.indexOf(prefix) == -1) {
+					prefixes.push(prefix);
+				}
+			}
 		}
+
+		prefixes.forEach(function eachPrefix(prefix) {
+
+			var val;
+
+			if (value) {
+				val = value[prefix];
+			}
+
+			that.addPrefixValue(val, prefix);
+		});
 	} else {
 		this.addPrefixValue(value);
 	}
@@ -419,7 +487,7 @@ var ChimeraField = Function.inherits(function ChimeraField(parent, value, contai
 	this.originalValue = value;
 
 	// Field data
-	this.field = variables.data.field;
+	this.field = parent.field;
 
 	// The prefix of the field
 	this.prefix = prefix;
@@ -483,7 +551,7 @@ ChimeraField.setProperty(function index() {
  */
 ChimeraField.setProperty(function path() {
 
-	var result = this.variables.data.field.path;
+	var result = this.field.path;
 
 	if (this.index !== false) {
 		result += '.' + this.index;
@@ -494,6 +562,17 @@ ChimeraField.setProperty(function path() {
 	}
 
 	return result;
+});
+
+/**
+ * Get the value to store in the database
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraField.setMethod(function getData() {
+	return this.value;
 });
 
 /**
@@ -740,9 +819,9 @@ ChimeraField.setMethod(function setReadOnly(value) {
 	}
 });
 
-hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/view'}, applySave);
-hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/edit'}, applySave);
-hawkejs.scene.on({type: 'set', name: 'pageCentral', template: 'chimera/editor/add'}, applySave);
+hawkejs.scene.on({type: 'set', name: 'chimera-cage', template: 'chimera/editor/view'}, applySave);
+hawkejs.scene.on({type: 'set', name: 'chimera-cage', template: 'chimera/editor/edit'}, applySave);
+hawkejs.scene.on({type: 'set', name: 'chimera-cage', template: 'chimera/editor/add'}, applySave);
 
 /**
  * Apply save functionality when clicking on the "save" button
@@ -757,7 +836,7 @@ function applySave(el, variables) {
 
 	isDraft = this.filter.template === 'chimera/editor/add';
 
-	$editor = $('.chimeraEditor', el).first();
+	$editor = $('.chimera-editor', el).first();
 	$save = $('.action-save', $editor);
 
 	if (variables.__chimeraReadOnly) {
@@ -800,6 +879,12 @@ function applySave(el, variables) {
 			var $wrapper = $(this),
 			    instance = this.CFWrapper;
 
+			// Skip nested wrappers,
+			// this could mess up the data
+			if (instance.nested_in) {
+				return;
+			}
+
 			Object.merge(data, instance.getData(true));
 		});
 
@@ -808,6 +893,8 @@ function applySave(el, variables) {
 		}
 
 		var editurl = document.location.href;
+
+		console.log('Saving', obj);
 
 		hawkejs.scene.openUrl($save.attr('href'), {post: obj, history: false}, function(err, result) {
 
@@ -919,6 +1006,6 @@ function chimeraFlash(flash) {
 	}, flash.timeout || 2000);
 }
 
-$(document).ready(function() {
-	vex.defaultOptions.className = 'vex-theme-flat-attack';
-});
+// $(document).ready(function() {
+// 	vex.defaultOptions.className = 'vex-theme-flat-attack';
+// });

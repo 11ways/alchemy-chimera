@@ -21,7 +21,7 @@ alchemy.plugins.chimera.menu.set('dashboard', {
 	route: 'chimera@Dashboard',
 	parameters: {},
 	icon: {svg: 'chimera/home'}
-});
+}, 9999);
 
 // Set user data for chimera
 chimera.use(function setChimeraData(req, res, next) {

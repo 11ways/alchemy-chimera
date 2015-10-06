@@ -29,6 +29,7 @@ options = {
 
 // Inject the user-overridden options
 alchemy.plugins.chimera = Object.merge(options, alchemy.plugins.chimera);
+global.chimera = alchemy.plugins.chimera;
 
 if (!alchemy.plugins.acl) {
 	alchemy.plugins.acl = {placeholders: {}}

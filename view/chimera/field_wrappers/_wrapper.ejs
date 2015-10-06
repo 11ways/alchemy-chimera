@@ -21,26 +21,13 @@ if (data.field) {
 
 	if (data.field.script_file) {
 		script(['chimera/chimera'].concat(data.field.script_file));
+	} else {
+		script(['chimera/chimera']);
 	}
 
 	if (data.field.style_file) {
 		style(data.field.style_file);
 	}
 }
-
-// // See if it's an arrayable field
-// if (data.field.fieldType.isArray) {
-// 	value = Array.cast(data.value);
-// 	i = 0;
-
-// 	do {
-// 		newData = {data: __Protoblast.Bound.Object.assign({}, data, {value: value[i]})};
-// 		console.log('Implementing', fieldElement);
-// 		implement(fieldElement, null, newData);
-// 		i++;
-// 	} while (i < value.length);
-// } else {
-// 	implement(fieldElement);
-// }
 
 %>

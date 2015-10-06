@@ -11,15 +11,15 @@ var Editor = Function.inherits('ChimeraController', function EditorChimeraContro
 
 	this.addComponent('paginate');
 
-	this.addAction('model', 'index', {title: '<span class="fi-list-bullet"></span>'});
-	this.addAction('model', 'add', {title: '<span class="fi-plus"></span>'});
+	this.addAction('model', 'index', {title: '<x-svg data-src="chimera/list"></x-svg>'});
+	this.addAction('model', 'add', {title: '<x-svg data-src="chimera/plus"></x-svg>'});
 
-	this.addAction('draft', 'save', {title: '<span class="fi-save"></span>', handleManual: true});
+	this.addAction('draft', 'save', {title: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
 
-	this.addAction('record', 'edit', {title: '<span class="fi-pencil"></span>'});
-	this.addAction('record', 'view', {title: '<span class="fi-eye"></span>'});
-	this.addAction('record', 'save', {title: '<span class="fi-save"></span>', handleManual: true});
-	this.addAction('record', 'remove', {title: '<span class="fi-trash"></span>'});
+	this.addAction('record', 'edit', {title: '<x-svg data-src="chimera/edit"></x-svg>'});
+	this.addAction('record', 'view', {title: '<x-svg data-src="chimera/eye"></x-svg>'});
+	this.addAction('record', 'save', {title: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
+	this.addAction('record', 'remove', {title: '<x-svg data-src="chimera/garbage"></x-svg>'});
 
 });
 
@@ -43,6 +43,8 @@ Editor.setMethod(function listing(conduit, type, view) {
 	    modelName = conduit.routeParam('subject'),
 	    model = this.getModel(modelName),
 	    chimera = model.constructor.chimera;
+
+	this.set('pagetitle', modelName.titleize().pluralize());
 
 	model.disableTranslations();
 
@@ -119,7 +121,7 @@ Editor.setMethod(function add(conduit) {
 		that.set('groups', groups);
 		that.set('actions', that.getActions());
 		that.set('modelName', modelName);
-		that.set('pageTitle', modelName.humanize());
+		that.set('pagetitle', modelName.humanize() + ': Add');
 		that.internal('modelName', modelName);
 		that.internal('recordId', id);
 
@@ -165,7 +167,7 @@ Editor.setMethod(function edit(conduit) {
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
 			that.set('modelName', modelName);
-			that.set('pageTitle', modelName.humanize());
+			that.set('pagetitle', modelName.humanize() + ': Edit');
 			that.internal('modelName', modelName);
 			that.internal('recordId', id);
 

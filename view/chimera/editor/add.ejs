@@ -1,54 +1,27 @@
 <% expands('layouts/chimera') %>
 
 <% start('chimera-cage') %>
-	<main>
-		<article class="chimeraEditor">
-			<header class="chimeraEditor-header u-stretch">
-				<h1 class="pageTitle u-child"><%= pageTitle %>:</h1>
-				<nav class="u-child">
-					<% Chimera.printActions('model', {className: 'btn-top'}, record) %>
-					<% Chimera.printActions('draft', {className: 'btn-top'}, record) %>
-				</nav>
-			</header>
-
-			<div class="radioTabs">
-
-				<%
-					counter = 0;
-
-					for (name in groups) {
-						record = groups[name][0];
-						fields = record.fields;
-						id = record.id;
-
-						print('<input class="radioTabs-input" name="etab" type="radio" id="r' + counter + '"');
-						if (counter === 0) print(' checked');
-						print('>');
-						print('<label class="radioTabs-label" for="r' + counter + '"><section>');
-						print('<h1 class="radioTabs-title">');
-						print(name);
-						print('</h1>');
-						print('<div class="radioTabs-content">');
-
-						for (i = 0; i < fields.length; i++) {
-							Chimera.printField(fields[i]);
-						}
-
-						print('</div>');
-						print('</section></label>');
-
-						counter++;
-					}
-				%>
-			</div>
-
-			<footer class="chimeraEditor-footer u-stretch">
-				<div class="u-child"></div>
-				<nav class="u-child">
-					<% Chimera.printActions('model', {className: 'btn-top'}, record) %>
-					<% Chimera.printActions('draft', {className: 'btn-top'}, record) %>
-				</nav>
-			</footer>
-		</article>
-	</main>
+<main>
+	<x-panel class="chimera-editor" tabs>
+		<x-panel-tabs>
+			<% for (name in groups) { %>
+				<a href="#<%= name.slug() %>"><%= name.titleize() %></a>
+			<% } %>
+		</x-panel-tabs>
+		<x-panel-action>
+			<% Chimera.printActions('model', {className: 'btn-top'}, record) %>
+			<% Chimera.printActions('draft', {className: 'btn-top'}, record) %>
+		</x-panel-action>
+		<% for (name in groups) { %>
+			<x-panel-body id="<%= name.slug() %>">
+			<%
+				fields = groups[name][0].fields;
+				for (i = 0; i < fields.length; i++) {
+					Chimera.printField(fields[i]);
+				}
+			%>
+			</x-panel-body>
+		<% } %>
+	</x-panel>
+</main>
 <% end('chimera-cage') %>
