@@ -138,8 +138,7 @@ TimeChimeraField.setMethod(function initEdit() {
  */
 function applyDateField(that, type, options) {
 
-	var $el = that.intake,
-	    value = that.value,
+	var value = that.value,
 	    calender;
 
 	if (value != null) {
@@ -155,6 +154,7 @@ function applyDateField(that, type, options) {
 
 	calender.on('data', function dateChange(dateString) {
 		var newdate = calender.getDate();
+		console.log('Setting new value', newdate);
 		that.setValue(newdate);
 	});
 }

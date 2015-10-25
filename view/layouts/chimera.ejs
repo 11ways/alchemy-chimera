@@ -3,7 +3,8 @@
 expands('layouts/chimera_body');
 
 // Require jquery
-script(['https://code.jquery.com/jquery-2.1.4.min.js', 'selectize/0.11/selectize']);
+script([{name: 'jquery', path: '//code.jquery.com/jquery-1.11.3.min.js'}, 'selectize/0.11/selectize']);
+style('selectize/0.11/selectize');
 
 if (pagetitle) {
 	start('chimera-title');

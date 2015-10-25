@@ -15,7 +15,10 @@
  */
 var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(parent, value, container, variables, prefix) {
 
-	var recordId;
+	var that = this,
+	    recordId;
+
+	this.default_options = {};
 
 	if (variables.__urlparams.id) {
 		recordId = variables.__urlparams.id;
@@ -42,6 +45,28 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 		action: 'related_data',
 		id: recordId
 	}));
+
+	// Construct the create url
+	this.createUrl = Blast.Collection.URL.parse(this.Router.routeUrl('ModelAction', {
+		controller: 'editor',
+		subject: this.field.fieldType.options.modelName,
+		action: 'create_field_value'
+	}));
+
+	if (this.field.options.create && !this.default_options.create) {
+		this.default_options.create = function create(input, callback) {
+
+			hawkejs.scene.fetch(that.createUrl, {post: {text: input}}, function gotResult(err, data) {
+
+				if (err) {
+					console.error(err);
+					return callback();
+				}
+
+				callback({value: data._id, text: input});
+			});
+		};
+	}
 });
 
 /**
@@ -94,14 +119,15 @@ BelongstoChimeraField.setMethod(function initEdit() {
 	    $input = $(this.input),
 	    coordinates,
 	    modelName,
-	    baseUrl,
 	    initted,
+	    baseUrl,
+	    options,
 	    url;
 
 	modelName = this.modelName;
 	baseUrl = this.baseUrl;
 
-	$input.selectize({
+	options = Object.assign({
 		valueField: '_id',
 		labelField: 'title',
 		searchField: 'title',
@@ -131,6 +157,7 @@ BelongstoChimeraField.setMethod(function initEdit() {
 			$.get(url, function gotResult(response) {
 
 				var result = [],
+				    title,
 				    item,
 				    i;
 
@@ -142,9 +169,11 @@ BelongstoChimeraField.setMethod(function initEdit() {
 						item = item[modelName];
 					}
 
+					title = Object.first(item[response.displayField]) || Object.first(item.title) || Object.first(item.name);
+
 					result.push({
 						_id: item._id,
-						title: item[response.displayField] || item.title || item.name,
+						title: title,
 						data: response[i]
 					});
 				}
@@ -154,12 +183,14 @@ BelongstoChimeraField.setMethod(function initEdit() {
 				if (setInitValue && that.variables.data.value) {
 					thisSelect.setValue(that.variables.data.value);
 				}
-			}, 'json');
+			});
 		},
 		onChange: function changed(value) {
 			that.setValue(value);
 		}
-	});
+	}, this.default_options);
+
+	$input.selectize(options);
 
 	this.selectizeInstance = $input[0].selectize;
 });

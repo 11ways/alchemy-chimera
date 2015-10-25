@@ -92,6 +92,27 @@ Editor.setMethod(function listing(conduit, type, view) {
 });
 
 /**
+ * Create a field value
+ *
+ * @param   {Conduit}   conduit
+ */
+Editor.setMethod(function create_field_value(conduit, controller, subject, action) {
+
+	var that = this,
+	    model = this.getModel(subject),
+	    data = {name: conduit.body.text, title: conduit.body.text};
+
+	model.save(data, function saved(err, doc) {
+
+		if (err) {
+			return conduit.error(err);
+		}
+
+		conduit.end({_id: doc._id});
+	});
+});
+
+/**
  * The add action
  *
  * @param   {Conduit}   conduit
@@ -231,8 +252,6 @@ Editor.setMethod(function related_data(conduit) {
 
 	// Some fields (like subschemas) require record info for related data
 	model.find('first', {conditions: {_id: id}, document: false}, function gotResult(err, items) {
-
-		console.log('Found related data of', modelName, 'with', id, 'at', conduit.param('fieldpath'), '=', err, items);
 
 		field = chimera.getField(conduit.param('fieldpath'), items[0]);
 

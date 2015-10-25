@@ -23,6 +23,18 @@ alchemy.plugins.chimera.menu.set('dashboard', {
 	icon: {svg: 'chimera/home'}
 }, 9999);
 
+// Add the users to the menu
+alchemy.plugins.chimera.menu.set('users', {
+	title: 'Users',
+	route: 'chimera@ModelAction',
+	parameters: {
+		controller: 'Editor',
+		subject: 'user',
+		action: 'index'
+	},
+	icon: {svg: 'chimera/office-worker'}
+}, 9000);
+
 // Set user data for chimera
 chimera.use(function setChimeraData(req, res, next) {
 

@@ -18,6 +18,26 @@ BooleanChimeraField = ChimeraField.extend(function BooleanChimeraField(parent, v
 });
 
 /**
+ * Create the edit input element
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+BooleanChimeraField.setMethod(function renderEdit() {
+
+	var html = '<input type="checkbox"';
+
+	if (this.value) {
+		html += ' checked';
+	}
+
+	html += '>';
+
+	this.setMainElement(html);
+});
+
+/**
  * Initialize the field
  *
  * @param    {Mixed}   value
@@ -25,7 +45,7 @@ BooleanChimeraField = ChimeraField.extend(function BooleanChimeraField(parent, v
 BooleanChimeraField.setMethod(function initEdit() {
 
 	var that = this,
-	    $input = $('.chimeraEditor-input', this.intake);
+	    $input = $(this.input);
 
 	$input.change(function onBooleanEdit() {
 		that.setValue($input.is(':checked'));
