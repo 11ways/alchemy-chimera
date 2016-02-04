@@ -253,10 +253,17 @@ Editor.setMethod(function related_data(conduit) {
 	// Some fields (like subschemas) require record info for related data
 	model.find('first', {conditions: {_id: id}, document: false}, function gotResult(err, items) {
 
-		field = chimera.getField(conduit.param('fieldpath'), items[0]);
+		var nested_in = conduit.param('nested_in'),
+		    fieldpath = conduit.param('fieldpath');
+
+		if (nested_in) {
+			fieldpath = nested_in + '.' + fieldpath;
+		}
+
+		field = chimera.getField(fieldpath, items[0]);
 
 		if (!field) {
-			conduit.notFound('Could not find field "' + conduit.param('fieldpath') + '"');
+			conduit.notFound('Could not find field "' + fieldpath + '"');
 		} else {
 			field.sendRelatedData(conduit, items[0], options);
 		}

@@ -46,6 +46,12 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 		id: recordId
 	}));
 
+	// If this is a nested field, add that info
+	// @todo: this will only work for 1 level, not multiple...
+	if (this.parent.nested_in) {
+		this.baseUrl.addQuery('nested_in', this.parent.nested_in.field.fieldType.name);
+	}
+
 	// Construct the create url
 	this.createUrl = Blast.Collection.URL.parse(this.Router.routeUrl('ModelAction', {
 		controller: 'editor',
