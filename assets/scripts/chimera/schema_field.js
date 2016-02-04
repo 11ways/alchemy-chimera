@@ -1,9 +1,9 @@
 /**
- * The Password ChimeraField class
+ * The Schema ChimeraField class
  *
  * @constructor
  *
- * @author   Kjell Keisse   <kjell@codedor.be>
+ * @author   Jelle De Loecker <jelle@develry.be>
  * @since    1.0.0
  * @version  1.0.0
  *
@@ -18,6 +18,11 @@ var SchemaChimeraField = ChimeraField.extend(function SchemaChimeraField(parent,
 	var that = this,
 	    base;
 
+	// @todo: this is probably breaking array support for schema's
+	if (Array.isArray(value)) {
+		value = value[0];
+	}
+
 	// Make sure the fields exist inside the value object
 	if (!value) {
 
@@ -27,10 +32,12 @@ var SchemaChimeraField = ChimeraField.extend(function SchemaChimeraField(parent,
 		// Get the original value of the parent wrapper
 		base = Object.first(parent.original_value);
 
-		// Copy over the fields, but not the value
-		base.fields.forEach(function eachField(entry) {
-			value.fields.push({field: entry.field});
-		});
+		if (base && base.fields) {
+			// Copy over the fields, but not the value
+			base.fields.forEach(function eachField(entry) {
+				value.fields.push({field: entry.field});
+			});
+		}
 	}
 
 	SchemaChimeraField.super.call(this, parent, value, container, variables, prefix);
