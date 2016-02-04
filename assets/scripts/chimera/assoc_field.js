@@ -158,12 +158,19 @@ BelongstoChimeraField.setMethod(function initEdit() {
 
 				var result = [],
 				    title,
+				    items,
 				    item,
 				    i;
 
-				for (i = 0; i < response.items.length; i++) {
+				if (Array.isArray(response)) {
+					items = response;
+				} else {
+					items = response.items;
+				}
 
-					item = response.items[i];
+				for (i = 0; i < items.length; i++) {
+
+					item = items[i];
 
 					if (item[modelName]) {
 						item = item[modelName];
@@ -174,7 +181,7 @@ BelongstoChimeraField.setMethod(function initEdit() {
 					result.push({
 						_id: item._id,
 						title: title,
-						data: response[i]
+						data: items[i]
 					});
 				}
 
