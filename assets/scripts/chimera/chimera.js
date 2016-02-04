@@ -867,8 +867,31 @@ function applySave(el, variables) {
 			// Set the initial passed-along-by-server values first
 			Object.each(variables.groups, function eachGroup(group, name) {
 				group[0].fields.forEach(function eachField(entry) {
-					if (entry.value != null) {
-						Object.setPath(data, entry.field.path, entry.value);
+
+					var i, j,
+					    subgroup,
+					    subentry;
+
+					console.log('Entry:', entry)
+
+					if (entry.field.fieldType.typename == 'Schema' && entry.field.fieldType.isArray) {
+						// @todo: this hasn't really been tested,
+						// and it probably only works 1 level deep
+						for (i = 0; i < entry.value.length; i++) {
+							subgroup = entry.value[i];
+
+							for (j = 0; j < subgroup.fields.length; j++) {
+								subentry = subgroup.fields[j];
+
+								if (subentry.value != null) {
+									Object.setPath(data, entry.field.path + '.' + i + '.' + subentry.field.path, subentry.value);
+								}
+							}
+						}
+					} else {
+						if (entry.value != null) {
+							Object.setPath(data, entry.field.path, entry.value);
+						}
 					}
 				});
 			});
@@ -893,8 +916,6 @@ function applySave(el, variables) {
 		}
 
 		var editurl = document.location.href;
-
-		console.log('Saving', obj);
 
 		hawkejs.scene.openUrl($save.attr('href'), {post: obj, history: false}, function(err, result) {
 

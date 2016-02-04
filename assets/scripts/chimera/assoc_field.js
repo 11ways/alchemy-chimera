@@ -193,8 +193,8 @@ BelongstoChimeraField.setMethod(function initEdit() {
 
 				callback(result);
 
-				if (setInitValue && that.variables.data.value) {
-					thisSelect.setValue(that.variables.data.value);
+				if (setInitValue && that.value) {
+					thisSelect.setValue(that.value);
 				}
 			});
 		},
