@@ -159,6 +159,42 @@ ChimeraFieldWrapper.prepareProperty(function fieldClass() {
 });
 
 /**
+ * Get the full path to this field value
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraFieldWrapper.setMethod(function getNestedPath() {
+
+	var nested,
+	    result = '';
+
+	// Originally we only returned the field name:
+	// this.parent.nested_in.field.fieldType.name
+
+	// Get the field this is nested in
+	nested = this.nested_in;
+
+	// As long as a field is nested, do this
+	while (nested) {
+		if (result) {
+			result = nested.path + '.' + result;
+		} else {
+			result = nested.path
+		}
+
+		if (nested.parent) {
+			nested = nested.parent.nested_in;
+		} else {
+			nested = false;
+		}
+	}
+
+	return result;
+});
+
+/**
  * Create ChimeraField instances
  *
  * @param    {String}   name
@@ -562,6 +598,17 @@ ChimeraField.setProperty(function path() {
 	}
 
 	return result;
+});
+
+/**
+ * Get the path of the value it's nested in
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    1.0.0
+ * @version  1.0.0
+ */
+ChimeraField.setMethod(function getNestedPath() {
+	return this.parent.getNestedPath();
 });
 
 /**

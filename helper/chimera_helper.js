@@ -3,7 +3,16 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 	var Chimera = Hawkejs.Helper.extend(function ChimeraHelper(view) {
 		Hawkejs.Helper.call(this, view);
 	});
-var i = 0;
+
+	/**
+	 * Print the chimera field
+	 *
+	 * @author   Jelle De Loecker   <jelle@codedor.be>
+	 * @since    1.0.0
+	 * @version  1.0.0
+	 *
+	 * @param    {Object}   recordValue   Object containg fieldType and value
+	 */
 	Chimera.setMethod(function printField(recordValue) {
 
 		var that = this,
@@ -13,7 +22,6 @@ var i = 0;
 		    fblock;
 
 		variables = {
-			test: i++,
 			data: recordValue,
 			template: {
 				field: recordValue.field.viewname,
@@ -26,7 +34,7 @@ var i = 0;
 		placeholder = this.view.print_element('chimera/field_wrappers/_wrapper', variables);
 
 		// Add the container classname to the wrapper element
-		placeholder.element.addClass('chimeraField-container');
+		placeholder.element.classList.add('chimeraField-container');
 
 		// Create the 'fields' blockbuffer
 		fblock = placeholder.renderer.createBlock('field');

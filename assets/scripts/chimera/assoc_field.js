@@ -16,7 +16,9 @@
 var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(parent, value, container, variables, prefix) {
 
 	var that = this,
-	    recordId;
+	    nested_path,
+	    recordId,
+	    subject;
 
 	this.default_options = {};
 
@@ -38,18 +40,23 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 	// Create a router instance
 	this.Router = new hawkejs.constructor.helpers.Router();
 
+	subject = this.variables.__urlparams.subject || this.field.model_name;
+
 	// Construct the base url
 	this.baseUrl = Blast.Collection.URL.parse(this.Router.routeUrl('RecordAction', {
 		controller: 'editor',
-		subject: this.variables.__urlparams.subject,
+		subject: subject,
 		action: 'related_data',
 		id: recordId
 	}));
 
+	// Get the path of the value it's nested in
+	nested_path = this.getNestedPath();
+
 	// If this is a nested field, add that info
 	// @todo: this will only work for 1 level, not multiple...
-	if (this.parent.nested_in) {
-		this.baseUrl.addQuery('nested_in', this.parent.nested_in.field.fieldType.name);
+	if (nested_path) {
+		this.baseUrl.addQuery('nested_in', nested_path);
 	}
 
 	// Construct the create url
