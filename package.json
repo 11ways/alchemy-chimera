@@ -2,6 +2,13 @@
 	"name": "alchemy-chimera",
 	"description": "Chimera plugin for Alchemy MVC",
 	"version": "0.2.0",
+	"author": "Jelle De Loecker <jelle@develry.be>",
+	"keywords": [
+		"alchemy",
+		"alchemymvc",
+		"plugin",
+		"cms"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/codedor/alchemy-chimera.git"
