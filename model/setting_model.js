@@ -5,7 +5,7 @@
  *
  * @author   Kjell Keisse   <kjell@codedor.be>
  * @since    0.2.0
- * @version  1.0.0
+ * @version  0.2.0
  */
 var Setting = Model.extend(function SettingModel(options) {
 	SettingModel.super.call(this, options);
@@ -15,8 +15,8 @@ var Setting = Model.extend(function SettingModel(options) {
  * Constitute the class wide schema
  *
  * @author   Jelle De Loecker <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 Setting.constitute(function addFields() {
 	this.addField('email', 'String');
@@ -30,8 +30,8 @@ Setting.constitute(function addFields() {
  * Configure chimera for this model
  *
  * @author   Jelle De Loecker <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 Setting.constitute(function chimeraConfig() {
 

@@ -4,8 +4,8 @@
  * @constructor
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -21,8 +21,8 @@ var RomeChimeraField = Function.inherits('ChimeraField', function RomeChimeraFie
  * Create the edit input element
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 RomeChimeraField.setMethod(function renderEdit() {
 	var html = '<div class="chimeraEditor-date-edit"></div>';
@@ -35,8 +35,8 @@ RomeChimeraField.setMethod(function renderEdit() {
  * @constructor
  *
  * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -67,8 +67,8 @@ DatetimeChimeraField.setMethod(function initEdit() {
  * @constructor
  *
  * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -98,8 +98,8 @@ DateChimeraField.setMethod(function initEdit() {
  * @constructor
  *
  * @author   Kjell Keisse   <kjell@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -129,8 +129,8 @@ TimeChimeraField.setMethod(function initEdit() {
  * @constructor
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraField}   that
  * @param    {String}         type

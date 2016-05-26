@@ -1,7 +1,7 @@
 {
 	"name": "chimera",
 	"description": "Chimera plugin for Alchemy MVC",
-	"version": "1.0.0",
+	"version": "0.2.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/codedor/alchemy-chimera.git"
@@ -12,6 +12,6 @@
 	},
 	"license": "MIT",
 	"engines": {
-		"node": ">=0.8"
+		"node": "~4.5.0"
 	}
 }

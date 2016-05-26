@@ -8,8 +8,8 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 	 * Print the chimera field
 	 *
 	 * @author   Jelle De Loecker   <jelle@codedor.be>
-	 * @since    1.0.0
-	 * @version  1.0.0
+	 * @since    0.2.0
+	 * @version  0.2.0
 	 *
 	 * @param    {Object}   recordValue   Object containg fieldType and value
 	 */
@@ -47,8 +47,8 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 	 * Print the actions for a given action type
 	 *
 	 * @author   Jelle De Loecker   <jelle@codedor.be>
-	 * @since    1.0.0
-	 * @version  1.0.0
+	 * @since    0.2.0
+	 * @version  0.2.0
 	 *
 	 * @param    {String}   type   model, list or record
 	 */

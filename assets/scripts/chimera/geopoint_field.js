@@ -4,8 +4,8 @@
  * @constructor
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -21,8 +21,8 @@ GeopointChimeraField = ChimeraField.extend(function GeopointChimeraField(parent,
  * Create the edit input element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 GeopointChimeraField.setMethod(function renderEdit() {
 

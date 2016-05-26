@@ -4,8 +4,8 @@
  * @constructor
  *
  * @author   Jelle De Loecker <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -51,8 +51,8 @@ var SchemaChimeraField = ChimeraField.extend(function SchemaChimeraField(parent,
  * Create the edit input element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 SchemaChimeraField.setMethod(function renderEdit() {
 
@@ -109,8 +109,8 @@ SchemaChimeraField.setMethod(function initEdit() {
  * Get the data from the subschema
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 SchemaChimeraField.setMethod(function getData() {
 

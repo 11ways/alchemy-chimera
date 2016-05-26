@@ -31,8 +31,8 @@ hawkejs.scene.on({type: 'rendered'}, function rendered(variables, renderData) {
  * @constructor
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {Object}   options
  */
@@ -126,8 +126,8 @@ var ChimeraFieldWrapper = Function.inherits(function ChimeraFieldWrapper(options
  * Static create method
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraFieldWrapper.setStatic(function create(options) {
 	return new this(options);
@@ -137,8 +137,8 @@ ChimeraFieldWrapper.setStatic(function create(options) {
  * The fieldClass property (Class Constructor)
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraFieldWrapper.prepareProperty(function fieldClass() {
 
@@ -162,8 +162,8 @@ ChimeraFieldWrapper.prepareProperty(function fieldClass() {
  * Get the full path to this field value
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraFieldWrapper.setMethod(function getNestedPath() {
 
@@ -258,8 +258,8 @@ ChimeraFieldWrapper.setMethod(function initFields() {
  * Add translate buttons
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraFieldWrapper.setMethod(function addButtons() {
 
@@ -322,8 +322,8 @@ ChimeraFieldWrapper.setMethod(function getPrefixFields(prefix) {
  * Get the data
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {Boolean}   changesOnly
  */
@@ -440,8 +440,8 @@ ChimeraFieldWrapper.setMethod(function addPrefixValue(value, prefix) {
  * Remove the given child from the array
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraField}   child
  */
@@ -466,8 +466,8 @@ ChimeraFieldWrapper.setMethod(function removeFromArray(child) {
  * Add the child to the correct intake element
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraField}   child
  */
@@ -490,8 +490,8 @@ ChimeraFieldWrapper.setMethod(function addEntry(child) {
  * @constructor
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -601,11 +601,22 @@ ChimeraField.setProperty(function path() {
 });
 
 /**
+ * Return the nested path
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.2.0
+ * @version  0.2.0
+ */
+ChimeraField.setProperty(function nested_path() {
+	return this.getNestedPath();
+});
+
+/**
  * Get the path of the value it's nested in
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraField.setMethod(function getNestedPath() {
 	return this.parent.getNestedPath();
@@ -615,8 +626,8 @@ ChimeraField.setMethod(function getNestedPath() {
  * Get the value to store in the database
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraField.setMethod(function getData() {
 	return this.value;
@@ -626,8 +637,8 @@ ChimeraField.setMethod(function getData() {
  * Add element to the wrapper
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {Element}   element
  */
@@ -653,8 +664,8 @@ ChimeraField.setMethod(function addElement(element) {
  * Set the main element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {Element}   element
  */
@@ -694,8 +705,8 @@ ChimeraField.setMethod(function setMainElement(element) {
  * Render the element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraField.setMethod(function render() {
 	this['render' + this.actionType]();
@@ -705,8 +716,8 @@ ChimeraField.setMethod(function render() {
  * Add extra buttons
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraField.setMethod(function addButtons() {
 
@@ -726,8 +737,8 @@ ChimeraField.setMethod(function addButtons() {
  * Create the edit input element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraField.setMethod(function renderEdit() {
 	var html = '<input class="chimeraField-string" type="text">';
@@ -739,8 +750,8 @@ ChimeraField.setMethod(function renderEdit() {
  * Create the view input element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraField.setMethod(function renderView() {
 	return this.renderEdit();
@@ -750,8 +761,8 @@ ChimeraField.setMethod(function renderView() {
  * Create the list input element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraField.setMethod(function renderList() {
 	var html = '<div>' + this.value + '</div>';
@@ -762,8 +773,8 @@ ChimeraField.setMethod(function renderList() {
  * Render the element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {Function}   callback
  */
@@ -786,8 +797,8 @@ ChimeraField.setMethod(function _render(callback) {
  * Remove this value (from an array field)
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 ChimeraField.setMethod(function remove() {
 

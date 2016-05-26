@@ -24,7 +24,6 @@ options = {
 
 	// The title to show in the top left corner
 	title: 'Alchemy Admin'
-
 };
 
 // Inject the user-overridden options
@@ -61,6 +60,13 @@ var ChimeraController = Function.inherits('Controller', function ChimeraControll
 	this.actions = {};
 });
 
+/**
+ * Add a chimera action
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.2.0
+ * @version  0.2.0
+ */
 ChimeraController.setMethod(function addAction(type, fncname, options) {
 
 	var obj;
@@ -86,6 +92,13 @@ ChimeraController.setMethod(function addAction(type, fncname, options) {
 	obj.set(fncname, options);
 });
 
+/**
+ * Get all chimera actions
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.2.0
+ * @version  0.2.0
+ */
 ChimeraController.setMethod(function getActions(type) {
 
 	if (this.actions == null) {

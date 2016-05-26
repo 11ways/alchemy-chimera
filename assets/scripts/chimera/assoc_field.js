@@ -4,8 +4,8 @@
  * @constructor
  *
  * @author   Jelle De Loecker <jelle@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -47,14 +47,23 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 	// Store the modelname
 	this.modelName = this.field.fieldType.options.modelName;
 
+	// Get the subject
+	subject = urlparams.subject;
+
+	if (!subject) {
+		subject = Object.path(variables, 'data.root_model');
+	}
+
+	if (!subject) {
+		subject = this.field.model_name || this.modelName;
+	}
+
 	if (!this.modelName) {
-		this.modelName = Object.path(variables, 'data.root_model');
+		this.modelName = subject;
 	}
 
 	// Create a router instance
 	this.Router = new hawkejs.constructor.helpers.Router();
-
-	subject = urlparams.subject || this.field.model_name || this.modelName;
 
 	// Construct the base url
 	this.baseUrl = Blast.Collection.URL.parse(this.Router.routeUrl('RecordAction', {
@@ -65,7 +74,15 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 	}));
 
 	// Get the path of the value it's nested in
-	nested_path = Object.path(variables, 'data.nested_path') || this.getNestedPath();
+	nested_path = Object.path(variables, 'data.nested_path');
+
+	if (nested_path) {
+		if (this.nested_path) {
+			nested_path += '.' + this.nested_path;
+		}
+	} else {
+		nested_path = this.getNestedPath();
+	}
 
 	// If this is a nested field, add that info
 	// @todo: this will only work for 1 level, not multiple...
@@ -100,8 +117,8 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
  * Create the edit input element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 BelongstoChimeraField.setMethod(function renderEdit() {
 
@@ -114,8 +131,8 @@ BelongstoChimeraField.setMethod(function renderEdit() {
  * Create the list input element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 BelongstoChimeraField.setMethod(function renderList() {
 
@@ -245,8 +262,8 @@ BelongstoChimeraField.setMethod(function setReadOnly(value) {
  * @constructor
  *
  * @author   Jelle De Loecker <jelle@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -264,8 +281,8 @@ var HasoneparentChimeraField = BelongstoChimeraField.extend(function Hasoneparen
  * @constructor
  *
  * @author   Jelle De Loecker <jelle@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -283,8 +300,8 @@ var EnumChimeraField = BelongstoChimeraField.extend(function EnumChimeraField(pa
  * @constructor
  *
  * @author   Jelle De Loecker <jelle@codedor.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -300,8 +317,8 @@ var HABTMChimeraField = BelongstoChimeraField.extend(function HabtmChimeraField(
  * Create the edit input element
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    1.0.0
- * @version  1.0.0
+ * @since    0.2.0
+ * @version  0.2.0
  */
 HABTMChimeraField.setMethod(function renderEdit() {
 
