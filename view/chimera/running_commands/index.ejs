@@ -1,0 +1,114 @@
+<% implement('layouts/chimera') %>
+
+<% start('chimera-status') %>
+<% end('chimera-status') %>
+
+<% start('chimera-cage') %>
+<x-panel class="devices table-panel">
+	<x-panel-body>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Started</th>
+					<th>Stopped</th>
+					<th>Percentage</th>
+					<th>Status</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody class="running">
+				<% for (i = 0; i < running.length; i++) {
+					record = running[i]; %>
+					<tr>
+						<td><%= record.description || record.title || record.name %></td>
+						<td><%= Date.create(record.started).format('Y-m-d H:i:s') %></td>
+						<td>
+							<%
+								live('record.stopped', function gotStopped(stopped) {
+									if (stopped) {
+										print(Date.create(stopped).format('H:i:s'));
+									}
+								});
+							%>
+						</td>
+						<td>
+							<%
+								live('record.percentage', function gotPercentage(percentage) {
+									print(percentage);
+								});
+							%>&nbsp;%
+						</td>
+						<td>
+							<%
+								live('record.reports', function gotReports(reports) {
+									print((reports.last()||{}).type);
+								});
+							%>
+						</td>
+						<td>
+							<%
+								live('record.stopped', function gotStopped(stopped) {
+
+									if (stopped) {
+										return;
+									}
+
+								%>
+									<button
+										class="btn btn-success"
+										data-server-event="al-rcommand-action | <%= record.id %> | stop"
+										title="Stop"
+									>
+										Stop
+									</button>
+								<% });
+
+								live('record.paused', function gotPaused(paused) {
+
+									if (record.stopped) {
+										return;
+									}
+
+									if (paused) { %>
+										<button
+											class="btn btn-success"
+											data-server-event="al-rcommand-action | <%= record.id %> | resume"
+											title="Resume"
+										>
+											Resume
+										</button>
+									<% } else { %> 
+										<button
+											class="btn btn-success"
+											data-server-event="al-rcommand-action | <%= record.id %> | pause"
+											title="Pause"
+										>
+											Pause
+										</button>
+									<% } %>
+								<% });
+							%>
+						</td>
+					</tr>
+				<% } %>
+			</tbody>
+			<tbody class="stopped">
+				<% for (i = 0; i < finished.length; i++) {
+					record = finished[i]; %>
+					<tr>
+						<td><%= record.title || record.name %></td>
+						<td><%= Date.create(record.started).format('Y-m-d H:i:s') %></td>
+						<td><%= Date.create(record.stopped).format('H:i:s') %></td>
+						<td><%= record.percentage || 0 %>&nbsp;%</td>
+						<td><%= (record.reports.last()||{}).type %></td>
+						<td>
+							
+						</td>
+					</tr>
+				<% } %>
+			</tbody>
+		</table>
+	</x-panel-body>
+</x-panel>
+<% end('chimera-cage') %>

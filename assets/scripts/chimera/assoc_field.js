@@ -3,7 +3,7 @@
  *
  * @constructor
  *
- * @author   Jelle De Loecker <jelle@codedor.be>
+ * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
  * @version  0.2.0
  *
@@ -261,7 +261,7 @@ BelongstoChimeraField.setMethod(function setReadOnly(value) {
  *
  * @constructor
  *
- * @author   Jelle De Loecker <jelle@codedor.be>
+ * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
  * @version  0.2.0
  *
@@ -280,7 +280,7 @@ var HasoneparentChimeraField = BelongstoChimeraField.extend(function Hasoneparen
  *
  * @constructor
  *
- * @author   Jelle De Loecker <jelle@codedor.be>
+ * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
  * @version  0.2.0
  *
@@ -299,7 +299,7 @@ var EnumChimeraField = BelongstoChimeraField.extend(function EnumChimeraField(pa
  *
  * @constructor
  *
- * @author   Jelle De Loecker <jelle@codedor.be>
+ * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
  * @version  0.2.0
  *

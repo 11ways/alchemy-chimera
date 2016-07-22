@@ -7,7 +7,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 	/**
 	 * Print the chimera field
 	 *
-	 * @author   Jelle De Loecker   <jelle@codedor.be>
+	 * @author   Jelle De Loecker   <jelle@develry.be>
 	 * @since    0.2.0
 	 * @version  0.2.0
 	 *
@@ -46,7 +46,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 	/**
 	 * Print the actions for a given action type
 	 *
-	 * @author   Jelle De Loecker   <jelle@codedor.be>
+	 * @author   Jelle De Loecker   <jelle@develry.be>
 	 * @since    0.2.0
 	 * @version  0.2.0
 	 *

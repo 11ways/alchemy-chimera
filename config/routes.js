@@ -1,6 +1,9 @@
 // Create a new chimera section
 var chimera = Router.section('chimera', '/' + alchemy.plugins.chimera.routename);
 
+// @TODO: add this to the chimera router
+Router.socket('al-rcommand-action', 'RunningCommandChimera#action');
+
 chimera.get('Dashboard', '/', 'ChimeraStatic#dashboard');
 
 // Non-subject link

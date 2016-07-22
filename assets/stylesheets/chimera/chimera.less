@@ -128,12 +128,12 @@ x-hawkejs {
 	}
 
 	.chimera-sidenav {
-		.flexChild(0 1 @width-sidebar);
+		.flexChild(0 0 @width-sidebar);
 		background-color: @color-background-frame;
 	}
 
 	.chimera-cage {
-		.flexChild(1 0 auto);
+		.flexChild(1);
 		box-shadow: @shadow-cage;
 		padding: 1rem;
 	}
@@ -404,11 +404,11 @@ x-panel {
 	max-width: 33%;
 }
 
-.x-switch-checkbox+.x-switch-span {
+.al-switch-checkbox+.al-switch-span {
 	background-color: @color-danger;
 }
 
-.x-switch-checkbox:checked+.x-switch-span {
+.al-switch-checkbox:checked+.al-switch-span {
 	background-color: @color-success;
 }
 

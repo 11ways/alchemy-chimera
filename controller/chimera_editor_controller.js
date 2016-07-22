@@ -85,6 +85,7 @@ Editor.setMethod(function listing(conduit, type, view) {
 			that.conduit.set('modelName', modelName);
 			that.conduit.internal('modelName', modelName);
 			that.conduit.set('pageTitle', modelName.humanize());
+			that.conduit.set('show_index_filters', model.chimera.show_index_filters);
 
 			that.render('chimera/editor/' + view);
 		});

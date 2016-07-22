@@ -27,6 +27,23 @@
 					%>
 					<th class="record-actions">Actions</th>
 				</tr>
+				<% if (show_index_filters) { %>
+					<tr class="filters">
+						<th></th>
+						<%
+						fields.reset();
+						while (fields.hasNext()) {
+							field = fields.next().value;
+
+							print('<th>');
+							print(Pagination.filter({field: field.path, content: field.fieldType.title}));
+							print('</th>');
+						}
+						%>
+					</tr>
+				<% } %>
+				</thead>
+				<tbody>
 				<%
 					iterator = records.createIterator();
 					while (iterator.hasNext()) {
@@ -51,7 +68,7 @@
 						print('</tr>');
 					}
 				%>
-			</thead>
+			</tbody>
 		</table>
 	</x-panel-body>
 	<x-panel-footer class="chimeraEditor-footer u-stretch">

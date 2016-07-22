@@ -1,7 +1,7 @@
 /**
  * The Chimera Page Controller class
  *
- * @author        Jelle De Loecker   <jelle@codedor.be>
+ * @author        Jelle De Loecker   <jelle@develry.be>
  * @since         0.2.0
  * @version       0.2.0
  */
