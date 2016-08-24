@@ -1,10 +1,14 @@
+<% sub_id = getId() %>
+
 <div class="chimeraEditor-subschema">
 	<h2>
 		<% assign('title') %>
 		<% print(data.field.fieldType.title) %>
 		<% assign_end('title') %>
+		<div class="chimeraField-left">
+		</div>
 	</h2>
-	<div class="chimeraEditor-subschema-wrap">
-		<% assign('field') %>
+	<div class="chimeraEditor-subschema-wrap" data-sub-id="<%= sub_id %>">
+		<% assign('entries') %>
 	</div>
 </div>

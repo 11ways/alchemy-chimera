@@ -1,17 +1,15 @@
-var Model = alchemy.classes.Model;
-
 /**
  * Prepare the static `chimera` config property:
  * Every model class will now have this
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.3.0
  *
- * @type     {alchemy.classes.ChimeraConfig}
+ * @type     {Alchemy.ChimeraConfig}
  */
 Model.prepareStaticProperty(function chimera() {
-	return new alchemy.classes.ChimeraConfig(this);
+	return new Classes.Alchemy.ChimeraConfig(this);
 });
 
 /**
@@ -23,7 +21,7 @@ Model.prepareStaticProperty(function chimera() {
  * @since    0.2.0
  * @version  0.2.0
  *
- * @type     {alchemy.classes.ChimeraConfig}
+ * @type     {Alchemy.ChimeraConfig}
  */
 Model.setProperty(function chimera() {
 	return this.constructor.chimera;

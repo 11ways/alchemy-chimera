@@ -1,0 +1,4 @@
+<% for (i = 0; i < actions.length; i++) { %>
+	<% action = actions[i] %>
+	<% Router.printRoute(action.route_name, action.parameters, action.options) %>
+<% } %>

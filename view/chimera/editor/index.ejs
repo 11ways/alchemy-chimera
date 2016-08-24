@@ -36,7 +36,10 @@
 							field = fields.next().value;
 
 							print('<th>');
-							print(Pagination.filter({field: field.path, content: field.fieldType.title}));
+							filter_element = Pagination.filter({field: field.path, content: field.fieldType.title});
+							filter_element.classList.add('chimeraField-string');
+
+							print(filter_element);
 							print('</th>');
 						}
 						%>

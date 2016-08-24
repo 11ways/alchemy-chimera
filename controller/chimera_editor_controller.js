@@ -5,21 +5,21 @@
  * @since         0.2.0
  * @version       0.2.0
  */
-var Editor = Function.inherits('ChimeraController', function EditorChimeraController(conduit, options) {
+var Editor = Function.inherits('Alchemy.ChimeraController', function EditorChimeraController(conduit, options) {
 
 	EditorChimeraController.super.call(this, conduit, options);
 
 	this.addComponent('paginate');
 
-	this.addAction('model', 'index', {title: '<x-svg data-src="chimera/list"></x-svg>'});
-	this.addAction('model', 'add', {title: '<x-svg data-src="chimera/plus"></x-svg>'});
+	this.addAction('model', 'index', {title: 'Index', icon: '<x-svg data-src="chimera/list"></x-svg>'});
+	this.addAction('model', 'add', {title: 'Add', icon: '<x-svg data-src="chimera/plus"></x-svg>'});
 
-	this.addAction('draft', 'save', {title: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
+	this.addAction('draft', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
 
-	this.addAction('record', 'edit', {title: '<x-svg data-src="chimera/edit"></x-svg>'});
-	this.addAction('record', 'view', {title: '<x-svg data-src="chimera/eye"></x-svg>'});
-	this.addAction('record', 'save', {title: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
-	this.addAction('record', 'remove', {title: '<x-svg data-src="chimera/garbage"></x-svg>'});
+	this.addAction('record', 'edit', {title: 'Edit', icon: '<x-svg data-src="chimera/edit"></x-svg>'});
+	this.addAction('record', 'view', {title: 'View', icon: '<x-svg data-src="chimera/eye"></x-svg>'});
+	this.addAction('record', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
+	this.addAction('record', 'remove', {title: 'Remove', icon: '<x-svg data-src="chimera/garbage"></x-svg>'});
 
 });
 
@@ -66,29 +66,51 @@ Editor.setMethod(function listing(conduit, type, view) {
 		fields.push(sorted[i].path);
 	}
 
-	this.components.paginate.find(model, {fields: fields, pageSize: 20}, function(err, items) {
+	Function.parallel(function getTotal(next) {
+		model.find('list', {fields: ['_id']}, function gotResult(err, list) {
+
+			// Ignore errors here
+			if (err) {
+				return next();
+			}
+
+			that.conduit.set('available_records', list.available || 0);
+			next();
+		});
+	}, function paginate(next) {
+
+		that.components.paginate.find(model, {fields: fields, pageSize: 10}, function(err, items) {
+
+			if (err) {
+				return next(err);
+			}
+
+			actionFields.processRecords('general', model, items, function groupedRecords(err, results) {
+
+				if (err) {
+					return conduit.error(err);
+				}
+
+				that.set('prefixes', Prefix.getPrefixList());
+				that.conduit.set('fields', general);
+				that.conduit.set('records', results.general);
+				that.conduit.set('actions', that.getActions());
+				that.conduit.set('modelName', modelName);
+				that.conduit.internal('modelName', modelName);
+				that.conduit.set('pageTitle', modelName.humanize());
+				that.conduit.set('show_index_filters', model.chimera.show_index_filters);
+
+				next();
+			});
+		});
+
+	}, function done(err) {
 
 		if (err) {
 			return conduit.error(err);
 		}
 
-		actionFields.processRecords('general', model, items, function groupedRecords(err, results) {
-
-			if (err) {
-				return conduit.error(err);
-			}
-
-			that.set('prefixes', Prefix.getPrefixList());
-			that.conduit.set('fields', general);
-			that.conduit.set('records', results.general);
-			that.conduit.set('actions', that.getActions());
-			that.conduit.set('modelName', modelName);
-			that.conduit.internal('modelName', modelName);
-			that.conduit.set('pageTitle', modelName.humanize());
-			that.conduit.set('show_index_filters', model.chimera.show_index_filters);
-
-			that.render('chimera/editor/' + view);
-		});
+		that.render('chimera/editor/' + view);
 	});
 });
 
@@ -189,6 +211,7 @@ Editor.setMethod(function edit(conduit) {
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
 			that.set('modelName', modelName);
+			that.set('display_field_value', items.getDisplayFieldValue({prefer: 'name'}));
 			that.set('pagetitle', modelName.humanize() + ': Edit');
 			that.internal('modelName', modelName);
 			that.internal('recordId', id);
@@ -196,6 +219,64 @@ Editor.setMethod(function edit(conduit) {
 			that.render('chimera/editor/edit');
 		});
 	});
+});
+
+/**
+ * The "peek" method
+ *
+ * @param   {Conduit}   conduit
+ */
+Editor.setMethod(function peek(conduit) {
+
+	var that = this,
+	    action_fields,
+	    model_,ame,
+	    chimera,
+	    groups,
+	    model,
+	    id;
+
+	model_name = conduit.routeParam('subject');
+	model = this.getModel(model_name);
+	chimera = model.constructor.chimera;
+	id = conduit.routeParam('id');
+
+	// Disable translations in the CMS
+	model.disableTranslations();
+
+	// Get the "peek" fields
+	action_fields = chimera.getActionFields('peek');
+	groups = action_fields.groups.clone();
+
+	// Get the wanted record
+	model.find('first', {conditions: {_id: id}}, function gotRecord(err, items) {
+
+		if (err) {
+			return conduit.error(err);
+		}
+
+		if (!items.length) {
+			return conduit.notFound();
+		}
+
+		action_fields.processRecords(model, items, function groupedRecords(err, groups) {
+
+			if (err) {
+				return conduit.error(err);
+			}
+
+			that.set('prefixes', Prefix.getPrefixList());
+			that.set('groups', groups);
+			that.set('actions', that.getActions());
+			that.set('modelName', model_name);
+			that.set('display_field_value', items.getDisplayFieldValue({prefer: 'name'}));
+			that.internal('modelName', model_name);
+			that.internal('recordId', id);
+
+			that.render('chimera/editor/peek');
+		});
+	});
+
 });
 
 /**

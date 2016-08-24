@@ -5,7 +5,7 @@
  *
  * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.3.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -13,9 +13,10 @@
  * @param    {Object}                variables
  * @param    {String}                prefix
  */
-var SchemaChimeraField = ChimeraField.extend(function SchemaChimeraField(parent, value, container, variables, prefix) {
+var SchemaChimeraField = Function.inherits('ChimeraField', function SchemaChimeraField(options) {
 
 	var that = this,
+	    value = options.value,
 	    base;
 
 	// @todo: this is probably breaking array support for schema's
@@ -30,7 +31,7 @@ var SchemaChimeraField = ChimeraField.extend(function SchemaChimeraField(parent,
 		value = {fields: []};
 
 		// Get the original value of the parent wrapper
-		base = Object.first(parent.original_value);
+		base = Object.first(options.parent.original_value);
 
 		if (base && base.fields) {
 			// Copy over the fields, but not the value
@@ -40,7 +41,9 @@ var SchemaChimeraField = ChimeraField.extend(function SchemaChimeraField(parent,
 		}
 	}
 
-	SchemaChimeraField.super.call(this, parent, value, container, variables, prefix);
+	options.value = value;
+
+	SchemaChimeraField.super.call(this, options);
 
 	// Newly created ChimeraField instances of the subschema
 	// will be stored in this array
@@ -54,7 +57,7 @@ var SchemaChimeraField = ChimeraField.extend(function SchemaChimeraField(parent,
  * @since    0.2.0
  * @version  0.2.0
  */
-SchemaChimeraField.setMethod(function renderEdit() {
+SchemaChimeraField.setMethod(function old_renderEdit() {
 
 	var html = '<div class="chimera-schema-field"></div>';
 
@@ -68,7 +71,54 @@ SchemaChimeraField.setMethod(function renderEdit() {
  */
 SchemaChimeraField.setMethod(function initEdit() {
 
-	var that = this;
+	var that = this,
+	    containers,
+	    selector;
+
+	// Get all the field containers that are direct descendents of this schema,
+	// but not further (not a schema in a schema)
+	// This is curently not used, as it does not work when adding new entries
+	selector = '.chimeraField-container.nid-' + this.parent.entries_id;
+
+	// All the entries are containers
+	containers = Array.cast(this.entry.children);
+
+	// Filter out any non-container elements
+	containers = containers.filter(function eachElement(element) {
+		return element.matches('.chimeraField-container');
+	});
+
+	console.log('Sub containers:', containers, this.value);
+
+	containers.forEach(function eachContainer(element, index) {
+
+		var instance,
+		    options,
+		    config,
+		    entry;
+
+		entry = that.value.fields[index];
+		config = entry.field;
+
+		// Construct the wrapper options
+		options = {
+			nested_in: that,
+			variables: that.variables,
+			container: element,
+			viewname: config.viewname,
+			value: entry.value,
+			field: entry.field
+		};
+
+		// Create a new wrapper instance
+		instance = new ChimeraFieldWrapper(options);
+
+		that.fields.push(instance);
+	});
+
+	console.log('Fields:', that.fields);
+
+	return;
 
 	this.value.fields.forEach(function eachSchemaField(entry) {
 

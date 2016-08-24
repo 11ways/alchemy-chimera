@@ -1,33 +1,60 @@
 <%
 
 fieldWrapper = [
+
 	// The expected wrapper to use
 	'chimera/field_wrappers/' + template.wrapper + '_' + template.action,
+
 	// The fallback wrapper
-	'chimera/field_wrappers/default_' + template.action
+	'chimera/field_wrappers/default_' + template.action,
+
+	// If it still doesn't exist, try the list view
+	'chimera/field_wrappers/default_list'
 ];
 
 fieldElement = [
+
 	// The expected element to use
 	'chimera/fields/' + template.field + '_' + template.action,
+
 	// The fallback element
-	'chimera/fields/default_' + template.action
+	'chimera/fields/default_' + template.action,
+
+	// If it still doesn't exist, try the list view
+	'chimera/fields/default_list'
 ];
 
+fieldEntries = 'chimera/field_wrappers/_entries';
+
 // Render the wrapper
-implement(fieldWrapper, {changeMain: true, wrapper: false});
+if (print_wrapper !== false) {
+	implement(fieldWrapper, {changeMain: true, wrapper: false});
+}
 
 if (data.field) {
+	field_scripts = [
+		'chimera/chimera',
+		'chimera/chimera_field_wrapper',
+		'chimera/chimera_field'
+	];
 
 	if (data.field.script_file) {
-		script(['chimera/chimera'].concat(data.field.script_file));
-	} else {
-		script(['chimera/chimera']);
+		field_scripts = field_scripts.concat(data.field.script_file);
 	}
+
+	script(field_scripts);
 
 	if (data.field.style_file) {
 		style(data.field.style_file);
 	}
+}
+
+if (print_entries !== false) {
+	if (print_wrapper === false) {
+		assign('entries');
+	}
+
+	implement(fieldEntries, null, {fieldElement: fieldElement});
 }
 
 %>

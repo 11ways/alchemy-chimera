@@ -3,9 +3,9 @@
  *
  * @author        Kjell Keisse   <kjell@codedor.be>
  * @since         0.2.0
- * @version       0.2.0
+ * @version       0.3.0
  */
-var Settings = Function.inherits('ChimeraController', function SettingsChimeraController(conduit, options) {
+var Settings = Function.inherits('Alchemy.ChimeraController', function SettingsChimeraController(conduit, options) {
 
 	SettingsChimeraController.super.call(this, conduit, options);
 

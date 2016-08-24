@@ -13,6 +13,7 @@
 			<% model = modelName.singularize().camelize() %>
 			
 			<div class="chimera-remove">
+			<% console.log(item) %>
 				<p>Are you sure you want to delete <% if(item[model].title){ %><%= item[model].title %><% } else { %><%= item[model]._id %><% } %></p>
 				<% Router.printRoute('RecordAction', {controller: 'editor', subject: modelName, action: 'remove', id: item[model]._id}, {title: 'Yes', className: 'btn remove-btn  btn-red'}) %>
 				<% Router.printRoute('ModelAction', {controller: 'editor', subject: modelName, action: 'index'}, {title: 'No', className: 'btn'}) %>

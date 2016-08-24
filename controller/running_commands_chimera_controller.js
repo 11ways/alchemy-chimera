@@ -4,10 +4,10 @@ var commands = alchemy.shared('Command.running', 'Array');
  * The Chimera Commands Controller class
  *
  * @author    Jelle De Loecker   <jelle@develry.be>
- * @since     0.2.1
- * @version   0.2.1
+ * @since     0.3.0
+ * @version   0.3.0
  */
-var Commands = Function.inherits('ChimeraController', function RunningCommandChimeraController(conduit, options) {
+var Commands = Function.inherits('Alchemy.ChimeraController', function RunningCommandChimeraController(conduit, options) {
 
 	RunningCommandChimeraController.super.call(this, conduit, options);
 

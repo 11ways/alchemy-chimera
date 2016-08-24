@@ -1,0 +1,71 @@
+<%
+
+// Create a new entries id
+entries_id = getId();
+
+// This function will print out the actual entry
+printEntries = function printEntries(values) {
+
+	// Make sure there is at least 1 entry
+	if (!values.length) {
+		values.push(null);
+	}
+
+	for (i = 0; i < values.length; i++) {
+		value = values[i];
+
+		// The field element expects a single value to be in `data.value`
+		newData = {
+			data: Object.assign({}, data, {value: value}),
+			parent_entries_id: entries_id
+		};
+
+		className = 'chimeraField-entry action-' + template.action + ' cfe-' + entries_id;
+
+		// Print the actual field element
+		placeholder = print_element(fieldElement, newData, {className: className});
+
+		// Set the element id for creating client-side chimera fields
+		placeholder.element.setAttribute('data-oid', i);
+	}
+};
+
+// Start creating the entries block
+start('entries', {attributes: {'data-entries-id': entries_id}});
+
+	if (data.field.fieldType.isTranslatable) {
+		prefixes = {};
+		first_prefix = true;
+
+		exposed_prefixes = expose('prefixes');
+
+		for (prefix in exposed_prefixes) {
+			prefixes[prefix] = true;
+		}
+
+		for (prefix in data.value) {
+			prefixes[prefix] = true;
+		}
+
+		for (prefix in prefixes) {
+			print('<div class="chimeraField-prefix-intake" data-prefix="' + prefix + '"');
+
+			if (first_prefix) {
+				first_prefix = false;
+			} else {
+				print(' style="display:none;"');
+			}
+
+			print('>');
+
+			values = Array.cast(data.value[prefix]);
+			printEntries(values);
+			print('</div>');
+		}
+	} else {
+		values = Array.cast(data.value);
+		printEntries(values);
+	}
+
+end('entries');
+%>

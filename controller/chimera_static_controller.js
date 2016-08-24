@@ -3,11 +3,10 @@
  *
  * @author        Jelle De Loecker   <jelle@kipdola.be>
  * @since         0.2.0
- * @version       0.2.0
+ * @version       0.3.0
  */
-var ChimeraStatic = Function.inherits('Controller', function ChimeraStaticController(conduit) {
-
-	Controller.call(this, conduit);
+var ChimeraStatic = Function.inherits('Alchemy.ChimeraController', function ChimeraStaticController(conduit) {
+	ChimeraStaticController.super.call(this, conduit);
 });
 
 /**

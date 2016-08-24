@@ -25,7 +25,19 @@ var RomeChimeraField = Function.inherits('ChimeraField', function RomeChimeraFie
  * @version  0.2.0
  */
 RomeChimeraField.setMethod(function renderEdit() {
-	var html = '<div class="chimeraEditor-date-edit"></div>';
+
+	var html;
+
+	// The "inline" option only shows a Rome picker,
+	// but it can be confusing when no value is set
+	if (this.parent.field.options.inline) {
+		html = '<div class="chimeraEditor-date-edit"></div>';
+	} else {
+		// Don't use "date" or "datetime" as type,
+		// that'll just complicate things
+		html = '<input class="chimeraField-string" type="text"></input>';
+	}
+
 	this.setMainElement(html);
 });
 
@@ -54,11 +66,35 @@ var DatetimeChimeraField = Function.inherits('RomeChimeraField', function Dateti
  * @param    {Mixed}   value
  */
 DatetimeChimeraField.setMethod(function initEdit() {
-
 	var that = this;
-
 	applyDateField(that, 'datetime');
+});
 
+/**
+ * Don't use rome for list views
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    0.2.1
+ * @version  0.2.1
+ */
+DatetimeChimeraField.setMethod(function renderList() {
+
+	var format,
+	    html,
+	    val = this.value;
+
+	if (this.parent.field.options.list_format) {
+		format = this.parent.field.options.list_format;
+	} else {
+		format = 'Y-m-d H:i';
+	}
+
+	if (val && Date.isDate(val)) {
+		val = val.format(format);
+	}
+
+	html = '<div>' + val + '</div>';
+	this.setMainElement(html);
 });
 
 /**
@@ -86,10 +122,35 @@ var DateChimeraField = Function.inherits('RomeChimeraField', function DateChimer
  * @param    {Mixed}   value
  */
 DateChimeraField.setMethod(function initEdit() {
-
 	var that = this;
-
 	applyDateField(that, 'date', {time: false});
+});
+
+/**
+ * Don't use rome for list views
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    0.2.1
+ * @version  0.2.1
+ */
+DateChimeraField.setMethod(function renderList() {
+
+	var format,
+	    html,
+	    val = this.value;
+
+	if (this.parent.field.options.list_format) {
+		format = this.parent.field.options.list_format;
+	} else {
+		format = 'Y-m-d';
+	}
+
+	if (val && Date.isDate(val)) {
+		val = val.format(format);
+	}
+
+	html = '<div>' + val + '</div>';
+	this.setMainElement(html);
 });
 
 /**
@@ -117,10 +178,35 @@ TimeChimeraField = ChimeraField.extend(function TimeChimeraField(parent, value, 
  * @param    {Mixed}   value
  */
 TimeChimeraField.setMethod(function initEdit() {
-
 	var that = this;
-
 	applyDateField(that, 'time', {date: false});
+});
+
+/**
+ * Don't use rome for list views
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    0.2.1
+ * @version  0.2.1
+ */
+TimeChimeraField.setMethod(function renderList() {
+
+	var format,
+	    html,
+	    val = this.value;
+
+	if (this.parent.field.options.list_format) {
+		format = this.parent.field.options.list_format;
+	} else {
+		format = 'H:i:s';
+	}
+
+	if (val && Date.isDate(val)) {
+		val = val.format(format);
+	}
+
+	html = '<div>' + val + '</div>';
+	this.setMainElement(html);
 });
 
 /**
@@ -153,8 +239,11 @@ function applyDateField(that, type, options) {
 	this.romeCalender = calender;
 
 	calender.on('data', function dateChange(dateString) {
-		var newdate = calender.getDate();
-		console.log('Setting new value', newdate);
-		that.setValue(newdate);
+		var local = calender.getDate(),
+		    utc;
+
+		utc = new Date(Date.UTC(local.getFullYear(), local.getMonth()+1, local.getDate(), local.getHours(), local.getMinutes(), local.getSeconds(), local.getMilliseconds()));
+
+		that.setValue(utc);
 	});
 }

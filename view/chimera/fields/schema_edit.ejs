@@ -1,11 +1,9 @@
-<% start('field') %>
-<% 
+<%
 	if (data.value != null) {
 		for (i = 0; i < data.value.fields.length; i++) {
-			Chimera.printField(data.value.fields[i]);
+			Chimera.printField(data.value.fields[i], {is_nested: true, nested_id: parent_entries_id});
 		}
 	} else {
-		%> No subschema was set <%s
+		%> No subschema was set <%
 	}
 %>
-<% end('field') %>

@@ -1,53 +1,91 @@
+var chimera_section,
+    chimera_menu;
+
 // Create a new chimera section
-var chimera = Router.section('chimera', '/' + alchemy.plugins.chimera.routename);
+chimera_section = Router.section('chimera', '/' + alchemy.plugins.chimera.routename);
+
+// Link to the dashboard
+chimera_section.add({
+	title      : __('chimera', 'Dashboard'),
+	name       : 'Dashboard',
+	methods    : 'get',
+	paths      : '/',
+	handler    : 'ChimeraStatic#dashboard',
+	breadcrumb : 'chimera.dashboard'
+});
+
+chimera_section.add({
+	name       : 'IdActionLink',
+	methods    : ['get', 'post'],
+	paths      : '/:controller/:action/[ObjectId]:id',
+	handler    : '{controller}ChimeraController#{action}',
+	breadcrumb : 'chimera.{controller}.{action}.{id}'
+});
+
+chimera_section.add({
+	name       : 'ActionLink',
+	methods    : ['get', 'post'],
+	paths      : '/:controller/:action',
+	handler    : '{controller}ChimeraController#{action}',
+	breadcrumb : 'chimera.{controller}.{action}'
+});
+
+chimera_section.add({
+	name       : 'RecordAction',
+	methods    : ['get', 'post'],
+	paths      : '/:controller/:subject/:action/[ObjectId]:id',
+	handler    : '{controller}ChimeraController#{action}',
+	breadcrumb : 'chimera.{controller}.{subject}.{action}.{id}'
+});
+
+chimera_section.add({
+	name       : 'ModelAction',
+	methods    : ['get', 'post'],
+	paths      : '/:controller/:subject/:action',
+	handler    : '{controller}ChimeraController#{action}',
+	breadcrumb : 'chimera.{controller}.{subject}'
+});
+
+chimera_section.add({
+	name       : 'SettingsAction',
+	methods    : ['get', 'post'],
+	paths      : '/settings',
+	handler    : 'SettingsChimeraController#index',
+	breadcrumb : 'chimera.settings'
+});
+
+chimera_section.get('PageEditor', '/page_editor', 'ChimeraStatic#pageEditor');
 
 // @TODO: add this to the chimera router
 Router.socket('al-rcommand-action', 'RunningCommandChimera#action');
 
-chimera.get('Dashboard', '/', 'ChimeraStatic#dashboard');
+// alchemy.plugins.chimera.menu_items.addItem('route', {
+// 	title      : 'Dashboard',
+// 	route      : 'chimera@Dashboard',
+// 	parameters : {}
+// });
 
-// Non-subject link
-chimera.add(['get', 'post'], 'IdActionLink', '/:controller/:action/[ObjectId]:id', '{controller}ChimeraController#{action}');
-chimera.add(['get', 'post'], 'ActionLink', '/:controller/:action', '{controller}ChimeraController#{action}');
-
-chimera.add(['get', 'post'], 'RecordAction', '/:controller/:subject/:action/[ObjectId]:id', '{controller}ChimeraController#{action}');
-chimera.add(['get', 'post'], 'DraftAction', '/:controller/:subject/:action/[ObjectId]:id', '{controller}ChimeraController#{action}');
-chimera.add(['get', 'post'], 'ModelAction', '/:controller/:subject/:action', '{controller}ChimeraController#{action}');
-
-chimera.add(['get', 'post'], 'SettingsAction', '/:subject', 'SettingsChimeraController#index');
-
-chimera.get('PageEditor', '/page_editor', 'ChimeraStatic#pageEditor');
-
-// Add the dashboard to the menu deck
-alchemy.plugins.chimera.menu.set('dashboard', {
-	title: 'Dashboard',
-	route: 'chimera@Dashboard',
-	parameters: {},
-	icon: {svg: 'chimera/home'}
-}, 9999);
-
-// Add the users to the menu
-alchemy.plugins.chimera.menu.set('users', {
-	title: 'Users',
-	route: 'chimera@ModelAction',
-	parameters: {
-		controller: 'Editor',
-		subject: 'user',
-		action: 'index'
-	},
-	icon: {svg: 'chimera/office-worker'}
-}, 9000);
 
 // Set user data for chimera
-chimera.use(function setChimeraData(req, res, next) {
+chimera_section.use(function setChimeraData(req, res, next) {
 
 	// Always set the user data
 	req.conduit.internal('UserData', req.conduit.session('UserData') || {});
+
+	// Set the theme to use
+	req.conduit.viewRender.setTheme(alchemy.plugins.chimera.view_settings.theme);
 
 	// Skip the rest if it's an ajax call
 	if (req.conduit.ajax) {
 		return next();
 	}
+
+	// req.conduit.getModel('Menu').getPosition('chimera_main_sidebar', function gotMainSidebarMenu(err, result) {
+	// 	// Do nothing on an error,
+	// 	if (err) {
+	// 		return console.error('ERROR: ' + err);
+	// 	}
+	// });
 
 	// Send the ACL layout options to the client
 	req.conduit.expose('chimera-view-setting', alchemy.plugins.chimera.view_settings);

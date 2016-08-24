@@ -22,6 +22,9 @@ options = {
 	// The name to use in the routing
 	routename: 'chimera',
 
+	// The default theme to use
+	theme: 'ajatar',
+
 	// The title to show in the top left corner
 	title: 'Alchemy Admin'
 };
@@ -40,22 +43,128 @@ if (!alchemy.plugins.acl) {
 
 // Construct the view settings
 options.view_settings = {
-	baselayout: 'layouts/' + options.baselayout,
-	bodylayout: 'layouts/' + options.bodylayout,
-	bodyblock: options.bodyblock,
-	mainblock: options.mainblock,
-	contentblock: options.contentblock,
-	title: options.title
+	baselayout     : 'layouts/' + options.baselayout,
+	bodylayout     : 'layouts/' + options.bodylayout,
+	bodyblock      : options.bodyblock,
+	mainblock      : options.mainblock,
+	contentblock   : options.contentblock,
+	theme          : options.theme,
+	title          : options.title
 };
 
-// Create the menu deck
-options.menu = new Deck();
+if (options.theme == 'ajatar') {
+	alchemy.usePlugin('ajatar-theme');
+}
 
-var ChimeraController = Function.inherits('Controller', function ChimeraController(conduit, options) {
+/**
+ * Function to asynchronously get the menu item
+ *
+ * @author   Jelle De Loecker <jelle@develry.be>
+ * @since    0.3.0
+ * @version  0.3.0
+ *
+ * @param    {Function}   callback
+ */
+alchemy.plugins.chimera.getMenu = function getMenu(callback) {
+	alchemy.plugins.menu.getDefault('chimera_menu', callback);
+};
+
+/**
+ * Backwards compatibility for synchronously adding items
+ *
+ * @author   Jelle De Loecker <jelle@develry.be>
+ * @since    0.3.0
+ * @version  0.3.0
+ */
+alchemy.plugins.chimera.menu = {
+	set : function set(name, options, weight) {
+		alchemy.plugins.chimera.getMenu(function gotMenu(err, menu) {
+
+			var config = {
+				title     : name,
+				settings  : options,
+				weight    : weight
+			};
+
+			if (options.icon) {
+				options.decoration = options.icon;
+			}
+
+			menu.addItem('route', config);
+		});
+	}
+};
+
+/**
+ * Get the chimera menu and add some entries
+ *
+ * @author   Jelle De Loecker <jelle@develry.be>
+ * @since    0.3.0
+ * @version  0.3.0
+ */
+alchemy.plugins.chimera.getMenu(function gotMenu(err, menu) {
+
+	// Set the position name
+	menu.position_name = 'chimera_main_sidebar';
+
+	// Set the title
+	menu.title = __('chimera', 'Chimera');
+
+	/**
+	 * Add the dashboard to the menu
+	 *
+	 * @author   Jelle De Loecker <jelle@develry.be>
+	 * @since    0.2.0
+	 * @version  0.3.0
+	 */
+	menu.addItem('route', {
+		weight     : 9999,
+		settings   : {
+			title  : __('chimera', 'Dashboard'),
+			route  : 'chimera@Dashboard',
+			decoration  : {
+				icon    : {
+					svg : 'chimera/home'
+				}
+			}
+		}
+	});
+
+	/**
+	 * Add the users model to the menu
+	 *
+	 * @author   Jelle De Loecker <jelle@develry.be>
+	 * @since    0.2.0
+	 * @version  0.3.0
+	 */
+	menu.addItem('route', {
+		weight     : 9900,
+		settings   : {
+			title  : __('chimera', 'Users'),
+			route  : 'chimera@ModelAction',
+			parameters  : {
+				controller : 'Editor',
+				subject    : 'user',
+				action     : 'index'
+			},
+			decoration  : {
+				icon    : {
+					svg : 'chimera/office-worker'
+				}
+			}
+		}
+	});
+});
+
+var ChimeraController = Function.inherits('Alchemy.Controller', function ChimeraController(conduit, options) {
 
 	Controller.call(this, conduit, options);
 
+	// @TODO: move to the prototype
 	this.name = this.constructor.name.beforeLast('ChimeraController');
+
+	// Set the theme
+	this.viewRender.setTheme(alchemy.plugins.chimera.theme);
 
 	this.actions = {};
 });

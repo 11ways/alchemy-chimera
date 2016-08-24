@@ -9,11 +9,14 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 	 *
 	 * @author   Jelle De Loecker   <jelle@develry.be>
 	 * @since    0.2.0
-	 * @version  0.2.0
+	 * @version  0.3.0
 	 *
-	 * @param    {Object}   recordValue   Object containg fieldType and value
+	 * @param    {Object}   record_value   Object containg fieldType and value
+	 * @param    {Object}   options
+	 *
+	 * @return   {Placeholder}
 	 */
-	Chimera.setMethod(function printField(recordValue) {
+	Chimera.setMethod(function printField(record_value, options) {
 
 		var that = this,
 		    placeholder,
@@ -21,26 +24,60 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 		    variables,
 		    fblock;
 
+		if (!options) {
+			options = {};
+		}
+
+		// Print the wrapper by default
+		if (!options.template) {
+			options.template = 'chimera/field_wrappers/_wrapper';
+		}
+
+		if (options.print_wrapper == null) {
+			options.print_wrapper = true;
+		}
+
+		if (options.print_entries == null) {
+			options.print_entries = true;
+		}
+
 		variables = {
-			data: recordValue,
+			data: record_value,
 			template: {
-				field: recordValue.field.viewname,
-				action: recordValue.field.viewaction,
-				wrapper: recordValue.field.viewwrapper
-			}
+				field: record_value.field.viewname,
+				action: record_value.field.viewaction,
+				wrapper: record_value.field.viewwrapper
+			},
+			print_wrapper: options.print_wrapper,
+			print_entries: options.print_entries,
+			is_nested: options.is_nested
 		};
 
+		if (options.variables) {
+			Object.assign(variables, options.variables);
+		}
+
 		// Print the placeholder element
-		placeholder = this.view.print_element('chimera/field_wrappers/_wrapper', variables);
+		placeholder = this.view.print_element(options.template, variables);
 
 		// Add the container classname to the wrapper element
 		placeholder.element.classList.add('chimeraField-container');
 
+		if (options.is_nested) {
+			placeholder.element.classList.add('chimeraField-is-nested');
+
+			if (options.nested_id) {
+				placeholder.element.classList.add('nid-' + options.nested_id);
+			}
+		}
+
 		// Create the 'fields' blockbuffer
-		fblock = placeholder.renderer.createBlock('field');
+		fblock = placeholder.renderer.createBlock('field', {created_manually: true});
 
 		// Add the intake classname to the field wrapper element
 		fblock.attributes['class'] = 'chimeraField-intake';
+
+		return placeholder;
 	});
 
 	/**
@@ -61,6 +98,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 		    actions,
 		    action,
 		    view,
+		    list,
 		    name,
 		    item,
 		    temp,
@@ -87,6 +125,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 		}
 
 		actions = actionData[type].createIterator();
+		list = [];
 
 		while (actions.hasNext()) {
 			action = actions.next().value;
@@ -102,7 +141,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 				id: view.internal('recordId') || subject.id
 			};
 
-			className = 'btn btn--' + type + ' action-' + action.name;
+			className = 'action-' + action.name;
 
 			if (options.className) {
 				className += ' ' + options.className;
@@ -119,8 +158,13 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 				rOptions.handleManual = true;
 			}
 
-			view.print(' ');
-			view.helpers.Router.printRoute(routeName, temp, rOptions);
+			list.push({
+				route_name : routeName,
+				parameters : temp,
+				options    : rOptions
+			});
 		}
+
+		view.print_element('chimera/elements/editor_actions', {actions: list});
 	});
 };

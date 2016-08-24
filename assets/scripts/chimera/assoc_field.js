@@ -134,7 +134,7 @@ BelongstoChimeraField.setMethod(function renderEdit() {
  * @since    0.2.0
  * @version  0.2.0
  */
-BelongstoChimeraField.setMethod(function renderList() {
+BelongstoChimeraField.setMethod(function old_renderList() {
 
 	var that = this,
 	    url = this.baseUrl.clone(),
@@ -144,6 +144,11 @@ BelongstoChimeraField.setMethod(function renderList() {
 	url.addQuery('display_field_only', true);
 
 	$.get(url, function gotResult(response) {
+
+		// The title field for the associated record can be translatable,
+		// but this field doesn't know that
+		response = that.getText(response);
+
 		html = '<div>' + response + '</div>';
 		that.setMainElement(html);
 	});

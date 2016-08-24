@@ -6,7 +6,5 @@ if (data.value && data.value.coordinates) {
 
 id = 'map-' + Date.now() + '-' + Number.random(0,100);
 %>
-<% start('field') %>
 <input type="hidden" name="data.<%= data.field.path %>">
 <div id="<%= id %>" class="chimeraField-prime geopoint-div geopoint-edit"></div>
-<% end('field') %>
