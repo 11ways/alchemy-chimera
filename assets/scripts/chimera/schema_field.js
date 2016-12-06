@@ -51,20 +51,6 @@ var SchemaChimeraField = Function.inherits('ChimeraField', function SchemaChimer
 });
 
 /**
- * Create the edit input element
- *
- * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    0.2.0
- * @version  0.2.0
- */
-SchemaChimeraField.setMethod(function old_renderEdit() {
-
-	var html = '<div class="chimera-schema-field"></div>';
-
-	this.setMainElement(html);
-});
-
-/**
  * Initialize the field
  *
  * @param    {Mixed}   value
@@ -80,15 +66,13 @@ SchemaChimeraField.setMethod(function initEdit() {
 	// This is curently not used, as it does not work when adding new entries
 	selector = '.chimeraField-container.nid-' + this.parent.entries_id;
 
-	// All the entries are containers
-	containers = Array.cast(this.entry.children);
+	// Get all the containers
+	containers = Array.cast(this.entry.querySelectorAll(selector));
 
 	// Filter out any non-container elements
 	containers = containers.filter(function eachElement(element) {
 		return element.matches('.chimeraField-container');
 	});
-
-	console.log('Sub containers:', containers, this.value);
 
 	containers.forEach(function eachContainer(element, index) {
 
@@ -115,8 +99,6 @@ SchemaChimeraField.setMethod(function initEdit() {
 
 		that.fields.push(instance);
 	});
-
-	console.log('Fields:', that.fields);
 
 	return;
 

@@ -85,7 +85,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 	 *
 	 * @author   Jelle De Loecker   <jelle@develry.be>
 	 * @since    0.2.0
-	 * @version  0.2.0
+	 * @version  0.3.0
 	 *
 	 * @param    {String}   type   model, list or record
 	 */
@@ -94,6 +94,7 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 		var actionData,
 		    routeName,
 		    className,
+		    variables,
 		    rOptions,
 		    actions,
 		    action,
@@ -114,6 +115,8 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 
 		view = this.view;
 		actionData = view.set('actions');
+
+		// The default route name to use
 		routeName = type.classify() + 'Action';
 
 		if (subject == null) {
@@ -159,12 +162,34 @@ module.exports = function HawkejsChimera(Hawkejs, Blast) {
 			}
 
 			list.push({
-				route_name : routeName,
+				route_name : action.route_name || routeName,
 				parameters : temp,
 				options    : rOptions
 			});
 		}
 
-		view.print_element('chimera/elements/editor_actions', {actions: list});
+		variables = Object.assign({}, {actions: list}, options.variables);
+
+		view.print_element('chimera/elements/editor_actions', variables);
+	});
+
+	/**
+	 * Set the page title
+	 *
+	 * @author   Jelle De Loecker   <jelle@develry.be>
+	 * @since    0.3.0
+	 * @version  0.3.0
+	 *
+	 * @param    {Object}   options
+	 */
+	Chimera.setMethod(function setTitle(options) {
+
+		if (typeof options == 'string') {
+			options = {
+				title : options
+			};
+		}
+
+		this.view.set_title('Chimera: ' + options.title);
 	});
 };

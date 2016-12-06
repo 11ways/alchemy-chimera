@@ -5,6 +5,11 @@
 			<% print(data.field.fieldType.title) %>
 			<% assign_end('title') %>
 		</label>
+		<% if (data.field.fieldType.isArray) { %>
+			<button class="btn chimeraField-add-entry">
+				<%= __('chimera', 'Add new entry') %>
+			</button>
+		<% } %>
 	</div>
 	<% assign('entries') %>
 </div>

@@ -40,7 +40,8 @@ var ChimeraFieldWrapper = Function.inherits(function ChimeraFieldWrapper(options
 	// The entries wrapper
 	this.entries_wrapper = options.entries_wrapper || options.container.querySelector('[data-name="entries"]');
 
-	// Store this instance on the intake element
+	// Store this instance on the entries wrapper element and the container
+	this.container.CFWrapper = this;
 	this.entries_wrapper.CFWrapper = this;
 
 	// Get the entries id
@@ -238,16 +239,16 @@ ChimeraFieldWrapper.setMethod(function addButtons() {
 		$left = $(that.container);
 	}
 
-	// @TODO: "list" is just a name of an action,
-	// need to add some other way to indicate
-	// to not add these + buttons
-	if (this.isArray && this.action !== 'list') {
-		el = Blast.parseHTML('<button class="chimeraField-add-entry">+</button>');
-		$left.append(el);
+	// Look for add-entry buttons
+	if (this.isArray) {
+		// Get the first add-entry button (so skip buttons in sub schemas)
+		el = this.container.querySelector('.chimeraField-add-entry');
 
-		el.addEventListener('click', function onClick() {
-			that.addValue();
-		});
+		if (el) {
+			el.addEventListener('click', function onClick() {
+				that.addValue();
+			});
+		}
 	}
 
 	if (this.isTranslatable) {

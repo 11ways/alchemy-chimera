@@ -5,15 +5,17 @@
  *
  * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.3.0
  *
- * @param    {ChimeraFieldWrapper}   parent
- * @param    {Mixed}                 value
- * @param    {DOMElement}            container
- * @param    {Object}                variables
- * @param    {String}                prefix
+ * @param    {Object}                options
+ * @param    {ChimeraFieldWrapper}   options.parent
+ * @param    {DOMElement}            options.container
+ * @param    {Object}                options.variables
+ * @param    {Mixed}                 options.value
+ * @param    {String}                options.prefix
+ * @param    {Number}                options.original_index
  */
-var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(parent, value, container, variables, prefix) {
+var BelongstoChimeraField = Function.inherits('ChimeraField', function BelongstoChimeraField(options) {
 
 	var that = this,
 	    nested_path,
@@ -21,28 +23,24 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 	    recordId,
 	    subject;
 
-	if (!variables.__urlparams) {
-		variables.__urlparams = {};
-	}
+	BelongstoChimeraField.super.call(this, options);
 
-	urlparams = variables.__urlparams;
+	urlparams = this.variables.__urlparams || {};
 	this.default_options = {};
 
 	if (urlparams.id) {
 		recordId = urlparams.id;
 	} else {
-		recordId = Object.path(variables, 'item.value.id');
+		recordId = Object.path(this.variables, 'item.value.id');
 	}
 
 	if (!recordId) {
-		recordId = Object.path(variables, 'data.root_id');
+		recordId = Object.path(this.variables, 'data.root_id');
 
 		if (!recordId) {
-			recordId = variables.__recordId || "000000000000000000000000";
+			recordId = this.variables.__recordId || "000000000000000000000000";
 		}
 	}
-
-	BelongstoChimeraField.super.call(this, parent, value, container, variables, prefix);
 
 	// Store the modelname
 	this.modelName = this.field.fieldType.options.modelName;
@@ -51,7 +49,7 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 	subject = urlparams.subject;
 
 	if (!subject) {
-		subject = Object.path(variables, 'data.root_model');
+		subject = Object.path(this.variables, 'data.root_model');
 	}
 
 	if (!subject) {
@@ -74,7 +72,7 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 	}));
 
 	// Get the path of the value it's nested in
-	nested_path = Object.path(variables, 'data.nested_path');
+	nested_path = Object.path(this.variables, 'data.nested_path');
 
 	if (nested_path) {
 		if (this.nested_path) {
@@ -114,50 +112,6 @@ var BelongstoChimeraField = ChimeraField.extend(function BelongstoChimeraField(p
 });
 
 /**
- * Create the edit input element
- *
- * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    0.2.0
- * @version  0.2.0
- */
-BelongstoChimeraField.setMethod(function renderEdit() {
-
-	var html = '<select class="chimeraField-prime"></select>';
-
-	this.setMainElement(html);
-});
-
-/**
- * Create the list input element
- *
- * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    0.2.0
- * @version  0.2.0
- */
-BelongstoChimeraField.setMethod(function old_renderList() {
-
-	var that = this,
-	    url = this.baseUrl.clone(),
-	    html;
-
-	url.addQuery('fieldpath', this.field.path);
-	url.addQuery('display_field_only', true);
-
-	$.get(url, function gotResult(response) {
-
-		// The title field for the associated record can be translatable,
-		// but this field doesn't know that
-		response = that.getText(response);
-
-		html = '<div>' + response + '</div>';
-		that.setMainElement(html);
-	});
-
-	html = '<div class="chimeraField-temp">' + this.value + '</div>';
-	this.setMainElement(html);
-});
-
-/**
  * Initialize the field
  *
  * @param    {Mixed}   value
@@ -180,6 +134,7 @@ BelongstoChimeraField.setMethod(function initEdit() {
 		valueField: '_id',
 		labelField: 'title',
 		searchField: 'title',
+		placeholder: '-- empty --',
 		preload: true,
 		create: false,
 		render: {
@@ -187,7 +142,7 @@ BelongstoChimeraField.setMethod(function initEdit() {
 				return '<div><span>' + item.title + '</span></div>';
 			},
 			option: function shownOption(item, escape) {
-				return '<div><span>' + item.title + '</span></div>';
+				return '<div class="option"><span>' + item.title + '</span></div>';
 			}
 		},
 		load: function load(query, callback) {
@@ -268,16 +223,18 @@ BelongstoChimeraField.setMethod(function setReadOnly(value) {
  *
  * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.3.0
  *
- * @param    {ChimeraFieldWrapper}   parent
- * @param    {Mixed}                 value
- * @param    {DOMElement}            container
- * @param    {Object}                variables
- * @param    {String}                prefix
+ * @param    {Object}                options
+ * @param    {ChimeraFieldWrapper}   options.parent
+ * @param    {DOMElement}            options.container
+ * @param    {Object}                options.variables
+ * @param    {Mixed}                 options.value
+ * @param    {String}                options.prefix
+ * @param    {Number}                options.original_index
  */
-var HasoneparentChimeraField = BelongstoChimeraField.extend(function HasoneparentChimeraField(parent, value, container, variables, prefix) {
-	HasoneparentChimeraField.super.call(this, parent, value, container, variables, prefix);
+var HasoneparentChimeraField = BelongstoChimeraField.extend(function HasoneparentChimeraField(options) {
+	HasoneparentChimeraField.super.call(this, options);
 });
 
 /**
@@ -287,16 +244,18 @@ var HasoneparentChimeraField = BelongstoChimeraField.extend(function Hasoneparen
  *
  * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.3.0
  *
- * @param    {ChimeraFieldWrapper}   parent
- * @param    {Mixed}                 value
- * @param    {DOMElement}            container
- * @param    {Object}                variables
- * @param    {String}                prefix
+ * @param    {Object}                options
+ * @param    {ChimeraFieldWrapper}   options.parent
+ * @param    {DOMElement}            options.container
+ * @param    {Object}                options.variables
+ * @param    {Mixed}                 options.value
+ * @param    {String}                options.prefix
+ * @param    {Number}                options.original_index
  */
-var EnumChimeraField = BelongstoChimeraField.extend(function EnumChimeraField(parent, value, container, variables, prefix) {
-	EnumChimeraField.super.call(this, parent, value, container, variables, prefix);
+var EnumChimeraField = BelongstoChimeraField.extend(function EnumChimeraField(options) {
+	EnumChimeraField.super.call(this, options);
 });
 
 /**
@@ -306,28 +265,16 @@ var EnumChimeraField = BelongstoChimeraField.extend(function EnumChimeraField(pa
  *
  * @author   Jelle De Loecker <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.3.0
  *
- * @param    {ChimeraFieldWrapper}   parent
- * @param    {Mixed}                 value
- * @param    {DOMElement}            container
- * @param    {Object}                variables
- * @param    {String}                prefix
+ * @param    {Object}                options
+ * @param    {ChimeraFieldWrapper}   options.parent
+ * @param    {DOMElement}            options.container
+ * @param    {Object}                options.variables
+ * @param    {Mixed}                 options.value
+ * @param    {String}                options.prefix
+ * @param    {Number}                options.original_index
  */
-var HABTMChimeraField = BelongstoChimeraField.extend(function HabtmChimeraField(parent, value, container, variables, prefix) {
-	HabtmChimeraField.super.call(this, parent, value, container, variables, prefix);
-});
-
-/**
- * Create the edit input element
- *
- * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    0.2.0
- * @version  0.2.0
- */
-HABTMChimeraField.setMethod(function renderEdit() {
-
-	var html = '<select multiple class="chimeraField-prime"></select>';
-
-	this.setMainElement(html);
+var HABTMChimeraField = BelongstoChimeraField.extend(function HabtmChimeraField(options) {
+	HabtmChimeraField.super.call(this, options);
 });

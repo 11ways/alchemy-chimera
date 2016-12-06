@@ -18,9 +18,17 @@ var Editor = Function.inherits('Alchemy.ChimeraController', function EditorChime
 
 	this.addAction('record', 'edit', {title: 'Edit', icon: '<x-svg data-src="chimera/edit"></x-svg>'});
 	this.addAction('record', 'view', {title: 'View', icon: '<x-svg data-src="chimera/eye"></x-svg>'});
-	this.addAction('record', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
 	this.addAction('record', 'remove', {title: 'Remove', icon: '<x-svg data-src="chimera/garbage"></x-svg>'});
 
+	this.addAction('record-edit', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true, route_name: 'RecordAction'});
+	this.addAction('record-edit', 'index', {title: 'Index', icon: '<x-svg data-src="chimera/list"></x-svg>', route_name: 'ModelAction'});
+	this.addAction('record-edit', 'view', {title: 'View', icon: '<x-svg data-src="chimera/eye"></x-svg>', route_name: 'RecordAction'});
+	this.addAction('record-edit', 'remove', {title: 'Remove', icon: '<x-svg data-src="chimera/garbage"></x-svg>', route_name: 'RecordAction'});
+
+	this.addAction('record-draft', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true, route_name: 'RecordAction'});
+	this.addAction('record-draft', 'index', {title: 'Index', icon: '<x-svg data-src="chimera/list"></x-svg>', route_name: 'ModelAction'});
+	this.addAction('record-draft', 'view', {title: 'View', icon: '<x-svg data-src="chimera/eye"></x-svg>', route_name: 'RecordAction'});
+	this.addAction('record-draft', 'remove', {title: 'Remove', icon: '<x-svg data-src="chimera/garbage"></x-svg>', route_name: 'RecordAction'});
 });
 
 /**
@@ -161,6 +169,7 @@ Editor.setMethod(function add(conduit) {
 			throw err;
 		}
 
+		that.set('editor_action', 'add');
 		that.set('prefixes', Prefix.getPrefixList());
 		that.set('groups', groups);
 		that.set('actions', that.getActions());
@@ -192,7 +201,7 @@ Editor.setMethod(function edit(conduit) {
 	    groups = actionFields.groups.clone();
 
 	model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, items) {
-
+console.log('Edit:', items);
 		if (err) {
 			return conduit.error(err);
 		}
@@ -207,6 +216,7 @@ Editor.setMethod(function edit(conduit) {
 				return conduit.error(err);
 			}
 
+			that.set('editor_action', 'edit');
 			that.set('prefixes', Prefix.getPrefixList());
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
@@ -265,6 +275,7 @@ Editor.setMethod(function peek(conduit) {
 				return conduit.error(err);
 			}
 
+			that.set('editor_action', 'peek');
 			that.set('prefixes', Prefix.getPrefixList());
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
@@ -344,8 +355,10 @@ Editor.setMethod(function related_data(conduit) {
 
 		field = chimera.getField(fieldpath, items[0]);
 
+		console.log('Got', fieldpath, field, 'of', items);
+
 		if (!field) {
-			conduit.notFound('Could not find field "' + fieldpath + '"');
+			conduit.notFound(new Error('Could not find field "' + fieldpath + '"'));
 		} else {
 			field.sendRelatedData(conduit, items[0], options);
 		}
@@ -388,6 +401,7 @@ Editor.setMethod(function view(conduit) {
 				return conduit.error(err);
 			}
 
+			that.set('editor_action', 'view');
 			that.set('prefixes', Prefix.getPrefixList());
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
@@ -498,6 +512,7 @@ Editor.setMethod(function remove(conduit) {
 				return conduit.notFound();
 			}
 
+			that.set('editor_action', 'remove');
 			that.set('actions', that.getActions());
 			that.set('modelName', modelName);
 			that.set('pageTitle', modelName.humanize());

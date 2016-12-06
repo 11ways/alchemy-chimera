@@ -1,6 +1,11 @@
-<% expands('layouts/chimera') %>
+<% expands('layouts/chimera');
 
-<% start('chimera-cage') %>
+Router.setBreadcrumb([
+	{title: __('chimera', 'Dashboard'), route: 'chimera@Dashboard'},
+	{title: pageTitle, route: 'chimera@ModelAction'}
+]);
+
+start('chimera-cage') %>
 <x-panel class="table-panel model-list-panel" role="main">
 	<x-panel-title></x-panel-title>
 	<x-panel-action>

@@ -1,14 +1,15 @@
-<% sub_id = getId() %>
-
 <div class="chimeraEditor-subschema">
 	<h2>
 		<% assign('title') %>
 		<% print(data.field.fieldType.title) %>
 		<% assign_end('title') %>
-		<div class="chimeraField-left">
-		</div>
 	</h2>
-	<div class="chimeraEditor-subschema-wrap" data-sub-id="<%= sub_id %>">
+	<% if (data.field.fieldType.isArray) { %>
+		<button class="btn chimeraField-add-entry">
+			<%= __('chimera', 'Add new entry') %>
+		</button>
+	<% } %>
+	<div class="chimeraEditor-subschema-wrap">
 		<% assign('entries') %>
 	</div>
 </div>

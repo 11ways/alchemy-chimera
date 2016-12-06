@@ -1,4 +1,10 @@
 hawkejs.scene.on({type: 'set', template: 'chimera/field_wrappers/_wrapper'}, function applyField(element, variables) {
+
+	// Ignore nested wrappers
+	if (element.classList.contains('chimeraField-is-nested')) {
+		return;
+	}
+
 	hawkejs.require(['chimera/chimera_field_wrapper', 'chimera/chimera_field'], function loaded(err) {
 
 		var options;
@@ -55,6 +61,7 @@ function applySave(el, variables) {
 	$save.click(function onClick(e) {
 
 		var $fieldwrappers,
+		    containers,
 		    data,
 		    obj;
 
@@ -64,7 +71,9 @@ function applySave(el, variables) {
 			return chimeraFlash('Save ignored:<br>Save already in progress');
 		}
 
-		$intakes = $('.chimeraField-intake', $editor);
+		// Get all the non-nested containers
+		containers = $editor[0].querySelectorAll('.chimeraField-container:not(.chimeraField-is-nested)');
+
 		data = {};
 		obj = {
 			create: isDraft,
@@ -103,10 +112,14 @@ function applySave(el, variables) {
 			});
 		}
 
-		$intakes.each(function() {
+		containers.forEach(function eachFieldContainer(container) {
 
-			var $wrapper = $(this),
-			    instance = this.CFWrapper;
+			var instance = container.CFWrapper;
+
+			if (!instance) {
+				console.log('Found no instance on', container);
+				return;
+			}
 
 			// Skip nested wrappers,
 			// this could mess up the data

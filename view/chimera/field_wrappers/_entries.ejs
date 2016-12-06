@@ -23,7 +23,9 @@ printEntries = function printEntries(values) {
 		className = 'chimeraField-entry action-' + template.action + ' cfe-' + entries_id;
 
 		// Print the actual field element
+		print('\n');
 		placeholder = print_element(fieldElement, newData, {className: className});
+		print('\n');
 
 		// Set the element id for creating client-side chimera fields
 		placeholder.element.setAttribute('data-oid', i);
@@ -48,7 +50,7 @@ start('entries', {attributes: {'data-entries-id': entries_id}});
 		}
 
 		for (prefix in prefixes) {
-			print('<div class="chimeraField-prefix-intake" data-prefix="' + prefix + '"');
+			print('\n<div class="chimeraField-prefix-intake" data-prefix="' + prefix + '"');
 
 			if (first_prefix) {
 				first_prefix = false;
@@ -56,11 +58,11 @@ start('entries', {attributes: {'data-entries-id': entries_id}});
 				print(' style="display:none;"');
 			}
 
-			print('>');
+			print('>\n');
 
 			values = Array.cast(data.value[prefix]);
 			printEntries(values);
-			print('</div>');
+			print('\n</div>\n');
 		}
 	} else {
 		values = Array.cast(data.value);

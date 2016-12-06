@@ -5,13 +5,15 @@
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.3.0
  *
- * @param    {ChimeraFieldWrapper}   parent
- * @param    {Mixed}                 value
- * @param    {DOMElement}            container
- * @param    {Object}                variables
- * @param    {String}                prefix
+ * @param    {Object}                options
+ * @param    {ChimeraFieldWrapper}   options.parent
+ * @param    {DOMElement}            options.container
+ * @param    {Object}                options.variables
+ * @param    {Mixed}                 options.value
+ * @param    {String}                options.prefix
+ * @param    {Number}                options.original_index
  */
 var ChimeraField = Function.inherits(function ChimeraField(options) {
 
@@ -335,12 +337,16 @@ ChimeraField.setMethod(function addButtons() {
 	var that = this,
 	    el;
 
-	if (this.isArray && this.actionType == 'Edit') {
-		el = this.addElement('<button class="chimeraField-remove-entry">x</button>');
+	if (this.isArray) {
 
-		el.addEventListener('click', function onClickRemoveEntry(e) {
-			that.remove();
-		});
+		// Get the remove button
+		el = this.entry.querySelector('.chimeraField-remove-entry');
+
+		if (el) {
+			el.addEventListener('click', function onClickRemoveEntry(e) {
+				that.remove();
+			});
+		}
 	}
 });
 
@@ -483,6 +489,8 @@ ChimeraField.setMethod(function initEdit(value) {
 	if (typeof value !== 'undefined') {
 		this.input.value = value;
 	}
+
+	//console.log('Listening to change on', this);
 
 	// Add change listener
 	this.input.addEventListener('change', function onChange() {

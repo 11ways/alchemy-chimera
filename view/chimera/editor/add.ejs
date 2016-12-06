@@ -1,6 +1,12 @@
-<% expands('layouts/chimera') %>
+<% expands('layouts/chimera');
 
-<% start('chimera-cage') %>
+Router.setBreadcrumb([
+	{title: __('chimera', 'Dashboard'), route: 'chimera@Dashboard'},
+	{title: modelName.titleize(), route: 'chimera@ModelAction', parameters: {action: 'index'}},
+	{title: display_field_value, route: 'chimera@RecordAction'}
+]);
+
+start('chimera-cage') %>
 <main>
 	<x-panel class="chimera-editor" tabs>
 		<x-panel-tabs>
@@ -9,8 +15,7 @@
 			<% } %>
 		</x-panel-tabs>
 		<x-panel-action>
-			<% Chimera.printActions('model', {className: 'btn-top'}, record) %>
-			<% Chimera.printActions('draft', {className: 'btn-top'}, record) %>
+			<% Chimera.printActions('record-draft', {className: 'btn-top'}, record) %>
 		</x-panel-action>
 		<% for (name in groups) { %>
 			<x-panel-body id="<%= name.slug() %>">
