@@ -1,6 +1,8 @@
 var ChimeraController,
     options;
 
+alchemy.requirePlugin(['acl', 'menu']);
+
 // Define the default options
 options = {
 
@@ -224,3 +226,62 @@ ChimeraController.setMethod(function getActions(type) {
 
 	return this.actions[type];
 });
+
+/**
+ * Ensure Chimera ACL rules are set,
+ * don't start the server before it's done
+ */
+alchemy.sputnik.beforeSerial('startServer', function beforeStartServer(done) {
+
+	var AclRule = Model.get('AclRule'),
+	    rules;
+
+	rules = [
+		{
+			// Deny "everyone" group access to chimera section
+			_id              : '52efff0000a1c00002000000',
+			type             : 'route_acl_rule_type',
+			target_groups_id : [alchemy.plugins.acl.EveryoneGroupId],
+			settings         : {
+				section : 'chimera',
+				allow   : false,
+				weight  : 9999
+			}
+		},
+		{
+			// Allow "everyone" group access to chimera section
+			_id              : '52efff0000a1c00002000001',
+			type             : 'route_acl_rule_type',
+			target_groups_id : [alchemy.plugins.acl.SuperUserGroupId],
+			settings         : {
+				section : 'chimera',
+				allow   : true,
+				weight  : 100
+			}
+		}
+	];
+
+	AclRule.ensureIds(rules, function doneEnsuring(err) {
+
+		if (err) {
+			return log.error('Can not start server, error ensuring ACL rules.', {err: err});
+		}
+
+		done();
+	});
+});
+
+/*
+{
+    "_id" : ObjectId("58457c242ceac61b95d09e19"),
+    "created" : ISODate("2016-12-05T14:39:39.641Z"),
+    "updated" : ISODate("2016-12-05T22:35:32.593Z"),
+    "type" : "route_acl_rule_type",
+    "settings" : {
+        "section" : "chimera"
+    },
+    "target_groups_id" : [ 
+        ObjectId("52efff000001000001000000")
+    ]
+}
+*/

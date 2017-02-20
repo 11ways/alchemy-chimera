@@ -68,7 +68,7 @@ function applySave(el, variables) {
 		e.preventDefault();
 
 		if (preventDuplicate === true) {
-			return chimeraFlash('Save ignored:<br>Save already in progress');
+			//return chimeraFlash('Save ignored:<br>Save already in progress');
 		}
 
 		// Get all the non-nested containers
@@ -84,32 +84,44 @@ function applySave(el, variables) {
 			// Set the initial passed-along-by-server values first
 			Object.each(variables.groups, function eachGroup(group, name) {
 				group[0].fields.forEach(function eachField(entry) {
-
-					var i, j,
-					    subgroup,
-					    subentry;
-
-					if (entry.field.fieldType.typename == 'Schema' && entry.field.fieldType.isArray) {
-						// @todo: this hasn't really been tested,
-						// and it probably only works 1 level deep
-						for (i = 0; i < entry.value.length; i++) {
-							subgroup = entry.value[i];
-
-							for (j = 0; j < subgroup.fields.length; j++) {
-								subentry = subgroup.fields[j];
-
-								if (subentry.value != null) {
-									Object.setPath(data, entry.field.path + '.' + i + '.' + subentry.field.path, subentry.value);
-								}
-							}
-						}
-					} else {
-						if (entry.value != null) {
-							Object.setPath(data, entry.field.path, entry.value);
-						}
-					}
+					return doFieldEntry(entry);
 				});
 			});
+
+			function doFieldEntry(entry, base_path) {
+
+				var subgroup,
+				    subentry,
+				    subpath,
+				    path,
+				    i,
+				    j;
+
+				if (base_path) {
+					path = base_path;
+				}
+
+				if (!path) {
+					path = '';
+				} else {
+					path += '.';
+				}
+
+				path += entry.field.path;
+
+				if (entry.field.fieldType.typename == 'Schema' && entry.field.fieldType.isArray) {
+					for (i = 0; i < entry.value.length; i++) {
+						subgroup = entry.value[i];
+						subpath = base_path += '.' + i;
+
+						subgroup.fields.forEach(function eachSubField(entry) {
+							return doFieldEntry(entry, subpath);
+						});
+					}
+				} else if (entry.value != null) {
+					Object.setPath(data, path, entry.value);
+				}
+			}
 		}
 
 		containers.forEach(function eachFieldContainer(container) {

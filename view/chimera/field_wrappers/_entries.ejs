@@ -60,7 +60,12 @@ start('entries', {attributes: {'data-entries-id': entries_id}});
 
 			print('>\n');
 
-			values = Array.cast(data.value[prefix]);
+			if (data.value) {
+				values = Array.cast(data.value[prefix]);
+			} else {
+				values = [];
+			}
+
 			printEntries(values);
 			print('\n</div>\n');
 		}

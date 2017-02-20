@@ -18,18 +18,6 @@ var TextChimeraField = ChimeraField.extend(function TextChimeraField(parent, val
 });
 
 /**
- * Create the edit input element
- *
- * @author   Jelle De Loecker   <jelle@kipdola.be>
- * @since    0.2.0
- * @version  0.2.0
- */
-TextChimeraField.setMethod(function renderEdit() {
-	var html = '<div class="chimeraField-prime chimeraField-wysiwyg" contenteditable="true">' + (this.value || '') + '</div>';
-	this.setMainElement(html);
-});
-
-/**
  * Initialize the field
  *
  * @param    {Mixed}   value
@@ -37,11 +25,11 @@ TextChimeraField.setMethod(function renderEdit() {
 TextChimeraField.setMethod(function initEdit() {
 	
 	var that = this,
+	    editor,
 	    name,
-	    editor, id;
+	    id;
 
-
-	var editor = CKEDITOR.inline(that.input, {
+	editor = CKEDITOR.inline(that.input, {
 		extraPlugins: 'sourcedialog',
 		filebrowserBrowseUrl: '/boeckeditor',
 		allowedContent: true

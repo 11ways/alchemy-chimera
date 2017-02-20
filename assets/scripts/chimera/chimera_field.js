@@ -48,11 +48,6 @@ var ChimeraField = Function.inherits(function ChimeraField(options) {
 	// Identify local-added fields (by clicking + button)
 	this.is_local_add = this.original_index == null;
 
-	// Set the entry wrapper
-	if (!this.is_local_add) {
-		this.entry = this.parent.entries[this.original_index];
-	}
-
 	// Field data
 	this.field = this.parent.field;
 
@@ -116,11 +111,53 @@ ChimeraField.setProperty(function input() {
 
 	if (!this._input && this.entry) {
 		this._input = this.entry.querySelector('.chimeraField-prime');
+
+		if (!this._input) {
+			this._input = this.entry.querySelector('.chimeraEditor-input');
+		}
 	}
 
 	return this._input;
 }, function setInput(element) {
 	this._input = element;
+});
+
+/**
+ * Get the entry element
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.3.0
+ * @version  0.3.0
+ *
+ */
+ChimeraField.setProperty(function entry() {
+
+	var element,
+	    i;
+
+	if (this._entry != null) {
+		return this._entry;
+	}
+
+	if (this.is_local_add) {
+		this._entry = false;
+	} else if (!this.parent.isTranslatable) {
+		this._entry = this.parent.entries[this.original_index];
+	} else {
+		for (i = 0; i < this.parent.entries.length; i++) {
+			element = this.parent.entries[i];
+
+			if (element.dataset.oid == this.original_index && element.parentElement.dataset.prefix == this.prefix) {
+				this._entry = element;
+				break;
+			}
+		}
+	}
+
+	return this._entry;
+}, function set_entry(val) {
+	this._entry = val;
+	return val;
 });
 
 /**
@@ -284,6 +321,7 @@ ChimeraField.setMethod(function render(callback) {
 	render_function = 'render' + this.actionType;
 
 	// If there is a custom render function, execute that
+	// For exaple: renderEdit, renderList, renderPeek, renderView, ...
 	if (typeof this[render_function] == 'function') {
 		return this[render_function](callback);
 	}
@@ -493,9 +531,13 @@ ChimeraField.setMethod(function initEdit(value) {
 	//console.log('Listening to change on', this);
 
 	// Add change listener
-	this.input.addEventListener('change', function onChange() {
-		that.setValue(that.input.value);
-	});
+	if (this.input) {
+		this.input.addEventListener('change', function onChange() {
+			that.setValue(that.input.value);
+		});
+	} else {
+		console.warn('Field', this, 'has no input! Changes will not be saved');
+	}
 });
 
 /**

@@ -14,6 +14,8 @@ var Editor = Function.inherits('Alchemy.ChimeraController', function EditorChime
 	this.addAction('model', 'index', {title: 'Index', icon: '<x-svg data-src="chimera/list"></x-svg>'});
 	this.addAction('model', 'add', {title: 'Add', icon: '<x-svg data-src="chimera/plus"></x-svg>'});
 
+	this.addAction('model-list', 'add', {title: 'Add', icon: '<x-svg data-src="chimera/plus"></x-svg>', route_name: 'ModelAction'});
+
 	this.addAction('draft', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
 
 	this.addAction('record', 'edit', {title: 'Edit', icon: '<x-svg data-src="chimera/edit"></x-svg>'});
@@ -201,7 +203,7 @@ Editor.setMethod(function edit(conduit) {
 	    groups = actionFields.groups.clone();
 
 	model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, items) {
-console.log('Edit:', items);
+
 		if (err) {
 			return conduit.error(err);
 		}
@@ -240,7 +242,7 @@ Editor.setMethod(function peek(conduit) {
 
 	var that = this,
 	    action_fields,
-	    model_,ame,
+	    model_name,
 	    chimera,
 	    groups,
 	    model,
@@ -355,8 +357,6 @@ Editor.setMethod(function related_data(conduit) {
 
 		field = chimera.getField(fieldpath, items[0]);
 
-		console.log('Got', fieldpath, field, 'of', items);
-
 		if (!field) {
 			conduit.notFound(new Error('Could not find field "' + fieldpath + '"'));
 		} else {
@@ -444,6 +444,11 @@ Editor.setMethod(function save(conduit) {
 
 	chimera = model.constructor.chimera;
 	data = conduit.body.data;
+
+	if (!data) {
+		return conduit.error('Data was not found in POST body');
+	}
+
 	id = conduit.routeParam('id');
 
 	actionFields = chimera.getActionFields('edit');
