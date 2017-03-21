@@ -15,7 +15,7 @@
  * @param    {String}                options.prefix
  * @param    {Number}                options.original_index
  */
-var ChimeraField = Function.inherits(function ChimeraField(options) {
+var ChimeraField = Function.inherits('Informer', function ChimeraField(options) {
 
 	var that = this,
 	    action;
@@ -46,7 +46,7 @@ var ChimeraField = Function.inherits(function ChimeraField(options) {
 	this.original_index = options.original_index;
 
 	// Identify local-added fields (by clicking + button)
-	this.is_local_add = this.original_index == null;
+	this.is_local_add = options.local_add || this.original_index == null;
 
 	// Field data
 	this.field = this.parent.field;
@@ -198,6 +198,24 @@ ChimeraField.setProperty(function nested_path() {
  */
 ChimeraField.setMethod(function getNestedPath() {
 	return this.parent.getNestedPath();
+});
+
+/**
+ * Get the full path of this value
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.4.0
+ * @version  0.4.0
+ */
+ChimeraField.setMethod(function getFullPath() {
+
+	var nested = this.getNestedPath();
+
+	if (nested) {
+		return nested + '.' + this.path;
+	}
+
+	return this.path;
 });
 
 /**
@@ -460,10 +478,12 @@ ChimeraField.setMethod(function _render(callback) {
  * @author   Jelle De Loecker   <jelle@kipdola.be>
  * @since    0.2.0
  * @version  0.2.0
+ *
+ * @param    {Boolean}   force   Delete, even if it's not an array
  */
-ChimeraField.setMethod(function remove() {
+ChimeraField.setMethod(function remove(force) {
 
-	if (!this.isArray) {
+	if (!this.isArray && !force) {
 		return;
 	}
 
@@ -471,17 +491,26 @@ ChimeraField.setMethod(function remove() {
 	this.entry.remove();
 
 	// Remove the instance from the parent
-	this.parent.removeFromArray(this);
+	this.parent.removeFromArray(this, force);
 });
 
 /**
  * Set the new value for this field.
  * Only new values will be sent to the server on save.
  *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    0.2.0
+ * @version  0.4.0
+ *
  * @param    {Mixed}   value
  */
-ChimeraField.setMethod(function setValue(value) {
+ChimeraField.setMethod(function setValue(value, emit_change) {
 	this.value = value;
+
+	if (emit_change == null || emit_change) {
+		this.emit('change', value);
+		this.parent.emit('change');
+	}
 });
 
 /**

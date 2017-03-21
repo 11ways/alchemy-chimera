@@ -109,7 +109,7 @@ function applySave(el, variables) {
 
 				path += entry.field.path;
 
-				if (entry.field.fieldType.typename == 'Schema' && entry.field.fieldType.isArray) {
+				if (entry.field.fieldType.type_name == 'schema' && entry.field.fieldType.isArray) {
 					for (i = 0; i < entry.value.length; i++) {
 						subgroup = entry.value[i];
 						subpath = base_path += '.' + i;
@@ -126,7 +126,8 @@ function applySave(el, variables) {
 
 		containers.forEach(function eachFieldContainer(container) {
 
-			var instance = container.CFWrapper;
+			var instance = container.CFWrapper,
+			    sub_data;
 
 			if (!instance) {
 				console.log('Found no instance on', container);
@@ -139,7 +140,9 @@ function applySave(el, variables) {
 				return;
 			}
 
-			Object.merge(data, instance.getData(true));
+			sub_data = instance.getData(true);
+
+			Object.merge(data, sub_data);
 		});
 
 		if (Object.isEmpty(obj.data)) {

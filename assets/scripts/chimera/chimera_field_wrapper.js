@@ -9,7 +9,7 @@
  *
  * @param    {Object}   options
  */
-var ChimeraFieldWrapper = Function.inherits(function ChimeraFieldWrapper(options) {
+var ChimeraFieldWrapper = Function.inherits('Informer', function ChimeraFieldWrapper(options) {
 
 	if (!options) {
 		throw new Error('No options given for Chimera field wrapper');
@@ -129,7 +129,7 @@ ChimeraFieldWrapper.prepareProperty(function fieldClass() {
 });
 
 /**
- * Get the full path to this field value
+ * Get the path to this field value
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
@@ -162,6 +162,24 @@ ChimeraFieldWrapper.setMethod(function getNestedPath() {
 	}
 
 	return result;
+});
+
+/**
+ * Get the full path of this value
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.4.0
+ * @version  0.4.0
+ */
+ChimeraFieldWrapper.setMethod(function getFullPath() {
+
+	var nested = this.getNestedPath();
+
+	if (nested) {
+		return nested + '.' + this.name;
+	}
+
+	return this.name;
 });
 
 /**
@@ -394,6 +412,10 @@ ChimeraFieldWrapper.setMethod(function addValue(value, index) {
 /**
  * Add a prefix value
  *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    0.2.0
+ * @version  0.2.0
+ *
  * @param    {Object}   value
  * @param    {Number}   index
  * @param    {String}   prefix
@@ -401,6 +423,7 @@ ChimeraFieldWrapper.setMethod(function addValue(value, index) {
 ChimeraFieldWrapper.setMethod(function addPrefixValue(value, index, prefix) {
 
 	var instance,
+	    options,
 	    fields;
 
 	fields = this.getPrefixFields(prefix);
@@ -410,7 +433,52 @@ ChimeraFieldWrapper.setMethod(function addPrefixValue(value, index, prefix) {
 	}
 
 	try {
-		instance = new this.fieldClass({parent: this, value: value, prefix: prefix, original_index: index});
+		options = {
+			parent: this,
+			value: value,
+			prefix: prefix,
+			original_index: index
+		};
+
+		instance = new this.fieldClass(options);
+	} catch (err) {
+		console.error('Failed to create field:', err)
+	}
+});
+
+/**
+ * Set a prefix value
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    0.4.0
+ * @version  0.4.0
+ *
+ * @param    {Object}   value
+ * @param    {Number}   index
+ * @param    {String}   prefix
+ */
+ChimeraFieldWrapper.setMethod(function setPrefixValue(value, index, prefix) {
+
+	var instance,
+	    options,
+	    fields;
+
+	fields = this.getPrefixFields(prefix);
+
+	if (this.fieldClass.multipleValues && this.fields.length) {
+		return fields[0].addValue(value);
+	}
+
+	try {
+		options = {
+			parent: this,
+			value: value,
+			prefix: prefix,
+			original_index: index,
+			local_add: true
+		};
+
+		instance = new this.fieldClass(options);
 	} catch (err) {
 		console.error('Failed to create field:', err)
 	}
@@ -421,15 +489,16 @@ ChimeraFieldWrapper.setMethod(function addPrefixValue(value, index, prefix) {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.4.0
  *
  * @param    {ChimeraField}   child
+ * @param    {Boolean}        force
  */
-ChimeraFieldWrapper.setMethod(function removeFromArray(child) {
+ChimeraFieldWrapper.setMethod(function removeFromArray(child, force) {
 
 	var index;
 
-	if (!this.isArray) {
+	if (!this.isArray && !force) {
 		return;
 	}
 

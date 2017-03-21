@@ -120,6 +120,7 @@ BelongstoChimeraField.setMethod(function initEdit() {
 
 	var that = this,
 	    $input = $(this.input),
+	    init_value_has_been_set = false,
 	    coordinates,
 	    modelName,
 	    initted,
@@ -194,10 +195,12 @@ BelongstoChimeraField.setMethod(function initEdit() {
 				if (setInitValue && that.value) {
 					thisSelect.setValue(that.value);
 				}
+
+				init_value_has_been_set = true;
 			});
 		},
 		onChange: function changed(value) {
-			that.setValue(value);
+			that.setValue(value, init_value_has_been_set);
 		}
 	}, this.default_options);
 

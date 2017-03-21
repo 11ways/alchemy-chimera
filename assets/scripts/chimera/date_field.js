@@ -216,7 +216,7 @@ TimeChimeraField.setMethod(function renderList() {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.4.0
  *
  * @param    {ChimeraField}   that
  * @param    {String}         type
@@ -232,6 +232,10 @@ function applyDateField(that, type, options) {
 	}
 
 	options = Object.assign({weekStart: 1, initialValue: value}, options);
+
+	if (!that.input) {
+		throw new Error('Date field has no valid input element!');
+	}
 
 	// Apply `rome`
 	calender = rome(that.input, options);

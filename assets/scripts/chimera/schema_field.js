@@ -51,7 +51,52 @@ var SchemaChimeraField = Function.inherits('ChimeraField', function SchemaChimer
 });
 
 /**
+ * The linked field, if any
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    0.4.0
+ * @version  0.4.0
+ */
+SchemaChimeraField.setProperty(function linked_field() {
+
+	var siblings,
+	    pieces,
+	    field,
+	    path,
+	    i;
+
+	path = this.field.fieldType.options.schema;
+
+	if (typeof path != 'string') {
+		return null;
+	}
+
+	pieces = path.split('.');
+
+	// Get the siblings
+	siblings = this.container.parentElement.children;
+
+	for (i = 0; i < siblings.length; i++) {
+
+		// Ignore ourselves
+		if (siblings[i] == this.container) {
+			continue;
+		}
+
+		field = siblings[i].CFWrapper;
+
+		if (field.name == pieces[0]) {
+			return field;
+		}
+	}
+});
+
+/**
  * Initialize the field
+ *
+ * @author   Jelle De Loecker   <jelle@kipdola.be>
+ * @since    0.2.0
+ * @version  0.4.0
  *
  * @param    {Mixed}   value
  */
@@ -59,12 +104,40 @@ SchemaChimeraField.setMethod(function initEdit() {
 
 	var that = this,
 	    containers,
-	    selector;
+	    class_name,
+	    urlparams,
+	    selector,
+	    recordId,
+	    Router,
+	    linked,
+	    temp,
+	    url,
+	    i;
 
 	// Get all the field containers that are direct descendents of this schema,
 	// but not further (not a schema in a schema)
-	// This is curently not used, as it does not work when adding new entries
-	selector = '.chimeraField-container.nid-' + this.parent.entries_id;
+	if (this.is_local_add) {
+		selector = '.chimeraField-container';
+
+		// Get the very first container
+		temp = this.entry.querySelector(selector);
+
+		if (temp) {
+			for (i = 0; i < temp.classList.length; i++) {
+				if (temp.classList[i].startsWith('nid-')) {
+					class_name = temp.classList[i].after('nid-');
+					break;
+				}
+			}
+
+			if (class_name) {
+				selector += '.nid-' + class_name;
+			}
+		}
+
+	} else {
+		selector = '.chimeraField-container.nid-' + this.parent.entries_id;
+	}
 
 	// Get all the containers
 	containers = Array.cast(this.entry.querySelectorAll(selector));
@@ -100,40 +173,77 @@ SchemaChimeraField.setMethod(function initEdit() {
 		that.fields.push(instance);
 	});
 
-	return;
+	// Get the optional linked field
+	linked = this.linked_field;
 
-	this.value.fields.forEach(function eachSchemaField(entry) {
+	if (!linked) {
+		return;
+	}
 
-		var instance,
-		    options,
-		    wrapper,
-		    config = entry.field,
-		    html;
+	Router = new hawkejs.constructor.helpers.Router();
 
-		html = '<div class="chimeraField-row">';
-		html += '<div class="chimeraField-left"><div class="chimeraField-label">' + config.fieldType.title + '</div></div>';
-		html += '<div class="chimeraField-intake"></div>';
-		html += '</div>';
+	urlparams = this.variables.__urlparams || {};
 
-		wrapper = Blast.parseHTML(html);
+	if (urlparams.id) {
+		recordId = urlparams.id;
+	} else {
+		recordId = Object.path(this.variables, 'item.value.id');
+	}
 
-		// Add this new wrapper
-		that.$input.append(wrapper);
+	if (!recordId) {
+		recordId = Object.path(this.variables, 'data.root_id');
 
-		// Construct the wrapper options
-		options = {
-			nested_in: that,
-			variables: that.variables,
-			container: wrapper,
-			viewname: config.viewname,
-			value: entry.value,
-			field: entry.field
-		};
+		if (!recordId) {
+			recordId = this.variables.__recordId || "000000000000000000000000";
+		}
+	}
 
-		// Create a new wrapper instance
-		instance = new ChimeraFieldWrapper(options);
+	url = Blast.Collection.URL.parse(Router.routeUrl('RecordAction', {
+		controller: 'editor',
+		subject: this.field.model_name || this.modelName || this.variables.modelName,
+		action: 'related_data',
+		id: recordId
+	}));
 
-		that.fields.push(instance);
+	if (this.nested_path) {
+		url.addQuery('nested_in', this.nested_path);
+	}
+
+	url.addQuery('fieldpath', this.field.path);
+
+	linked.on('change', function onChange() {
+
+		var target_url,
+		    value,
+		    data;
+
+		data = linked.getData();
+
+		if (!data) {
+			return;
+		}
+
+		value = data[linked.name];
+
+		target_url = url.clone();
+		target_url.addQuery('path_of_new_value', linked.getFullPath());
+		target_url.addQuery('new_value', value);
+
+		hawkejs.scene.fetch(target_url, {}, function gotResult(err, data) {
+
+			if (err) {
+				throw err;
+			}
+
+			// Remove the original field, this has to happen before adding the
+			// new field, because otherwise multiple indexes exist and it screws up
+			that.remove(true);
+
+			that.parent.setPrefixValue(data, that.index, that.prefix);
+
+			// Unlisten to change event
+			linked.removeListener('change', onChange);
+		});
 	});
 });
 
