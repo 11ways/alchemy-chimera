@@ -159,13 +159,17 @@ BelongstoChimeraField.setMethod(function initEdit() {
 				setInitValue = true;
 			}
 
-			$.get(url, function gotResult(response) {
+			hawkejs.scene.fetch(url, function gotResult(err, response) {
 
 				var result = [],
 				    title,
 				    items,
 				    item,
 				    i;
+
+				if (err) {
+					throw err;
+				}
 
 				if (Array.isArray(response)) {
 					items = response;
@@ -192,7 +196,8 @@ BelongstoChimeraField.setMethod(function initEdit() {
 
 				callback(result);
 
-				if (setInitValue && that.value) {
+				// @TODO: that.value is sometimes an empty object in new records, why is that?
+				if (setInitValue && that.value && !Object.isEmpty(that.value)) {
 					thisSelect.setValue(that.value);
 				}
 

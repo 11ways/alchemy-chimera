@@ -109,13 +109,23 @@ function applySave(el, variables) {
 
 				path += entry.field.path;
 
-				if (entry.field.fieldType.type_name == 'schema' && entry.field.fieldType.isArray) {
-					for (i = 0; i < entry.value.length; i++) {
-						subgroup = entry.value[i];
-						subpath = base_path += '.' + i;
+				if (entry.field.fieldType.type_name == 'schema') {
+
+					if (entry.field.fieldType.isArray) {
+						for (i = 0; i < entry.value.length; i++) {
+							subgroup = entry.value[i];
+							subpath = base_path += '.' + i;
+
+							subgroup.fields.forEach(function eachSubField(entry) {
+								return doFieldEntry(entry, subpath);
+							});
+						}
+					} else if (entry.value) {
+
+						subgroup = entry.value[0];
 
 						subgroup.fields.forEach(function eachSubField(entry) {
-							return doFieldEntry(entry, subpath);
+							return doFieldEntry(entry, base_path);
 						});
 					}
 				} else if (entry.value != null) {
