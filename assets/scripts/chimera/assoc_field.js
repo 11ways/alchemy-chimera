@@ -23,6 +23,14 @@ var BelongstoChimeraField = Function.inherits('ChimeraField', function Belongsto
 	    recordId,
 	    subject;
 
+	this._original_value_object = options.value;
+
+	if (Object.isEmpty(options.value)) {
+		options.value = null;
+	} else if (typeof options.value == 'object' && options.value.assoc_id) {
+		options.value = options.value.assoc_id;
+	}
+
 	BelongstoChimeraField.super.call(this, options);
 
 	urlparams = this.variables.__urlparams || {};
