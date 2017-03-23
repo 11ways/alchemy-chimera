@@ -88,6 +88,12 @@ SchemaChimeraField.setProperty(function linked_field() {
 		if (field.name == pieces[0]) {
 			return field;
 		}
+
+		// The regular `field.name` can contain the root model name,
+		// so look deeper for just the name of the field
+		if (field.field && field.field.fieldType && field.field.fieldType.name == pieces[0]) {
+			return field;
+		}
 	}
 });
 
@@ -223,7 +229,7 @@ SchemaChimeraField.setMethod(function initEdit() {
 			return;
 		}
 
-		value = data[linked.name];
+		value = Object.path(data, linked.name);
 
 		target_url = url.clone();
 		target_url.addQuery('path_of_new_value', linked.getFullPath());
