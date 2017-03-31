@@ -391,12 +391,17 @@ ChimeraField.setMethod(function render(callback) {
 ChimeraField.setMethod(function addButtons() {
 
 	var that = this,
+	    elements,
 	    el;
 
 	if (this.isArray) {
 
 		// Get the remove button
-		el = this.entry.querySelector('.chimeraField-remove-entry');
+		elements = this.entry.querySelectorAll('.chimeraField-remove-entry');
+
+		// Get the LAST ONE,
+		// all the others could bu sub-array-field remove buttons
+		el = elements[elements.length - 1];
 
 		if (el) {
 			el.addEventListener('click', function onClickRemoveEntry(e) {
