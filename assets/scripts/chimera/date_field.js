@@ -1,47 +1,4 @@
 /**
- * The Rome ChimeraField class
- *
- * @constructor
- *
- * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    0.2.0
- * @version  0.2.0
- *
- * @param    {ChimeraFieldWrapper}   parent
- * @param    {Mixed}                 value
- * @param    {DOMElement}            container
- * @param    {Object}                variables
- * @param    {String}                prefix
- */
-var RomeChimeraField = Function.inherits('ChimeraField', function RomeChimeraField(parent, value, container, variables, prefix) {
-	RomeChimeraField.super.call(this, parent, value, container, variables, prefix);
-});
-
-/**
- * Create the edit input element
- *
- * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    0.2.0
- * @version  0.2.0
- */
-RomeChimeraField.setMethod(function renderEdit() {
-
-	var html;
-
-	// The "inline" option only shows a Rome picker,
-	// but it can be confusing when no value is set
-	if (this.parent.field.options.inline) {
-		html = '<div class="chimeraEditor-date-edit"></div>';
-	} else {
-		// Don't use "date" or "datetime" as type,
-		// that'll just complicate things
-		html = '<input class="chimeraField-string" type="text"></input>';
-	}
-
-	this.setMainElement(html);
-});
-
-/**
  * The Datetime ChimeraField class
  *
  * @constructor
@@ -56,18 +13,8 @@ RomeChimeraField.setMethod(function renderEdit() {
  * @param    {Object}                variables
  * @param    {String}                prefix
  */
-var DatetimeChimeraField = Function.inherits('RomeChimeraField', function DatetimeChimeraField(parent, value, container, variables, prefix) {
+var DatetimeChimeraField = Function.inherits('ChimeraField', function DatetimeChimeraField(parent, value, container, variables, prefix) {
 	DatetimeChimeraField.super.call(this, parent, value, container, variables, prefix);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-DatetimeChimeraField.setMethod(function initEdit() {
-	var that = this;
-	applyDateField(that, 'datetime');
 });
 
 /**
@@ -98,13 +45,54 @@ DatetimeChimeraField.setMethod(function renderList() {
 });
 
 /**
+ * Initialize the field in the edit action
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.4.0
+ * @version  0.4.0
+ *
+ * @param    {Mixed}   value   Optional value to override
+ */
+DatetimeChimeraField.setMethod(function initEdit(value) {
+
+	var that = this;
+
+	// Override the value if given
+	if (typeof value !== 'undefined') {
+		this.input.value = value;
+	}
+
+	// Add change listener
+	if (this.input) {
+		this.input.addEventListener('change', function onChange() {
+
+			var faulty,
+			    utc;
+
+			faulty = Date.create(that.input.value);
+
+			// The Date constructor interpreted it as having a timezone,
+			// we need to correct this
+			faulty = Number(faulty) + (faulty.getTimezoneOffset() * 60 * 1000);
+
+			// And now the correct value
+			utc = Date.create(faulty);
+
+			that.setValue(utc);
+		});
+	} else {
+		console.warn('Field', this, 'has no input! Changes will not be saved');
+	}
+});
+
+/**
  * The Date ChimeraField class
  *
  * @constructor
  *
  * @author   Kjell Keisse   <kjell@codedor.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.4.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -112,18 +100,8 @@ DatetimeChimeraField.setMethod(function renderList() {
  * @param    {Object}                variables
  * @param    {String}                prefix
  */
-var DateChimeraField = Function.inherits('RomeChimeraField', function DateChimeraField(parent, value, container, variables, prefix) {
+var DateChimeraField = Function.inherits('ChimeraField', function DateChimeraField(parent, value, container, variables, prefix) {
 	DateChimeraField.super.call(this, parent, value, container, variables, prefix);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-DateChimeraField.setMethod(function initEdit() {
-	var that = this;
-	applyDateField(that, 'date', {time: false});
 });
 
 /**
@@ -160,7 +138,7 @@ DateChimeraField.setMethod(function renderList() {
  *
  * @author   Kjell Keisse   <kjell@codedor.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.4.0
  *
  * @param    {ChimeraFieldWrapper}   parent
  * @param    {Mixed}                 value
@@ -170,16 +148,6 @@ DateChimeraField.setMethod(function renderList() {
  */
 TimeChimeraField = ChimeraField.extend(function TimeChimeraField(parent, value, container, variables, prefix) {
 	TimeChimeraField.super.call(this, parent, value, container, variables, prefix);
-});
-
-/**
- * Initialize the field
- *
- * @param    {Mixed}   value
- */
-TimeChimeraField.setMethod(function initEdit() {
-	var that = this;
-	applyDateField(that, 'time', {date: false});
 });
 
 /**
@@ -208,46 +176,3 @@ TimeChimeraField.setMethod(function renderList() {
 	html = '<div>' + val + '</div>';
 	this.setMainElement(html);
 });
-
-/**
- * Initiate a datefield
- *
- * @constructor
- *
- * @author   Jelle De Loecker   <jelle@develry.be>
- * @since    0.2.0
- * @version  0.4.0
- *
- * @param    {ChimeraField}   that
- * @param    {String}         type
- * @param    {Object}         options
- */
-function applyDateField(that, type, options) {
-
-	var value = that.value,
-	    calender;
-
-	if (value != null) {
-		value = new Date(value);
-	}
-
-	options = Object.assign({weekStart: 1, initialValue: value}, options);
-
-	if (!that.input) {
-		throw new Error('Date field has no valid input element!');
-	}
-
-	// Apply `rome`
-	calender = rome(that.input, options);
-
-	this.romeCalender = calender;
-
-	calender.on('data', function dateChange(dateString) {
-		var local = calender.getDate(),
-		    utc;
-
-		utc = new Date(Date.UTC(local.getFullYear(), local.getMonth()+1, local.getDate(), local.getHours(), local.getMinutes(), local.getSeconds(), local.getMilliseconds()));
-
-		that.setValue(utc);
-	});
-}

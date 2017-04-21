@@ -1,2 +1,20 @@
-<input type="hidden" name="data.<%= data.field.path %>">
-<div class="chimeraEditor-datetime-edit chimeraField-prime" data-value="<%= data.value || '' %>"></div>
+<%
+value = data.value;
+
+if (data.value && typeof data.value.format == 'function') {
+	value = data.value.format('Y-m-d\\TH:i:s');
+
+	ms = data.value.getMilliseconds();
+
+	if (ms) {
+		value += '.' + ms;
+	}
+}
+%>
+
+<input
+	type="datetime-local"
+	class="chimeraField-prime"
+	name="data.<%= data.field.path %>"
+	value="<%= value || '' %>"
+>
