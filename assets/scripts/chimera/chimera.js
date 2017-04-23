@@ -161,7 +161,16 @@ function applySave(el, variables) {
 
 		var editurl = document.location.href;
 
-		hawkejs.scene.openUrl($save.attr('href'), {post: obj, history: false}, function(err, result) {
+		var save_options = {
+			post    : obj,
+			history : false
+		};
+
+		if (isDraft) {
+			save_options.history = true;
+		}
+
+		hawkejs.scene.openUrl($save.attr('href'), save_options, function saved(err, result) {
 
 			if (err != null && result != null) {
 				preventDuplicate = false;

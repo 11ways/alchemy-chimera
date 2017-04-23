@@ -243,13 +243,14 @@ ChimeraFieldWrapper.setMethod(function initFields() {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.4.0
  */
 ChimeraFieldWrapper.setMethod(function addButtons() {
 
-	var that = this,
-	    $intake = $(this.intake),
-	    $left = $('.chimeraField-left', that.container).first(),
+	var that     = this,
+	    $prefixButtons,
+	    $intake  = $(this.intake),
+	    $left    = $('.chimeraField-left', that.container).first(),
 	    el,
 	    i;
 
@@ -272,11 +273,33 @@ ChimeraFieldWrapper.setMethod(function addButtons() {
 	if (this.isTranslatable) {
 		this.prefixes.forEach(function eachPrefix(prefix) {
 
-			var el = Blast.parseHTML('<button class="chimeraField-prefix-selector">' + prefix + '</button>');
-			$left.append(el);
+			var $prefix_button,
+			    prefix_button,
+			    is_first;
 
-			$(el).on('click', function onClickPrefix(e) {
+			if (!$prefixButtons) {
+				$prefixButtons = $('.chimeraField-prefix-buttons', $left);
+				is_first = true;
+
+				if (!$prefixButtons.length) {
+					$prefixButtons = $('<div class="chimeraField-prefix-buttons"></div>');
+					$left.append($prefixButtons);
+				}
+			}
+
+			prefix_button = Blast.parseHTML('<button class="chimeraField-prefix-selector btn btn-default">' + alchemy.__('chimera-prefix', prefix) + '</button>');
+			$prefixButtons.append(prefix_button);
+			$prefix_button = $(prefix_button);
+
+			if (is_first) {
+				prefix_button.classList.add('active');
+			}
+
+			$prefix_button.on('click', function onClickPrefix(e) {
 				that.showPrefix(prefix);
+
+				$prefix_button.siblings().removeClass('active');
+				$prefix_button.addClass('active');
 			});
 		});
 	}
