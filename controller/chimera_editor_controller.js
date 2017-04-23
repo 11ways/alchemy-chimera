@@ -36,7 +36,11 @@ var Editor = Function.inherits('Alchemy.ChimeraController', function EditorChime
 /**
  * The index action
  *
- * @param   {Conduit}   conduit
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.1.0
+ * @version  0.1.0
+ *
+ * @param    {Conduit}   conduit
  */
 Editor.setMethod(function index(conduit) {
 	return this.listing(conduit, 'list', 'index');
@@ -45,34 +49,63 @@ Editor.setMethod(function index(conduit) {
 /**
  * The generic listing method
  *
- * @param   {Conduit}   conduit
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.1.0
+ * @version  0.4.0
+ *
+ * @param    {Conduit}   conduit
+ * @param    {String}    type
+ * @param    {String}    view
  */
 Editor.setMethod(function listing(conduit, type, view) {
 
 	var that = this,
-	    modelName = conduit.routeParam('subject'),
-	    model = this.getModel(modelName),
-	    chimera = model.constructor.chimera;
+	    model_plural,
+	    model_title,
+	    model_name,
+	    chimera,
+	    model;
 
-	this.set('pagetitle', modelName.titleize().pluralize());
+	// Get the name of the model
+	model_name = conduit.routeParam('subject');
 
+	if (!model_name) {
+		return conduit.error(new Error('No model name was given, nothing to list'));
+	}
+
+	// Get the actual model
+	model = this.getModel(model_name);
+
+	// And get the chimera instance
+	chimera = model.constructor.chimera;
+
+	if (chimera == null) {
+		return conduit.error(new Error('Model "' + model_name + '" has no chimera configuration'));
+	}
+
+	// Get the model title
+	model_title = model_name.titleize();
+
+	// And the plural form
+	model_plural = model_title.pluralize();
+
+	// Disable translation behaviour of the model
 	model.disableTranslations();
+
+	// Set the page title
+	this.setTitle(model_plural);
 
 	if (view == null) {
 		view = type;
 	}
 
-	if (chimera == null) {
-		return conduit.error(new Error('Chimera configuration not added to model ' + modelName));
-	}
+	let action_fields = chimera.getActionFields(type),
+	    general       = action_fields.getGroup('general'),
+	    sorted        = general.getSorted(false),
+	    fields        = [],
+	    i;
 
-	var actionFields = chimera.getActionFields(type),
-	    general = actionFields.getGroup('general'),
-	    sorted = general.getSorted(false);
-
-	var fields = [];
-
-	for (var i = 0; i < sorted.length; i++) {
+	for (i = 0; i < sorted.length; i++) {
 		fields.push(sorted[i].path);
 	}
 
@@ -89,26 +122,37 @@ Editor.setMethod(function listing(conduit, type, view) {
 		});
 	}, function paginate(next) {
 
-		that.components.paginate.find(model, {fields: fields, pageSize: 10}, function(err, items) {
+		var options = {
+			fields    : fields,
+			pageSize  : 10
+		};
+
+		// Find the paginated records
+		that.components.paginate.find(model, options, function gotRecords(err, items) {
 
 			if (err) {
 				return next(err);
 			}
 
-			actionFields.processRecords('general', model, items, function groupedRecords(err, results) {
+			action_fields.processRecords('general', model, items, function groupedRecords(err, results) {
 
 				if (err) {
-					return conduit.error(err);
+					return next(err);
 				}
 
-				that.set('prefixes', Prefix.getPrefixList());
-				that.conduit.set('fields', general);
-				that.conduit.set('records', results.general);
-				that.conduit.set('actions', that.getActions());
-				that.conduit.set('modelName', modelName);
-				that.conduit.internal('modelName', modelName);
-				that.conduit.set('pageTitle', modelName.humanize());
-				that.conduit.set('show_index_filters', model.chimera.show_index_filters);
+				that.set('prefixes',           Prefix.getPrefixList());
+				that.set('fields',             general);
+				that.set('records',            results.general);
+				that.set('actions',            that.getActions());
+				that.set('show_index_filters', model.chimera.show_index_filters);
+
+				that.set('model_title',        model_title);
+				that.set('model_name',         model_name);
+				that.internal('model_name',    model_name);
+
+				// Deprecated modelName
+				that.set('modelName',          model_name);
+				that.internal('modelName',     model_name);
 
 				next();
 			});
@@ -153,32 +197,65 @@ Editor.setMethod(function create_field_value(conduit, controller, subject, actio
 Editor.setMethod(function add(conduit) {
 
 	var that = this,
-	    modelName = conduit.routeParam('subject'),
-	    model = this.getModel(modelName),
-	    chimera = model.constructor.chimera;
+	    model_plural,
+	    model_title,
+	    model_name,
+	    chimera,
+	    model;
 
+	// Get the name of the model
+	model_name = conduit.routeParam('subject');
+
+	if (!model_name) {
+		return conduit.error(new Error('No model name was given, nothing to list'));
+	}
+
+	// Get the actual model
+	model = this.getModel(model_name);
+
+	// And get the chimera instance
+	chimera = model.constructor.chimera;
+
+	if (chimera == null) {
+		return conduit.error(new Error('Model "' + model_name + '" has no chimera configuration'));
+	}
+
+	// Get the model title
+	model_title = model_name.titleize();
+
+	// And the plural form
+	model_plural = model_title.pluralize();
+
+	// Disable translation behaviour of the model
 	model.disableTranslations();
 
-	var actionFields = chimera.getActionFields('edit'),
-	    groups = actionFields.groups.clone();
+	this.setTitle(model_title + ': Add');
 
-	var item = model.compose(),
-	    id = item._id;
+	let action_fields = chimera.getActionFields('edit'),
+	    groups        = action_fields.groups.clone(),
+	    item          = model.compose(),
+	    id            = item._id;
 
-	actionFields.processRecords(model, [item], function groupedRecords(err, groups) {
+	action_fields.processRecords(model, [item], function groupedRecords(err, groups) {
 
 		if (err) {
 			throw err;
 		}
 
-		that.set('editor_action', 'add');
-		that.set('prefixes', Prefix.getPrefixList());
-		that.set('groups', groups);
-		that.set('actions', that.getActions());
-		that.set('modelName', modelName);
-		that.set('pagetitle', modelName.humanize() + ': Add');
-		that.internal('modelName', modelName);
-		that.internal('recordId', id);
+		that.set('editor_action',      'add');
+		that.set('prefixes',           Prefix.getPrefixList());
+		that.set('groups',             groups);
+		that.set('actions',            that.getActions());
+
+		that.set('model_title',        model_title);
+		that.set('model_name',         model_name);
+		that.internal('model_name',    model_name);
+		that.internal('record_id',     id);
+
+		// Deprecated variable names
+		that.set('modelName',          model_name);
+		that.internal('modelName',     model_name);
+		that.internal('recordId',      id);
 
 		that.render('chimera/editor/add');
 	});
@@ -471,7 +548,22 @@ Editor.setMethod(function save(conduit) {
 			return conduit.error(err);
 		}
 
+		let route_params = Object.assign({}, conduit.params);
+		route_params.action = 'edit';
+		route_params.id = result._id;
+
 		conduit.flash('Record has been saved', {className: 'chimera-success'});
+
+		// When creating a new record we need to supply a new url,
+		// because the 'history' will be activated
+		// The redirect does remain internal, though!
+		if (options.create) {
+			return conduit.redirect({
+				headers : conduit.headers,
+				url     : Router.getUrl('RecordAction', route_params)
+			});
+		}
+
 		that.edit(conduit);
 	});
 });
