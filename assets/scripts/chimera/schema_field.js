@@ -98,6 +98,22 @@ SchemaChimeraField.setProperty(function linked_field() {
 });
 
 /**
+ * Get the path of the value it's nested in
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.4.0
+ * @version  0.4.0
+ */
+SchemaChimeraField.setMethod(function getNestedPath() {
+
+	if (this.variables && this.variables.data && this.variables.data.nested_path) {
+		return this.variables.data.nested_path;
+	}
+
+	return this.parent.getNestedPath();
+});
+
+/**
  * Initialize the field
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
@@ -155,7 +171,8 @@ SchemaChimeraField.setMethod(function initEdit() {
 
 	containers.forEach(function eachContainer(element, index) {
 
-		var instance,
+		var model_name,
+		    instance,
 		    options,
 		    config,
 		    entry;
@@ -204,9 +221,19 @@ SchemaChimeraField.setMethod(function initEdit() {
 		}
 	}
 
+	// Get the name of the model this field is in
+	model_name = this.field.model_name || this.modelName || this.variables.modelName;
+
+	// If it's still not found, look in the data variable
+	if (!model_name) {
+		if (this.variables.data && this.variables.data.root_model) {
+			model_name = this.variables.data.root_model;
+		}
+	}
+
 	url = Blast.Collection.URL.parse(Router.routeUrl('RecordAction', {
 		controller: 'editor',
-		subject: this.field.model_name || this.modelName || this.variables.modelName,
+		subject: model_name,
 		action: 'related_data',
 		id: recordId
 	}));
