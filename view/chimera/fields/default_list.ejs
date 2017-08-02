@@ -1,1 +1,15 @@
-<%= data.value == null ? '' : data.value %>
+<%
+text_value = data.value == null ? '' : data.value;
+
+if (typeof text_value != 'string') {
+	text_value = String(text_value);
+}
+
+if (!text_value) {
+	text_value = '<i>' + __('chimera', 'empty') + '</i>';
+} else {
+	text_value = text_value.stripTags().truncate(100);
+}
+
+%>
+<%= text_value %>

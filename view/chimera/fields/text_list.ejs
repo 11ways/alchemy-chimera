@@ -1,1 +1,9 @@
-<%= data.value == null ? '' : data.value.stripTags().truncate(100) %>
+<%
+text_value = data.value == null ? '' : data.value.stripTags().truncate(100);
+
+if (!text_value) {
+	text_value = '<i>' + __('chimera', 'empty') + '</i>';
+}
+
+%>
+<%= text_value %>

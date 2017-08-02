@@ -1,0 +1,9 @@
+<%
+	dateval = data.value == null ? '' : data.value;
+
+	if (dateval) {
+		print('<time datetime="' + dateval.stripTime().toISOString() + '">');
+		print(dateval.toDateString());
+		print('</time>');
+	}
+%>

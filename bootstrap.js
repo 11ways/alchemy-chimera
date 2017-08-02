@@ -158,6 +158,16 @@ alchemy.plugins.chimera.getMenu(function gotMenu(err, menu) {
 	});
 });
 
+chimera.menu.set('i18n', {
+	title: 'I18n',
+	route: 'chimera@ModelAction',
+	parameters: {
+		controller: 'Editor',
+		subject: 'i18n',
+		action: 'index'
+	}
+});
+
 var ChimeraController = Function.inherits('Alchemy.Controller', function ChimeraController(conduit, options) {
 
 	Controller.call(this, conduit, options);
@@ -167,6 +177,9 @@ var ChimeraController = Function.inherits('Alchemy.Controller', function Chimera
 
 	// Set the theme
 	this.viewRender.setTheme(alchemy.plugins.chimera.theme);
+
+	// Set the chimera options
+	this.set('chimera_options', alchemy.plugins.chimera);
 
 	this.actions = {};
 });

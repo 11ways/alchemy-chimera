@@ -1,4 +1,4 @@
-hawkejs.scene.on({type: 'set', template: 'chimera/field_wrappers/_wrapper'}, function applyField(element, variables) {
+hawkejs.scene.on({type: 'set', entry: 'chimera/field_wrappers/_wrapper'}, function applyField(element, variables) {
 
 	// Ignore nested wrappers
 	if (element.classList.contains('chimeraField-is-nested')) {
