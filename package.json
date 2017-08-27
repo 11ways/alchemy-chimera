@@ -1,7 +1,7 @@
 {
 	"name": "alchemy-chimera",
 	"description": "Chimera plugin for Alchemy MVC",
-	"version": "0.3.0-alpha",
+	"version": "0.4.0",
 	"author": "Jelle De Loecker <jelle@develry.be>",
 	"keywords": [
 		"alchemy",
@@ -9,18 +9,14 @@
 		"plugin",
 		"cms"
 	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/codedor/alchemy-chimera.git"
-	},
+	"repository": "skerit/alchemy-chimera",
 	"dependencies": {
-		"alchemy-ajatar-theme": "~1.0.0",
-		"excel-export": "0.3.11",
-		"msexcel-builder": "0.0.x"
+		"alchemy-ajatar-theme" : "~1.0.0",
+		"excel-export"         : "0.3.11",
+		"msexcel-builder"      : "0.0.x"
 	},
 	"license": "MIT",
 	"engines": {
-		"node": "~4.5.0"
-	},
-	"private": true
+		"node": ">=6.6.0"
+	}
 }
