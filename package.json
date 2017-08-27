@@ -1,7 +1,7 @@
 {
 	"name": "alchemy-chimera",
 	"description": "Chimera plugin for Alchemy MVC",
-	"version": "0.4.0",
+	"version": "0.4.1-alpha",
 	"author": "Jelle De Loecker <jelle@develry.be>",
 	"keywords": [
 		"alchemy",
@@ -18,5 +18,6 @@
 	"license": "MIT",
 	"engines": {
 		"node": ">=6.6.0"
-	}
+	},
+	"private": true
 }

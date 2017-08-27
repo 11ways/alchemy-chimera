@@ -1,3 +1,5 @@
+## 0.4.1 (WIP)
+
 ## 0.4.0 (2017-08-27)
 
 * Linked subschema's will now change on-the-fly in the editor, without saving
