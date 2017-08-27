@@ -190,4 +190,4 @@
 
 	vex.defaultOptions.className = 'vex-theme-flat-attack';
 	hawkejs.require('vex/vex.dialog');
-});
+}());

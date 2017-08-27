@@ -117,11 +117,12 @@ alchemy.plugins.chimera.getMenu(function gotMenu(err, menu) {
 	 *
 	 * @author   Jelle De Loecker <jelle@develry.be>
 	 * @since    0.2.0
-	 * @version  0.3.0
+	 * @version  0.4.0
 	 */
 	menu.addItem('route', {
 		weight     : 9999,
 		settings   : {
+			name   : 'dashboard',
 			title  : __('chimera', 'Dashboard'),
 			route  : 'chimera@Dashboard',
 			decoration  : {
@@ -137,11 +138,12 @@ alchemy.plugins.chimera.getMenu(function gotMenu(err, menu) {
 	 *
 	 * @author   Jelle De Loecker <jelle@develry.be>
 	 * @since    0.2.0
-	 * @version  0.3.0
+	 * @version  0.4.0
 	 */
 	menu.addItem('route', {
 		weight     : 9900,
 		settings   : {
+			name   : 'users',
 			title  : __('chimera', 'Users'),
 			route  : 'chimera@ModelAction',
 			parameters  : {
@@ -161,6 +163,7 @@ alchemy.plugins.chimera.getMenu(function gotMenu(err, menu) {
 chimera.menu.set('i18n', {
 	title: 'I18n',
 	route: 'chimera@ModelAction',
+	name : 'i18n',
 	parameters: {
 		controller: 'Editor',
 		subject: 'i18n',

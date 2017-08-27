@@ -4,3 +4,7 @@
 	id="field-<%= data.field.path %>"
 	type="text"
 ></select>
+
+<% if (data.field.fieldType.isArray) { %>
+	<button class="btn chimeraField-remove-entry" type="button">x</button>
+<% } %>
