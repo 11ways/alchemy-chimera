@@ -1,5 +1,9 @@
 ## 0.4.1 (WIP)
 
+* Fix handling fields that are an array of arrays
+* Add option to hide translation buttons
+* Add option to set the notification timeout
+
 ## 0.4.0 (2017-08-27)
 
 * Linked subschema's will now change on-the-fly in the editor, without saving

@@ -70,7 +70,20 @@ start('entries', {attributes: {'data-entries-id': entries_id}});
 			print('\n</div>\n');
 		}
 	} else {
-		values = Array.cast(data.value);
+		if (data.field.fieldType.options && data.field.fieldType.options.nested_array) {
+			if (Array.isArray(data.value)) {
+				if (Array.isArray(data.value[0])) {
+					values = data.value;
+				} else {
+					values = [data.value];
+				}
+			} else {
+				values = [data.value];
+			}
+		} else {
+			values = Array.cast(data.value);
+		}
+
 		printEntries(values);
 	}
 

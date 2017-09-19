@@ -247,7 +247,8 @@ function removeRecord(el) {
 
 function chimeraFlash(flash) {
 
-	var className,
+	var chimera_options,
+	    className,
 	    element,
 	    obj;
 
@@ -255,6 +256,8 @@ function chimeraFlash(flash) {
 		console.log('"vex" not found, flash:', flash);
 		return;
 	}
+
+	chimera_options = hawkejs.scene.exposed.chimera_options || {};
 
 	if (typeof flash == 'string') {
 		flash = {
@@ -277,7 +280,7 @@ function chimeraFlash(flash) {
 
 	setTimeout(function closeVexFlash() {
 		vex.close(element.data('id'))
-	}, flash.timeout || 2000);
+	}, flash.timeout || chimera_options.notification_timeout || 2500);
 }
 
 // $(document).ready(function() {

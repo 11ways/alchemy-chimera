@@ -6,6 +6,9 @@ alchemy.requirePlugin(['acl', 'menu']);
 // Define the default options
 options = {
 
+	// Extra classes
+	extra_class: '',
+
 	// The name of the base layout
 	baselayout: 'admin_base',
 
@@ -34,6 +37,10 @@ options = {
 // Inject the user-overridden options
 alchemy.plugins.chimera = Object.merge(options, alchemy.plugins.chimera);
 global.chimera = alchemy.plugins.chimera;
+
+if (options.hide_translate_buttons) {
+	options.extra_class += ' hide-translate-buttons';
+}
 
 if (!alchemy.plugins.acl) {
 	alchemy.plugins.acl = {placeholders: {}}
@@ -183,6 +190,7 @@ var ChimeraController = Function.inherits('Alchemy.Controller', function Chimera
 
 	// Set the chimera options
 	this.set('chimera_options', alchemy.plugins.chimera);
+	this.expose('chimera_options', alchemy.plugins.chimera);
 
 	this.actions = {};
 });
