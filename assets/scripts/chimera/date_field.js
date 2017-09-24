@@ -66,19 +66,11 @@ DatetimeChimeraField.setMethod(function initEdit(value) {
 	if (this.input) {
 		this.input.addEventListener('change', function onChange() {
 
-			var faulty,
-			    utc;
+			var date;
 
-			faulty = Date.create(that.input.value);
+			date = Date.create(that.input.value);
 
-			// The Date constructor interpreted it as having a timezone,
-			// we need to correct this
-			faulty = Number(faulty) + (faulty.getTimezoneOffset() * 60 * 1000);
-
-			// And now the correct value
-			utc = Date.create(faulty);
-
-			that.setValue(utc);
+			that.setValue(date);
 		});
 	} else {
 		console.warn('Field', this, 'has no input! Changes will not be saved');
