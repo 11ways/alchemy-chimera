@@ -57,7 +57,7 @@ chimera_section.add({
 chimera_section.get('PageEditor', '/page_editor', 'ChimeraStatic#pageEditor');
 
 // @TODO: add this to the chimera router
-Router.socket('al-rcommand-action', 'RunningCommandChimera#action');
+Router.socket('al-rcommand-action', 'TaskChimera#action');
 
 // alchemy.plugins.chimera.menu_items.addItem('route', {
 // 	title      : 'Dashboard',

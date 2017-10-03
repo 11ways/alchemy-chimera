@@ -3,6 +3,7 @@
 * Fix handling fields that are an array of arrays
 * Add option to hide translation buttons
 * Add option to set the notification timeout
+* The `Command` class is now `Task`
 
 ## 0.4.0 (2017-08-27)
 
