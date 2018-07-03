@@ -1,4 +1,8 @@
-## 0.4.1 (WIP)
+## 0.5.0 (2018-07-03)
+
+* Compatible with alchemy v1.0.0
+
+## 0.4.1 (2017-10-03)
 
 * Fix handling fields that are an array of arrays
 * Add option to hide translation buttons

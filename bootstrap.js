@@ -178,15 +178,12 @@ chimera.menu.set('i18n', {
 	}
 });
 
-var ChimeraController = Function.inherits('Alchemy.Controller', function ChimeraController(conduit, options) {
+var ChimeraController = Function.inherits('Alchemy.Controller', 'Alchemy.Controller.Chimera', function Chimera(conduit, options) {
 
-	Controller.call(this, conduit, options);
-
-	// @TODO: move to the prototype
-	this.name = this.constructor.name.beforeLast('ChimeraController');
+	Chimera.super.call(this, conduit, options);
 
 	// Set the theme
-	this.viewRender.setTheme(alchemy.plugins.chimera.theme);
+	this.view_render.setTheme(alchemy.plugins.chimera.theme);
 
 	// Set the chimera options
 	this.set('chimera_options', alchemy.plugins.chimera);

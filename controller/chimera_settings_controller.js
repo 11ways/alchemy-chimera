@@ -5,9 +5,9 @@
  * @since         0.2.0
  * @version       0.3.0
  */
-var Settings = Function.inherits('Alchemy.ChimeraController', function SettingsChimeraController(conduit, options) {
+var Settings = Function.inherits('Alchemy.Controller.Chimera.Editor', function Setting(conduit, options) {
 
-	SettingsChimeraController.super.call(this, conduit, options);
+	Setting.super.call(this, conduit, options);
 
 	this.addComponent('paginate');
 
@@ -21,12 +21,12 @@ var Settings = Function.inherits('Alchemy.ChimeraController', function SettingsC
  *
  * @param   {Conduit}   conduit
  */
-Settings.setMethod(function index(conduit) {
-	
+Settings.setAction(function index(conduit) {
+
 	var that = this,
 	    modelName = 'settings',
 	    model = Model.get(modelName);
-		
+
 	model.find('first', function gotResult(err, settings){
 		if(settings.available){
 			return that.edit(conduit);
@@ -46,18 +46,18 @@ Settings.setMethod(function index(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Settings.setMethod(function edit(conduit) {
+Settings.setAction(function edit(conduit) {
 
 	var that = this,
 	    modelName = 'settings',
 	    model = Model.get(modelName),
 	    chimera = model.constructor.chimera,
 	    id;
-		
+
 	model.find('first', function gotResult(err, settings){
 
-		id = settings[0].Setting._id;
-		
+		id = settings._id;
+
 		var actionFields = chimera.getActionFields('edit'),
 		    groups = actionFields.groups.clone();
 
@@ -87,7 +87,7 @@ Settings.setMethod(function edit(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Settings.setMethod(function save(conduit) {
+Settings.setAction(function save(conduit) {
 
 	var that = this,
 	    actionFields,
@@ -110,8 +110,8 @@ Settings.setMethod(function save(conduit) {
 
 	model.find('first', function gotResult(err, settings){
 
-		id = settings[0].Setting._id;
-		
+		id = settings._id;
+
 		record = data[modelName.classify()];
 		record._id = alchemy.castObjectId(id);
 
@@ -125,7 +125,5 @@ Settings.setMethod(function save(conduit) {
 		model.save(record, options, function afterSave(err) {
 			that.edit(conduit);
 		});
-		
 	});
-
 });

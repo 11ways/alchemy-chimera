@@ -32,7 +32,7 @@ ObjectChimeraField.setMethod(function initEdit(value) {
 
 	// Override the value if given
 	if (typeof value !== 'undefined') {
-		this.input.value = JSON.stringify(value, null, 4);
+		this.input.value = JSON.dry(value, null, 4);
 	}
 
 	// Add change listener
@@ -41,7 +41,7 @@ ObjectChimeraField.setMethod(function initEdit(value) {
 		var value;
 
 		try {
-			value = JSON.parse(that.input.value);
+			value = JSON.undry(that.input.value);
 		} catch (err) {
 			return console.error('Failed to parse JSON: ', value);
 		}

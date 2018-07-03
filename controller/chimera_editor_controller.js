@@ -3,11 +3,11 @@
  *
  * @author        Jelle De Loecker   <jelle@kipdola.be>
  * @since         0.2.0
- * @version       0.2.0
+ * @version       0.5.0
  */
-var Editor = Function.inherits('Alchemy.ChimeraController', function EditorChimeraController(conduit, options) {
+var Editor = Function.inherits('Alchemy.Controller.Chimera', function Editor(conduit, options) {
 
-	EditorChimeraController.super.call(this, conduit, options);
+	Editor.super.call(this, conduit, options);
 
 	this.addComponent('paginate');
 
@@ -42,8 +42,8 @@ var Editor = Function.inherits('Alchemy.ChimeraController', function EditorChime
  *
  * @param    {Conduit}   conduit
  */
-Editor.setMethod(function index(conduit) {
-	return this.listing(conduit, 'list', 'index');
+Editor.setAction(function index(conduit) {
+	return this.doAction('listing', [conduit, 'list', 'index']);
 });
 
 /**
@@ -57,7 +57,7 @@ Editor.setMethod(function index(conduit) {
  * @param    {String}    type
  * @param    {String}    view
  */
-Editor.setMethod(function listing(conduit, type, view) {
+Editor.setAction(function listing(conduit, type, view) {
 
 	var that = this,
 	    model_plural,
@@ -173,7 +173,7 @@ Editor.setMethod(function listing(conduit, type, view) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function create_field_value(conduit, controller, subject, action) {
+Editor.setAction(function create_field_value(conduit, controller, subject, action) {
 
 	var that = this,
 	    model = this.getModel(subject),
@@ -194,7 +194,7 @@ Editor.setMethod(function create_field_value(conduit, controller, subject, actio
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function add(conduit) {
+Editor.setAction(function add(conduit) {
 
 	var that = this,
 	    model_plural,
@@ -266,7 +266,7 @@ Editor.setMethod(function add(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function edit(conduit) {
+Editor.setAction(function edit(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
@@ -279,17 +279,17 @@ Editor.setMethod(function edit(conduit) {
 	var actionFields = chimera.getActionFields('edit'),
 	    groups = actionFields.groups.clone();
 
-	model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, items) {
+	model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, item) {
 
 		if (err) {
 			return conduit.error(err);
 		}
 
-		if (!items.length) {
+		if (!item) {
 			return conduit.notFound();
 		}
 
-		actionFields.processRecords(model, items, function groupedRecords(err, groups) {
+		actionFields.processRecords(model, [item], function groupedRecords(err, groups) {
 
 			if (err) {
 				return conduit.error(err);
@@ -300,7 +300,7 @@ Editor.setMethod(function edit(conduit) {
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
 			that.set('modelName', modelName);
-			that.set('display_field_value', items.getDisplayFieldValue({prefer: 'name'}));
+			that.set('display_field_value', item.getDisplayFieldValue({prefer: 'name'}));
 			that.set('pagetitle', modelName.humanize() + ': Edit');
 			that.internal('modelName', modelName);
 			that.internal('recordId', id);
@@ -315,7 +315,7 @@ Editor.setMethod(function edit(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function peek(conduit) {
+Editor.setAction(function peek(conduit) {
 
 	var that = this,
 	    action_fields,
@@ -338,17 +338,17 @@ Editor.setMethod(function peek(conduit) {
 	groups = action_fields.groups.clone();
 
 	// Get the wanted record
-	model.find('first', {conditions: {_id: id}}, function gotRecord(err, items) {
+	model.find('first', {conditions: {_id: id}}, function gotRecord(err, item) {
 
 		if (err) {
 			return conduit.error(err);
 		}
 
-		if (!items.length) {
+		if (!item) {
 			return conduit.notFound();
 		}
 
-		action_fields.processRecords(model, items, function groupedRecords(err, groups) {
+		action_fields.processRecords(model, [item], function groupedRecords(err, groups) {
 
 			if (err) {
 				return conduit.error(err);
@@ -359,7 +359,7 @@ Editor.setMethod(function peek(conduit) {
 			that.set('groups', groups);
 			that.set('actions', that.getActions());
 			that.set('modelName', model_name);
-			that.set('display_field_value', items.getDisplayFieldValue({prefer: 'name'}));
+			that.set('display_field_value', item.getDisplayFieldValue({prefer: 'name'}));
 			that.internal('modelName', model_name);
 			that.internal('recordId', id);
 
@@ -374,7 +374,7 @@ Editor.setMethod(function peek(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function model_assoc_data(conduit) {
+Editor.setAction(function model_assoc_data(conduit) {
 
 	var model = Model.get(conduit.routeParam('subject')),
 	    options;
@@ -406,7 +406,7 @@ Editor.setMethod(function model_assoc_data(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function related_data(conduit) {
+Editor.setAction(function related_data(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
@@ -449,7 +449,7 @@ Editor.setMethod(function related_data(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function view(conduit) {
+Editor.setAction(function view(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
@@ -498,7 +498,7 @@ Editor.setMethod(function view(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function save(conduit) {
+Editor.setAction(function save(conduit) {
 
 	var that = this,
 	    actionFields,
@@ -541,12 +541,14 @@ Editor.setMethod(function save(conduit) {
 		options.create = true;
 	}
 
-	model.save(record, options, function afterSave(err, result) {
+	model.save(record, options, function afterSave(err, items) {
 
 		if (err != null) {
 			conduit.flash('Could not save record: ' + err, {className: 'chimera-fail'});
 			return conduit.error(err);
 		}
+
+		let result = items[0];
 
 		let route_params = Object.assign({}, conduit.params);
 		route_params.action = 'edit';
@@ -558,13 +560,14 @@ Editor.setMethod(function save(conduit) {
 		// because the 'history' will be activated
 		// The redirect does remain internal, though!
 		if (options.create) {
+
 			return conduit.redirect({
 				headers : conduit.headers,
 				url     : Router.getUrl('RecordAction', route_params)
 			});
 		}
 
-		that.edit(conduit);
+		that.doAction('edit', [conduit]);
 	});
 });
 
@@ -573,7 +576,7 @@ Editor.setMethod(function save(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function remove(conduit) {
+Editor.setAction(function remove(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),

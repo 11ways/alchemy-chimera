@@ -8,8 +8,8 @@ var all_task_types = alchemy.getClassGroup('task'),
  * @since         0.4.1
  * @version       0.4.1
  */
-var Tasks = Function.inherits('Alchemy.ChimeraController', function TasksChimeraController(conduit) {
-	TasksChimeraController.super.call(this, conduit);
+var Tasks = Function.inherits('Alchemy.Controller.Chimera', function Task(conduit) {
+	Task.super.call(this, conduit);
 });
 
 /**
@@ -18,7 +18,7 @@ var Tasks = Function.inherits('Alchemy.ChimeraController', function TasksChimera
  *
  * @param   {Conduit}   conduit
  */
-Tasks.setMethod(function index(conduit) {
+Tasks.setAction(function index(conduit) {
 
 	var that = this,
 	    finished = [],
@@ -81,7 +81,7 @@ Tasks.setMethod(function getById(id) {
  *
  * @param   {Conduit}   conduit
  */
-Tasks.setMethod(function action(conduit, id, type) {
+Tasks.setAction(function action(conduit, id, type) {
 
 	var task = this.getById(id);
 

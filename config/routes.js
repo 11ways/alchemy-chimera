@@ -10,39 +10,39 @@ chimera_section.add({
 	name       : 'Dashboard',
 	methods    : 'get',
 	paths      : '/',
-	handler    : 'ChimeraStatic#dashboard',
+	handler    : 'Chimera.Static#dashboard',
 	breadcrumb : 'chimera.dashboard'
 });
 
 chimera_section.add({
 	name       : 'IdActionLink',
 	methods    : ['get', 'post'],
-	paths      : '/:controller/:action/[ObjectId]:id',
-	handler    : '{controller}ChimeraController#{action}',
+	paths      : '/{controller}/{action}/{[ObjectId]id}',
+	handler    : 'Chimera.{controller}#{action}',
 	breadcrumb : 'chimera.{controller}.{action}.{id}'
 });
 
 chimera_section.add({
 	name       : 'ActionLink',
 	methods    : ['get', 'post'],
-	paths      : '/:controller/:action',
-	handler    : '{controller}ChimeraController#{action}',
+	paths      : '/{controller}/{action}',
+	handler    : 'Chimera.{controller}#{action}',
 	breadcrumb : 'chimera.{controller}.{action}'
 });
 
 chimera_section.add({
 	name       : 'RecordAction',
 	methods    : ['get', 'post'],
-	paths      : '/:controller/:subject/:action/[ObjectId]:id',
-	handler    : '{controller}ChimeraController#{action}',
+	paths      : '/{controller}/{subject}/{action}/{[ObjectId]id}',
+	handler    : 'Chimera.{controller}#{action}',
 	breadcrumb : 'chimera.{controller}.{subject}.{action}.{id}'
 });
 
 chimera_section.add({
 	name       : 'ModelAction',
 	methods    : ['get', 'post'],
-	paths      : '/:controller/:subject/:action',
-	handler    : '{controller}ChimeraController#{action}',
+	paths      : '/{controller}/{subject}/{action}',
+	handler    : 'Chimera.{controller}#{action}',
 	breadcrumb : 'chimera.{controller}.{subject}'
 });
 
@@ -50,11 +50,11 @@ chimera_section.add({
 	name       : 'SettingsAction',
 	methods    : ['get', 'post'],
 	paths      : '/settings',
-	handler    : 'SettingsChimeraController#index',
+	handler    : 'Chimera.Settings#index',
 	breadcrumb : 'chimera.settings'
 });
 
-chimera_section.get('PageEditor', '/page_editor', 'ChimeraStatic#pageEditor');
+chimera_section.get('PageEditor', '/page_editor', 'Chimera.Static#pageEditor');
 
 // @TODO: add this to the chimera router
 Router.socket('al-rcommand-action', 'TaskChimera#action');
@@ -73,7 +73,7 @@ chimera_section.use(function setChimeraData(req, res, next) {
 	req.conduit.internal('UserData', req.conduit.session('UserData') || {});
 
 	// Set the theme to use
-	req.conduit.viewRender.setTheme(alchemy.plugins.chimera.view_settings.theme);
+	req.conduit.view_render.setTheme(alchemy.plugins.chimera.view_settings.theme);
 
 	// Skip the rest if it's an ajax call
 	if (req.conduit.ajax) {
