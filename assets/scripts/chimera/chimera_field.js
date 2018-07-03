@@ -549,7 +549,7 @@ ChimeraField.setMethod(function doInit() {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
- * @version  0.3.0
+ * @version  0.5.0
  *
  * @param    {Mixed}   value   Optional value to override
  */
@@ -569,7 +569,7 @@ ChimeraField.setMethod(function initEdit(value) {
 		this.input.addEventListener('change', function onChange() {
 			that.setValue(that.input.value);
 		});
-	} else {
+	} else if (!(this.field && this.field.fieldType && this.field.fieldType.name == '_id')) {
 		console.warn('Field', this, 'has no input! Changes will not be saved');
 	}
 });
