@@ -15,6 +15,11 @@
 		"excel-export"         : "0.3.11",
 		"msexcel-builder"      : "0.0.x"
 	},
+	"peerDependencies": {
+		"alchemymvc": "~1.0.0",
+		"alchemy-acl": "~0.5.0",
+		"alchemy-menu": "~0.5.0"
+	},
 	"license": "MIT",
 	"engines": {
 		"node": ">=8.9.0"
