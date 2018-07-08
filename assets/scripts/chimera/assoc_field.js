@@ -173,7 +173,8 @@ BelongstoChimeraField.setMethod(function initEdit() {
 				    title,
 				    items,
 				    item,
-				    i;
+				    i,
+				    j;
 
 				if (err) {
 					throw err;
@@ -193,7 +194,21 @@ BelongstoChimeraField.setMethod(function initEdit() {
 						item = item[modelName];
 					}
 
-					title = Object.first(item[response.displayField]) || Object.first(item.title) || Object.first(item.name);
+					if (Array.isArray(response.displayField)) {
+						for (j = 0; j < response.displayField.length; j++) {
+							title = Object.first(item[response.displayField[j]]);
+
+							if (title) {
+								break;
+							}
+						}
+					} else {
+						title = Object.first(item[response.displayField]);
+					}
+
+					if (!title) {
+						title = Object.first(item.title) || Object.first(item.name) || item._id;
+					}
 
 					result.push({
 						_id: item._id,

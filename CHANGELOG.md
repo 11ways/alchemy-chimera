@@ -1,3 +1,7 @@
+## 0.5.1 (WIP)
+
+* `sendRelatedData` now uses `DocumentList#toSimpleArray()`, so this way property getters can act as a displayField
+
 ## 0.5.0 (2018-07-04)
 
 * Compatible with alchemy v1.0.0
