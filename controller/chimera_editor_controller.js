@@ -51,7 +51,7 @@ Editor.setAction(function index(conduit) {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.1.0
- * @version  0.4.0
+ * @version  0.5.1
  *
  * @param    {Conduit}   conduit
  * @param    {String}    type
@@ -126,6 +126,11 @@ Editor.setAction(function listing(conduit, type, view) {
 			fields    : fields,
 			pageSize  : 10
 		};
+
+		// Hacky way of stopping pagination
+		if (action_fields.options.paginate === false) {
+			options.pageSize = 999;
+		}
 
 		// Find the paginated records
 		that.components.paginate.find(model, options, function gotRecords(err, items) {
@@ -366,7 +371,71 @@ Editor.setAction(function peek(conduit) {
 			that.render('chimera/editor/peek');
 		});
 	});
+});
 
+
+/**
+ * Reorder an array
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.5.1
+ * @version  0.5.1
+ *
+ * @param    {Array}    arr        The array to reorder
+ * @param    {Object}   query      The query that should match the entries
+ * @param    {Number}   new_index  The new index this should be moved to
+ */
+function reorderByQuery(arr, query, new_index, path) {
+
+	let entry = arr.findByPath(query);
+
+	if (!entry) {
+		return;
+	}
+
+	arr.move(entry, new_index);
+
+	let i;
+
+	for (i = 0; i < arr.length; i++) {
+		Object.setPath(arr[i], path, i);
+	}
+};
+
+/**
+ * The "reorder" method
+ *
+ * @param   {Conduit}   conduit
+ */
+Editor.setAction(async function reorder(conduit) {
+
+	var that = this,
+	    model_name,
+	    new_index,
+	    model,
+	    id;
+
+	new_index = Number(conduit.param('new_index'));
+	model_name = conduit.routeParam('subject');
+	model = this.getModel(model_name);
+	id = conduit.routeParam('id');
+
+	let record = await model.findById(id);
+	let records = await model.find('all', {fields: ['_id', 'order']});
+
+	records = Array.cast(records);
+
+	reorderByQuery(records, {_id: String(id)}, new_index, 'order');
+
+	for (let i = 0; i < records.length; i++) {
+		if (!records[i].hasChanged()) {
+			continue;
+		}
+
+		await records[i].save();
+	}
+
+	conduit.end({saved: true});
 });
 
 /**
