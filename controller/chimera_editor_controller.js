@@ -645,53 +645,52 @@ Editor.setAction(function save(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setAction(function remove(conduit) {
+Editor.setAction(async function remove(conduit) {
 
 	var that = this,
-	    modelName = conduit.routeParam('subject'),
-	    model = this.getModel(modelName),
-	    chimera = model.constructor.chimera,
+	    model_name = conduit.routeParam('subject'),
+	    model = this.getModel(model_name),
 	    id = conduit.routeParam('id');
 
 	model.disableTranslations();
 
-	if(conduit.body.sure === 'yes'){
-
-		model.remove(alchemy.castObjectId(id), function(err) {
-
-			if (err) {
-				log.debug(err);
-			}
-
-			conduit.setHeader('x-history-url', '/chimera/editor/' + modelName + '/index');
-			conduit.flash('Record has been removed', {className: 'chimera-success'});
-			that.index(conduit);
-			return;
-		});
-
-	} else {
-
-		model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, items) {
+	if (conduit.body.sure === 'yes') {
+		model.remove(id, function onRemoved(err) {
 
 			if (err) {
 				return conduit.error(err);
 			}
 
-			if (!items.length) {
-				return conduit.notFound();
-			}
+			conduit.setHeader('x-history-url', '/chimera/editor/' + model_name + '/index');
+			conduit.flash('Record has been removed', {className: 'chimera-success'});
 
-			that.set('editor_action', 'remove');
-			that.set('actions', that.getActions());
-			that.set('modelName', modelName);
-			that.set('pageTitle', modelName.humanize());
-			that.set('item', items[0]);
-			that.internal('modelName', modelName);
-			that.internal('recordId', id);
+			let route_params = Object.assign({}, conduit.params);
+			route_params.action = 'index';
+			delete route_params.id;
 
-			that.render('chimera/editor/remove');
-
+			return conduit.redirect({
+				headers : conduit.headers,
+				url     : Router.getUrl('ModelAction', route_params)
+			});
 		});
+	} else {
+
+		let item = await model.findById(id);
+
+		if (!item) {
+			return conduit.notFound();
+		}
+
+		that.set('editor_action', 'remove');
+		that.set('actions', that.getActions());
+		that.set('modelName', model_name);
+		that.set('pageTitle', model_name.humanize());
+		that.set('item', item);
+		that.set('display_field_value', item.getDisplayFieldValue({prefer: 'name'}));
+		that.internal('modelName', model_name);
+		that.internal('recordId', id);
+
+		that.render('chimera/editor/remove');
 	}
 
 });
