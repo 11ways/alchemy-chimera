@@ -243,7 +243,7 @@ ChimeraFieldWrapper.setMethod(function initFields() {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
- * @version  0.4.0
+ * @version  0.5.1
  */
 ChimeraFieldWrapper.setMethod(function addButtons() {
 
@@ -270,7 +270,7 @@ ChimeraFieldWrapper.setMethod(function addButtons() {
 		}
 	}
 
-	if (this.isTranslatable) {
+	if (this.isTranslatable && this.prefixes && this.prefixes.length > 1) {
 		this.prefixes.forEach(function eachPrefix(prefix) {
 
 			var $prefix_button,
