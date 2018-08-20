@@ -499,7 +499,7 @@ Editor.setAction(function related_data(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setAction(function view(conduit) {
+Editor.setAction(async function view(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
@@ -512,34 +512,30 @@ Editor.setAction(function view(conduit) {
 	var actionFields = chimera.getActionFields('edit'),
 	    groups = actionFields.groups.clone();
 
-	model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, items) {
+	let item = await model.findById(id);
+
+	if (!item) {
+		return conduit.notFound();
+	}
+
+	actionFields.processRecords(model, [item], function groupedRecords(err, groups) {
 
 		if (err) {
 			return conduit.error(err);
 		}
 
-		if (!items.length) {
-			return conduit.notFound();
-		}
+		that.set('editor_action', 'view');
+		that.set('prefixes', Prefix.getPrefixList());
+		that.set('groups', groups);
+		that.set('actions', that.getActions());
+		that.set('modelName', modelName);
+		that.set('pageTitle', modelName.humanize());
+		that.set('display_field_value', item.getDisplayFieldValue({prefer: 'name'}));
+		that.internal('modelName', modelName);
+		that.internal('recordId', id);
+		that.internal('chimeraReadOnly', true);
 
-		actionFields.processRecords(model, items, function groupedRecords(err, groups) {
-
-			if (err) {
-				return conduit.error(err);
-			}
-
-			that.set('editor_action', 'view');
-			that.set('prefixes', Prefix.getPrefixList());
-			that.set('groups', groups);
-			that.set('actions', that.getActions());
-			that.set('modelName', modelName);
-			that.set('pageTitle', modelName.humanize());
-			that.internal('modelName', modelName);
-			that.internal('recordId', id);
-			that.internal('chimeraReadOnly', true);
-
-			that.render('chimera/editor/view');
-		});
+		that.render('chimera/editor/view');
 	});
 });
 

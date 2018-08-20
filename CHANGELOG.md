@@ -3,6 +3,7 @@
 * `sendRelatedData` now uses `DocumentList#toSimpleArray()`, so this way property getters can act as a displayField
 * Add support for reordering records in a listing
 * Don't show prefix buttons when there is only 1 prefix
+* Fix view action
 
 ## 0.5.0 (2018-07-04)
 
