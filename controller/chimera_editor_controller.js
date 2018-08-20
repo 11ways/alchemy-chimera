@@ -109,67 +109,48 @@ Editor.setAction(function listing(conduit, type, view) {
 		fields.push(sorted[i].path);
 	}
 
-	Function.parallel(function getTotal(next) {
-		model.find('list', {fields: ['_id']}, function gotResult(err, list) {
 
-			// Ignore errors here
-			if (err) {
-				return next();
-			}
+	let options = {
+		fields    : fields,
+		pageSize  : 10
+	};
 
-			that.conduit.set('available_records', list.available || 0);
-			next();
-		});
-	}, function paginate(next) {
+	// Hacky way of stopping pagination
+	if (action_fields.options.paginate === false) {
+		options.pageSize = 999;
+	}
 
-		var options = {
-			fields    : fields,
-			pageSize  : 10
-		};
-
-		// Hacky way of stopping pagination
-		if (action_fields.options.paginate === false) {
-			options.pageSize = 999;
-		}
-
-		// Find the paginated records
-		that.components.paginate.find(model, options, function gotRecords(err, items) {
-
-			if (err) {
-				return next(err);
-			}
-
-			action_fields.processRecords('general', model, items, function groupedRecords(err, results) {
-
-				if (err) {
-					return next(err);
-				}
-
-				that.set('prefixes',           Prefix.getPrefixList());
-				that.set('fields',             general);
-				that.set('records',            results.general);
-				that.set('actions',            that.getActions());
-				that.set('show_index_filters', model.chimera.show_index_filters);
-
-				that.set('model_title',        model_title);
-				that.set('model_name',         model_name);
-				that.internal('model_name',    model_name);
-
-				// Deprecated modelName
-				that.set('modelName',          model_name);
-				that.internal('modelName',     model_name);
-
-				next();
-			});
-		});
-
-	}, function done(err) {
+	// Find the paginated records
+	that.components.paginate.find(model, options, function gotRecords(err, items) {
 
 		if (err) {
 			return conduit.error(err);
 		}
 
-		that.render('chimera/editor/' + view);
+		that.conduit.set('available_records', items.available || 0);
+
+		action_fields.processRecords('general', model, items, function groupedRecords(err, results) {
+
+			if (err) {
+				return conduit.error(err);
+			}
+
+			that.set('prefixes',           Prefix.getPrefixList());
+			that.set('fields',             general);
+			that.set('records',            results.general);
+			that.set('actions',            that.getActions());
+			that.set('show_index_filters', model.chimera.show_index_filters);
+
+			that.set('model_title',        model_title);
+			that.set('model_name',         model_name);
+			that.internal('model_name',    model_name);
+
+			// Deprecated modelName
+			that.set('modelName',          model_name);
+			that.internal('modelName',     model_name);
+
+			that.render('chimera/editor/' + view);
+		});
 	});
 });
 
