@@ -30,9 +30,19 @@ TextChimeraField.setMethod(function initEdit() {
 	    id;
 
 	editor = CKEDITOR.inline(that.input, {
-		extraPlugins: 'sourcedialog',
-		filebrowserBrowseUrl: '/boeckeditor',
-		allowedContent: true
+		extraPlugins          : 'sourcedialog',
+		filebrowserBrowseUrl  : '/boeckeditor',
+		allowedContent        : true,
+		toolbarGroups         : [
+			{"name":"styles",      "groups":["styles"]},
+			{"name":"basicstyles", "groups":["basicstyles"]},
+			{"name":"links",       "groups":["links"]},
+			{"name":"paragraph",   "groups":["list","blocks"]},
+			{"name":"document",    "groups":["mode"]},
+			{"name":"insert",      "groups":["insert"]},
+			
+		],
+		removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar,NewPage,Flash,HorizontalRule,CreateDiv,Smiley,SpecialChar,PageBreak,Iframe'
 	});
 
 	editor.on('focus', function () {
