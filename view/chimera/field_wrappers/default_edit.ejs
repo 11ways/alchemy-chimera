@@ -1,6 +1,9 @@
 <div class="chimeraField-row">
 	<div class="chimeraField-left">
-		<label class="chimeraField-label">
+		<label
+			class="chimeraField-label"
+			for="field-<%= data.field.path %>"
+		>
 			<% assign('title') %>
 			<% print(data.field.fieldType.title) %>
 			<% assign_end('title') %>

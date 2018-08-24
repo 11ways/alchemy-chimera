@@ -6,7 +6,10 @@ script('//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js');
 %>
 <div class="chimeraEditor-fieldGroup">
 	<div class="chimeraField-left">
-		<label class="chimeraEditor-fieldLabel">
+		<label
+			class="chimeraEditor-fieldLabel"
+			for="map-<%= data.field.path %>"
+		>
 			<% assign('title') %>
 			<% print(data.field.fieldType.title) %>
 			<% assign_end('title') %>

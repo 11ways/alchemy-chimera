@@ -3,7 +3,10 @@ script('/public/ckeditor/4.4/ckeditor');
 %>
 <div class="chimeraEditor-fieldGroup">
 	<div class="chimeraField-left">
-		<label class="chimeraEditor-fieldLabel">
+		<label
+			class="chimeraEditor-fieldLabel"
+			for="field-<%= data.field.path %>"
+		>
 			<% assign('title') %>
 			<% print(data.field.fieldType.title) %>
 			<% assign_end('title') %>

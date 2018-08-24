@@ -2,6 +2,7 @@
 	class="chimeraField-prime chimeraField-string"
 	value="<%= String(data.value || '').encodeHTML() %>"
 	type="text"
+	id="field-<%= data.field.path %>"
 >
 
 <% if (data.field.fieldType.isArray) { %>
