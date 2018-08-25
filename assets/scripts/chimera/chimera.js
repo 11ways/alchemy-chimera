@@ -46,22 +46,28 @@ function applySave(el, variables) {
 	    variables,
 	    isDraft,
 	    $editor,
+	    $save_close,
+	    $saves,
 	    $save;
 
 	isDraft = this.filter.template === 'chimera/editor/add';
 
 	$editor = $('.chimera-editor', el).first();
 	$save = $('.action-save', $editor);
+	$save_close = $('.action-saveClose', $editor);
+	$saves = $('.action-save, .action-saveClose', $editor);
 
 	if (variables.__chimeraReadOnly) {
 		$save.remove();
+		$save_close.remove();
 		return;
 	}
 
-	$save.click(function onClick(e) {
+	$saves.click(function onClick(e) {
 
 		var $fieldwrappers,
 		    containers,
+		    $this = $(this),
 		    data,
 		    obj;
 
@@ -170,7 +176,7 @@ function applySave(el, variables) {
 			save_options.history = true;
 		}
 
-		hawkejs.scene.openUrl($save.attr('href'), save_options, function saved(err, result) {
+		hawkejs.scene.openUrl($this.attr('href'), save_options, function saved(err, result) {
 
 			if (err != null && result != null) {
 				preventDuplicate = false;

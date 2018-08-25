@@ -3,7 +3,7 @@
  *
  * @author        Jelle De Loecker   <jelle@kipdola.be>
  * @since         0.2.0
- * @version       0.5.0
+ * @version       0.5.1
  */
 var Editor = Function.inherits('Alchemy.Controller.Chimera', function Editor(conduit, options) {
 
@@ -23,14 +23,10 @@ var Editor = Function.inherits('Alchemy.Controller.Chimera', function Editor(con
 	this.addAction('record', 'remove', {title: 'Remove', icon: '<x-svg data-src="chimera/garbage"></x-svg>'});
 
 	this.addAction('record-edit', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true, route_name: 'RecordAction'});
-	this.addAction('record-edit', 'index', {title: 'Index', icon: '<x-svg data-src="chimera/list"></x-svg>', route_name: 'ModelAction'});
-	this.addAction('record-edit', 'view', {title: 'View', icon: '<x-svg data-src="chimera/eye"></x-svg>', route_name: 'RecordAction'});
-	this.addAction('record-edit', 'remove', {title: 'Remove', icon: '<x-svg data-src="chimera/garbage"></x-svg>', route_name: 'RecordAction'});
+	this.addAction('record-edit', 'saveClose', {title: 'Save and close', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true, route_name: 'RecordAction'});
 
 	this.addAction('record-draft', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true, route_name: 'RecordAction'});
-	this.addAction('record-draft', 'index', {title: 'Index', icon: '<x-svg data-src="chimera/list"></x-svg>', route_name: 'ModelAction'});
-	this.addAction('record-draft', 'view', {title: 'View', icon: '<x-svg data-src="chimera/eye"></x-svg>', route_name: 'RecordAction'});
-	this.addAction('record-draft', 'remove', {title: 'Remove', icon: '<x-svg data-src="chimera/garbage"></x-svg>', route_name: 'RecordAction'});
+	this.addAction('record-draft', 'saveClose', {title: 'Save and close', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true, route_name: 'RecordAction'});
 });
 
 /**
@@ -542,9 +538,39 @@ Editor.setAction(async function view(conduit) {
 /**
  * The save action
  *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.1.0
+ * @version  0.5.1
+ *
  * @param   {Conduit}   conduit
  */
 Editor.setAction(function save(conduit) {
+	this.save(conduit, false);
+});
+
+/**
+ * The save & close action
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.5.1
+ * @version  0.5.1
+ *
+ * @param   {Conduit}   conduit
+ */
+Editor.setAction(function saveClose(conduit) {
+	this.save(conduit, true);
+});
+
+/**
+ * Save a record
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.5.1
+ * @version  0.5.1
+ *
+ * @param   {Conduit}   conduit
+ */
+Editor.setMethod(function save(conduit, go_to_index) {
 
 	var that = this,
 	    actionFields,
@@ -597,10 +623,21 @@ Editor.setAction(function save(conduit) {
 		let result = items[0];
 
 		let route_params = Object.assign({}, conduit.params);
-		route_params.action = 'edit';
-		route_params.id = result._id;
 
 		conduit.flash('Record has been saved', {className: 'chimera-success'});
+
+		if (go_to_index) {
+			console.log('Go to index is...', go_to_index);
+			route_params.action = 'index';
+
+			return conduit.redirect({
+				headers : conduit.headers,
+				url     : Router.getUrl('ModelAction', route_params)
+			});
+		}
+
+		route_params.action = 'edit';
+		route_params.id = result._id;
 
 		// When creating a new record we need to supply a new url,
 		// because the 'history' will be activated
