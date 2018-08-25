@@ -83,7 +83,7 @@ Chimera.setMethod(function printField(record_value, options) {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
- * @version  0.3.0
+ * @version  0.5.1
  *
  * @param    {String}   type   model, list or record
  */
@@ -138,22 +138,32 @@ Chimera.setMethod(function printActions(type, options, subject) {
 		temp = {
 			controller: action.controller,
 			action: action.name,
-			subject: view.internal('modelName'),
-			id: view.internal('recordId') || subject.id
+			subject: view.internal('modelName')
 		};
+
+		if (view.internal('recordId')) {
+			temp.id = view.internal('recordId');
+		} else if (subject.id) {
+			temp.id = subject.id;
+		}
 
 		className = 'action-' + action.name;
 
 		if (options.className) {
 			className += ' ' + options.className;
 		}
-		
+
 		name = action.name;
-		if(action.title){
+
+		if (action.title) {
 			name = action.title;
 		}
 
-		rOptions = {title: action.name, content: name, className: className};
+		rOptions = {
+			title     : action.name,
+			content   : name,
+			className : className
+		};
 
 		if (action.handleManual) {
 			rOptions.handleManual = true;
