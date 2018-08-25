@@ -2,9 +2,8 @@
 	dateval = data.value == null ? '' : data.value;
 
 	if (dateval) {
-		print('<time datetime="' + dateval.toISOString() + '">');
-		print(dateval.toDateString() + ' - ');
-		print(dateval.getHours(true).toPaddedString(2) + ':' + dateval.getMinutes().toPaddedString(2));
-		print('</time>');
+		time_ago = create_element('time-ago');
+		time_ago.date = dateval;
+		print(time_ago);
 	}
 %>
