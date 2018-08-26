@@ -627,7 +627,6 @@ Editor.setMethod(function save(conduit, go_to_index) {
 		conduit.flash('Record has been saved', {className: 'chimera-success'});
 
 		if (go_to_index) {
-			console.log('Go to index is...', go_to_index);
 			route_params.action = 'index';
 
 			return conduit.redirect({

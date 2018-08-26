@@ -1,9 +1,14 @@
-## 0.5.1 (WIP)
+## 0.5.1 (2018-08-27)
 
 * `sendRelatedData` now uses `DocumentList#toSimpleArray()`, so this way property getters can act as a displayField
 * Add support for reordering records in a listing
 * Don't show prefix buttons when there is only 1 prefix
 * Fix view action
+* Add for/id attributes to inputs & labels
+* Remove certain buttons from ckeditor
+* Add "save & close" record action
+* Don't add id parameter to action links of none is required
+* Use time-ago element for date fields in the list view
 
 ## 0.5.0 (2018-07-04)
 
