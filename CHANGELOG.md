@@ -1,3 +1,7 @@
+## 0.5.2 (WIP)
+
+* `HABTMChimeraField#sendRelatedData` will now query all fields, so property getters will work
+
 ## 0.5.1 (2018-08-27)
 
 * `sendRelatedData` now uses `DocumentList#toSimpleArray()`, so this way property getters can act as a displayField

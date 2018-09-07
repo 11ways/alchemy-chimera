@@ -420,30 +420,35 @@ Editor.setAction(async function reorder(conduit) {
  *
  * @param   {Conduit}   conduit
  */
-Editor.setAction(function model_assoc_data(conduit) {
+Editor.setAction(async function model_assoc_data(conduit) {
 
 	var model = Model.get(conduit.routeParam('subject')),
 	    options;
 
-	options = {
-		fields: ['_id', 'title', 'name'].concat(model.displayField),
-		document: false
-	};
+	let records  = await model.find('all'),
+	    results  = [],
+	    response = {};
 
-	model.find('list', options, function gotData(err, results) {
+	for (let i = 0; i < records.length; i++) {
+		let record = records[i];
 
-		var response;
-
-		if (err) {
-			return conduit.error(err);
-		}
-
-		response = {
-			items: results,
-			displayField: model.displayField
+		let entry = {
+			_id : record._id
 		};
 
-		conduit.end(response);
+		if (record[model.displayField]) {
+			entry[model.displayField] = record[model.displayField];
+		} else {
+			entry.title = record.title;
+			entry.name = record.name;
+		}
+
+		results.push(entry);
+	}
+
+	conduit.end({
+		items        : results,
+		displayField : model.displayField
 	});
 });
 
