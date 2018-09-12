@@ -132,10 +132,9 @@ alchemy.plugins.chimera.getMenu(function gotMenu(err, menu) {
 			name   : 'dashboard',
 			title  : __('chimera', 'Dashboard'),
 			route  : 'chimera@Dashboard',
-			decoration  : {
-				icon    : {
-					svg : 'chimera/home'
-				}
+			icon    : {
+				svg : 'chimera/home',
+				fa  : 'tachometer-alt'
 			}
 		}
 	});
@@ -158,10 +157,9 @@ alchemy.plugins.chimera.getMenu(function gotMenu(err, menu) {
 				subject    : 'user',
 				action     : 'index'
 			},
-			decoration  : {
-				icon    : {
-					svg : 'chimera/office-worker'
-				}
+			icon    : {
+				svg : 'chimera/office-worker',
+				fa  : 'user'
 			}
 		}
 	});
@@ -175,6 +173,9 @@ chimera.menu.set('i18n', {
 		controller: 'Editor',
 		subject: 'i18n',
 		action: 'index'
+	},
+	icon : {
+		fa: 'language'
 	}
 });
 
