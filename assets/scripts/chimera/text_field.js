@@ -23,13 +23,14 @@ var TextChimeraField = ChimeraField.extend(function TextChimeraField(parent, val
  * @param    {Mixed}   value
  */
 TextChimeraField.setMethod(function initEdit() {
-	
+
 	var that = this,
+	    ck_options,
 	    editor,
 	    name,
 	    id;
 
-	editor = CKEDITOR.inline(that.input, {
+	ck_options = {
 		extraPlugins          : 'sourcedialog',
 		filebrowserBrowseUrl  : '/boeckeditor',
 		allowedContent        : true,
@@ -43,7 +44,13 @@ TextChimeraField.setMethod(function initEdit() {
 			
 		],
 		removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar,NewPage,Flash,HorizontalRule,CreateDiv,Smiley,SpecialChar,PageBreak,Iframe'
-	});
+	};
+
+	if (this.parent.field && this.parent.field.options && this.parent.field.options.use_br) {
+		ck_options.enterMode = CKEDITOR.ENTER_BR;
+	}
+
+	editor = CKEDITOR.inline(that.input, ck_options);
 
 	editor.on('focus', function () {
 		editor.setReadOnly(!!that.readOnly);
