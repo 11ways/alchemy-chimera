@@ -1,6 +1,7 @@
 ## 0.5.2 (WIP)
 
 * `HABTMChimeraField#sendRelatedData` will now query all fields, so property getters will work
+* Make CKEditor leave div classnames alone
 
 ## 0.5.1 (2018-08-27)
 

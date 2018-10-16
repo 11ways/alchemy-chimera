@@ -41,10 +41,12 @@ TextChimeraField.setMethod(function initEdit() {
 			{"name":"paragraph",   "groups":["list","blocks"]},
 			{"name":"document",    "groups":["mode"]},
 			{"name":"insert",      "groups":["insert"]},
-			
 		],
 		removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar,NewPage,Flash,HorizontalRule,CreateDiv,Smiley,SpecialChar,PageBreak,Iframe'
 	};
+
+	ck_options.extraAllowedContent = 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}';
+	CKEDITOR.dtd.$removeEmpty.i = 0;
 
 	if (this.parent.field && this.parent.field.options && this.parent.field.options.use_br) {
 		ck_options.enterMode = CKEDITOR.ENTER_BR;
