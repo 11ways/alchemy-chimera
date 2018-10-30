@@ -25,10 +25,16 @@ var TextChimeraField = ChimeraField.extend(function TextChimeraField(parent, val
 TextChimeraField.setMethod(function initEdit() {
 
 	var that = this,
+	    field_options = this.parent.field && this.parent.field.options,
 	    ck_options,
 	    editor,
 	    name,
-	    id;
+	    id,
+	    i;
+
+	if (!field_options) {
+		field_options = {};
+	}
 
 	ck_options = {
 		extraPlugins          : 'sourcedialog',
@@ -48,11 +54,48 @@ TextChimeraField.setMethod(function initEdit() {
 	ck_options.extraAllowedContent = 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}';
 	CKEDITOR.dtd.$removeEmpty.i = 0;
 
-	if (this.parent.field && this.parent.field.options && this.parent.field.options.use_br) {
+	if (field_options.use_br) {
 		ck_options.enterMode = CKEDITOR.ENTER_BR;
 	}
 
-	editor = CKEDITOR.inline(that.input, ck_options);
+	if (field_options.contents_css) {
+		ck_options.contentsCss = Array.cast(field_options.contents_css);
+	}
+
+	if (field_options.height) {
+		ck_options.height = field_options.height;
+	}
+
+	if (field_options.inline === false) {
+
+		if (!field_options.contents_css) {
+			ck_options.contentsCss = ['/stylesheets/website.css'];
+		}
+
+		for (i = 0; i < ck_options.contentsCss.length; i++) {
+			ck_options.contentsCss[i] = String(new Blast.Classes.RURL(ck_options.contentsCss[i], window.location));
+		}
+
+		if (!ck_options.height) {
+			if (that.input.clientHeight > 100) {
+				if (that.input.clientHeight > 450) {
+					ck_options.height = 450;
+				} else {
+					ck_options.height = that.input.clientHeight;
+				}
+			} else {
+				ck_options.height = 200;
+			}
+
+			if (ck_options.height < 200) {
+				ck_options.height = 200;
+			}
+		}
+
+		editor = CKEDITOR.replace(that.input, ck_options);
+	} else {
+		editor = CKEDITOR.inline(that.input, ck_options);
+	}
 
 	editor.on('focus', function () {
 		editor.setReadOnly(!!that.readOnly);

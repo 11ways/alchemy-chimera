@@ -1,3 +1,8 @@
+## 0.5.3 (WIP)
+
+* Allow using classic (iframe) mode in ckeditor Text field
+* Allow adding custom CSS files to the classic ckeditor mode
+
 ## 0.5.2 (2018-10-18)
 
 * `HABTMChimeraField#sendRelatedData` will now query all fields, so property getters will work
