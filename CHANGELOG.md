@@ -1,3 +1,5 @@
+## 0.5.4 (WIP)
+
 ## 0.5.3 (2018-12-06)
 
 * Allow using classic (iframe) mode in ckeditor Text field
