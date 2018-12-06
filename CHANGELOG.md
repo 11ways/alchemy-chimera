@@ -3,6 +3,7 @@
 * Allow using classic (iframe) mode in ckeditor Text field
 * Allow adding custom CSS files to the classic ckeditor mode
 * Add Html field
+* Add field title & description support
 
 ## 0.5.2 (2018-10-18)
 

@@ -2,7 +2,11 @@
 	<div class="chimeraField-left">
 		<label class="chimeraEditor-fieldLabel">
 			<% assign('title') %>
-			<% print(data.field.fieldType.title) %>
+				<span class="field-title"><% print(field_title) %></span>
+
+				<% if (field_description) { %>
+					<small class="field-description"><%= field_description %></small>
+				<% } %>
 			<% assign_end('title') %>
 		</label>
 	</div>

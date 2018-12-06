@@ -5,7 +5,11 @@
 			for="field-<%= data.field.path %>"
 		>
 			<% assign('title') %>
-			<% print(data.field.fieldType.title) %>
+				<span class="field-title"><% print(field_title) %></span>
+
+				<% if (field_description) { %>
+					<small class="field-description"><%= field_description %></small>
+				<% } %>
 			<% assign_end('title') %>
 		</label>
 		<% if (data.field.fieldType.isArray) { %>

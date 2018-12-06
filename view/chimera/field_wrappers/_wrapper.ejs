@@ -28,7 +28,25 @@ fieldEntries = 'chimera/field_wrappers/_entries';
 
 // Render the wrapper
 if (print_wrapper !== false) {
-	implement(fieldWrapper, {changeMain: true, wrapper: false});
+
+	if (data.field.options && data.field.options.title) {
+		field_title = data.field.options.title;
+	} else {
+		field_title = data.field.fieldType.title;
+	}
+
+	if (data.field.options && data.field.options.description) {
+		field_description = data.field.options.description;
+	} else if (data.field.fieldType.options) {
+		field_description = data.field.fieldType.options.description;
+	}
+
+	wrapper_variables = {
+		field_title       : field_title,
+		field_description : field_description
+	};
+
+	implement(fieldWrapper, {changeMain: true, wrapper: false}, wrapper_variables);
 }
 
 if (data.field) {
