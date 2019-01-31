@@ -1,4 +1,6 @@
-## 0.5.4 (WIP)
+## 0.6.0 (WIP)
+
+* Make compatible with Alchemy v1.1.0
 
 ## 0.5.3 (2018-12-06)
 

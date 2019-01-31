@@ -253,7 +253,7 @@ ChimeraController.setMethod(function getActions(type) {
  * Ensure Chimera ACL rules are set,
  * don't start the server before it's done
  */
-alchemy.sputnik.beforeSerial('startServer', function beforeStartServer(done) {
+alchemy.sputnik.before('start_server', function beforeStartServer() {
 
 	var AclRule = Model.get('AclRule'),
 	    rules;
@@ -283,13 +283,10 @@ alchemy.sputnik.beforeSerial('startServer', function beforeStartServer(done) {
 		}
 	];
 
-	AclRule.ensureIds(rules, function doneEnsuring(err) {
-
+	return AclRule.ensureIds(rules, function doneEnsuring(err) {
 		if (err) {
 			return log.error('Can not start server, error ensuring ACL rules.', {err: err});
 		}
-
-		done();
 	});
 });
 
