@@ -73,7 +73,7 @@ chimera_section.use(function setChimeraData(req, res, next) {
 	req.conduit.internal('UserData', req.conduit.session('UserData') || {});
 
 	// Set the theme to use
-	req.conduit.view_render.setTheme(alchemy.plugins.chimera.view_settings.theme);
+	req.conduit.renderer.setTheme(alchemy.plugins.chimera.view_settings.theme);
 
 	// Skip the rest if it's an ajax call
 	if (req.conduit.ajax) {

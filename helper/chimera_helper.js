@@ -58,6 +58,8 @@ Chimera.setMethod(function printField(record_value, options) {
 	// Print the placeholder element
 	placeholder = this.view.print_element(options.template, variables);
 
+	console.log('Printed placeholder:', placeholder)
+
 	// Add the container classname to the wrapper element
 	placeholder.element.classList.add('chimeraField-container');
 

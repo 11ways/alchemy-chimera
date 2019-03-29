@@ -46,7 +46,8 @@ if (print_wrapper !== false) {
 		field_description : field_description
 	};
 
-	implement(fieldWrapper, {changeMain: true, wrapper: false}, wrapper_variables);
+	//implement(fieldWrapper, {changeMain: true, wrapper: false}, wrapper_variables);
+	switchTemplate(fieldWrapper, wrapper_variables);
 }
 
 if (data.field) {
@@ -72,7 +73,12 @@ if (print_entries !== false) {
 		assign('entries');
 	}
 
-	implement(fieldEntries, null, {fieldElement: fieldElement});
+	console.log('Implementing', fieldEntries)
+
+	//implement(fieldEntries, null, {fieldElement: fieldElement});
+	implement(fieldEntries, {fieldElement: fieldElement});
+
+	console.log('____________')
 }
 
 %>

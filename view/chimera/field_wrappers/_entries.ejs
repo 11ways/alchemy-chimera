@@ -14,6 +14,8 @@ printEntries = function printEntries(values) {
 	for (i = 0; i < values.length; i++) {
 		value = values[i];
 
+		console.log('---- Printing', fieldElement, 'val', value, 'in', __template)
+
 		// The field element expects a single value to be in `data.value`
 		newData = {
 			data: Object.assign({}, data, {value: value}),
@@ -35,7 +37,9 @@ printEntries = function printEntries(values) {
 // Start creating the entries block
 start('entries', {attributes: {'data-entries-id': entries_id}});
 
-	if (data.field.fieldType.isTranslatable) {
+console.log('Vars:', vars);
+
+	if (data.field.fieldType.is_translatable) {
 		prefixes = {};
 		first_prefix = true;
 
@@ -50,15 +54,15 @@ start('entries', {attributes: {'data-entries-id': entries_id}});
 		}
 
 		for (prefix in prefixes) {
-			print('\n<div class="chimeraField-prefix-intake" data-prefix="' + prefix + '"');
+			%> <div class="chimeraField-prefix-intake" data-prefix="{% prefix %}"> <%
+
 
 			if (first_prefix) {
 				first_prefix = false;
 			} else {
-				print(' style="display:none;"');
+				// Hide the current element
+				$0.style.display = 'none';
 			}
-
-			print('>\n');
 
 			if (data.value) {
 				values = Array.cast(data.value[prefix]);
@@ -67,7 +71,7 @@ start('entries', {attributes: {'data-entries-id': entries_id}});
 			}
 
 			printEntries(values);
-			print('\n</div>\n');
+			%> </div> <%
 		}
 	} else {
 		if (data.field.fieldType.options && data.field.fieldType.options.nested_array) {

@@ -1,3 +1,5 @@
+console.log('Waiting for _wrapper');
+
 hawkejs.scene.on({type: 'set', entry: 'chimera/field_wrappers/_wrapper'}, function applyField(element, variables) {
 
 	// Ignore nested wrappers
@@ -12,6 +14,8 @@ hawkejs.scene.on({type: 'set', entry: 'chimera/field_wrappers/_wrapper'}, functi
 		if (err) {
 			throw err;
 		}
+
+		console.log('Created something', element, variables)
 
 		// Create the wrap options
 		options = {
