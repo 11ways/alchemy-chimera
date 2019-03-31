@@ -14,8 +14,6 @@ printEntries = function printEntries(values) {
 	for (i = 0; i < values.length; i++) {
 		value = values[i];
 
-		console.log('---- Printing', fieldElement, 'val', value, 'in', __template)
-
 		// The field element expects a single value to be in `data.value`
 		newData = {
 			data: Object.assign({}, data, {value: value}),
@@ -36,8 +34,6 @@ printEntries = function printEntries(values) {
 
 // Start creating the entries block
 start('entries', {attributes: {'data-entries-id': entries_id}});
-
-console.log('Vars:', vars);
 
 	if (data.field.fieldType.is_translatable) {
 		prefixes = {};

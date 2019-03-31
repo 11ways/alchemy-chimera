@@ -38,7 +38,7 @@ var ChimeraFieldWrapper = Function.inherits('Informer', function ChimeraFieldWra
 	this.container = options.container;
 
 	// The entries wrapper
-	this.entries_wrapper = options.entries_wrapper || options.container.querySelector('[data-name="entries"]');
+	this.entries_wrapper = options.entries_wrapper || options.container.querySelector('[data-he-name="entries"]');
 
 	// Store this instance on the entries wrapper element and the container
 	this.container.CFWrapper = this;
@@ -69,14 +69,14 @@ var ChimeraFieldWrapper = Function.inherits('Informer', function ChimeraFieldWra
 	this.action = this.field.viewaction;
 
 	// Is this an arrayable field?
-	this.isArray = this.field.fieldType.isArray;
+	this.isArray = this.field.fieldType.is_array;
 
 	// Is this a translatable field?
-	this.isTranslatable = this.field.fieldType.isTranslatable;
+	this.isTranslatable = this.field.fieldType.is_translatable;
 
 	// Is this a field translatable field?
-	this.fieldTranslatable = this.field.fieldType.fieldTranslatable;
-	this.valueTranslatable = this.field.fieldType.valueTranslatable;
+	this.fieldTranslatable = this.field.fieldType.field_translatable;
+	this.valueTranslatable = this.field.fieldType.value_translatable;
 
 	// Field instances
 	this.fields = [];
