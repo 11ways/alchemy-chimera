@@ -41,6 +41,10 @@ if (print_wrapper !== false) {
 		field_description = data.field.fieldType.options.description;
 	}
 
+	if (!field_title && data.field.fieldType.name) {
+		field_title = data.field.fieldType.name.titleize();
+	}
+
 	wrapper_variables = {
 		field_title       : field_title,
 		field_description : field_description
