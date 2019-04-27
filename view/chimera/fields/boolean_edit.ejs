@@ -4,8 +4,12 @@
 		type="checkbox"
 		name="data.<%= data.field.path %>"
 		id="field-<%= data.field.path %>"
-		<%= data.value ? 'checked': '' %>
 	>
+
+	<% if (data.value) {
+		$0.firstChild.setAttribute('checked', '');
+	} %>
+
 	<div class="chimeraEditor-boolean-text">
 		<span class="u-yes">Yes</span>
 		<span class="u-no">No</span>

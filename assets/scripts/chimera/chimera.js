@@ -115,7 +115,7 @@ function applySave(el, variables) {
 
 				path += entry.field.path;
 
-				if (entry.field.fieldType.type_name == 'schema') {
+				if (entry.field.fieldType.constructor.type_name == 'schema') {
 
 					if (entry.field.fieldType.isArray) {
 						for (i = 0; i < entry.value.length; i++) {
