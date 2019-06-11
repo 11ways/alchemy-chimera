@@ -5,7 +5,7 @@
  *
  * @author   Jelle De Loecker   <jelle@kipdola.be>
  * @since    0.2.0
- * @version  0.3.0
+ * @version  0.6.0
  *
  * @param    {Object}                options
  * @param    {ChimeraFieldWrapper}   options.parent
@@ -65,7 +65,7 @@ var ChimeraField = Function.inherits('Informer', function ChimeraField(options) 
 	__Protoblast.setImmediate(function() {
 
 		// @TODO: render only needs to happen when new values are added
-		if (that.is_local_add) {
+		if (that.is_local_add || that.require_render) {
 			that.render(function done(err) {
 				if (err) {
 					throw err;
@@ -127,12 +127,13 @@ ChimeraField.setProperty(function input() {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.3.0
- * @version  0.3.0
+ * @version  0.6.0
  *
  */
 ChimeraField.setProperty(function entry() {
 
 	var element,
+	    index = this.original_index || 0,
 	    i;
 
 	if (this._entry != null) {
@@ -142,12 +143,16 @@ ChimeraField.setProperty(function entry() {
 	if (this.is_local_add) {
 		this._entry = false;
 	} else if (!this.parent.isTranslatable) {
-		this._entry = this.parent.entries[this.original_index];
+		this._entry = this.parent.entries[index];
 	} else {
 		for (i = 0; i < this.parent.entries.length; i++) {
 			element = this.parent.entries[i];
 
-			if (element.dataset.oid == this.original_index && element.parentElement.dataset.prefix == this.prefix) {
+			if (element.parentElement.dataset.prefix != this.prefix) {
+				continue;
+			}
+
+			if (element.dataset.oid == index) {
 				this._entry = element;
 				break;
 			}
