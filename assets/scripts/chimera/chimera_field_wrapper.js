@@ -451,6 +451,7 @@ ChimeraFieldWrapper.setMethod(function addPrefixValue(value, index, prefix) {
 
 	fields = this.getPrefixFields(prefix);
 
+	// If the field itself supports multiple values, let it handle it
 	if (this.fieldClass.multipleValues && this.fields.length) {
 		return fields[0].addValue(value);
 	}
