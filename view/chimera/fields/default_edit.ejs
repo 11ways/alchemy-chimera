@@ -1,6 +1,6 @@
 <input
 	class="chimeraField-prime chimeraField-string"
-	value="<%= String(data.value || '').encodeHTML() %>"
+	value="<% data.value || '' %>"
 	type="text"
 	id="field-<%= data.field.path %>"
 >
