@@ -1,4 +1,7 @@
-## 0.5.4 (WIP)
+## 0.5.4 (2019-06-18)
+
+* Backport fixes from 0.6.0
+* Upgrade ajatar-theme
 
 ## 0.5.3 (2018-12-06)
 
