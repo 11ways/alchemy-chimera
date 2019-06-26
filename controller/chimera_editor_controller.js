@@ -422,12 +422,64 @@ Editor.setAction(async function reorder(conduit) {
  */
 Editor.setAction(async function model_assoc_data(conduit) {
 
-	var model = Model.get(conduit.routeParam('subject')),
-	    options;
+	var options,
+	    model = Model.get(conduit.routeParam('subject'));
 
-	let records  = await model.find('all'),
+	let criteria = model.find(),
+	    pagination,
+	    is_select2 = false,
+	    page_limit = conduit.param('page_limit'),
+	    page = conduit.param('page');
+
+	if (page_limit) {
+		criteria.limit(page_limit);
+
+		if (page) {
+			is_select2 = true;
+		}
+
+		if (page > 1) {
+			criteria.skip(page_limit * (page - 1));
+		}
+	}
+
+	let q = conduit.param('q');
+
+	if (q) {
+		let or = criteria.or();
+
+		q = '/' + q + '/i';
+
+		if (model.schema.has('name')) {
+			criteria.where('name').contains(q);
+		}
+
+		if (model.schema.has('title')) {
+			criteria.where('name').contains(q);
+		}
+
+		if (model.schema.has('description')) {
+			criteria.where('description').contains(q);
+		}
+
+		if (model.schema.has('body')) {
+			criteria.where('body').contains(q);
+		}
+
+		if (model.schema.has('slug')) {
+			criteria.where('slug').contains(q);
+		}
+	}
+
+	let records  = await model.find('all', criteria),
 	    results  = [],
 	    response = {};
+
+	if (is_select2 && records.available > records.length) {
+		pagination = {
+			more: true
+		};
+	}
 
 	for (let i = 0; i < records.length; i++) {
 		let record = records[i];
@@ -448,7 +500,8 @@ Editor.setAction(async function model_assoc_data(conduit) {
 
 	conduit.end({
 		items        : results,
-		displayField : model.displayField
+		displayField : model.displayField,
+		pagination   : pagination
 	});
 });
 
