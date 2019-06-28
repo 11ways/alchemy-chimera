@@ -261,7 +261,19 @@ Editor.setAction(function edit(conduit) {
 	var actionFields = chimera.getActionFields('edit'),
 	    groups = actionFields.groups.clone();
 
-	model.find('first', {conditions: {_id: alchemy.castObjectId(id)}}, function(err, item) {
+	let find_options = {
+		conditions: {
+
+		}
+	};
+
+	find_options.conditions[model.primary_key] = id;
+
+	if (model.display_field_select) {
+		find_options.select = model.display_field_select.slice(0);
+	}
+
+	model.find('first', find_options, function(err, item) {
 
 		if (err) {
 			return conduit.error(err);
