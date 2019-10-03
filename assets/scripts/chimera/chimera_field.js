@@ -353,7 +353,7 @@ ChimeraField.setMethod(function render(callback) {
 	placeholder = hawkejs.scene.helpers.Chimera.printField({field: this.field, value: this.value}, {print_wrapper: false});
 
 	// Resolve the placeholder
-	placeholder.getContent(function gotContent(err, html) {
+	placeholder.getContent(function gotContent(err, content) {
 
 		var entries;
 
@@ -362,10 +362,10 @@ ChimeraField.setMethod(function render(callback) {
 		}
 
 		// Still not done: we only want the entries block
-		entries = placeholder.parent.blocks.entries;
+		entries = content.renderer.blocks.entries;
 
 		// Get the html
-		entries.joinBuffer(function gotResult(err, html) {
+		entries.assemble().done(function gotResult(err, block) {
 
 			var entry_element;
 
@@ -373,8 +373,16 @@ ChimeraField.setMethod(function render(callback) {
 				return callback(err);
 			}
 
-			// Get the new entry element
-			entry_element = Array.cast(Blast.parseHTML(html))[0];
+			let content = block.toElements();
+
+			for (let i = 0; i < content.length; i++) {
+				if (typeof content[i] == 'string') {
+					continue;
+				}
+
+				entry_element = content[i];
+				break;
+			}
 
 			// Set it
 			that.entry = entry_element;
