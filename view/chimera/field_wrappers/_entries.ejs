@@ -52,12 +52,11 @@ start('entries', {attributes: {'data-entries-id': entries_id}});
 		for (prefix in prefixes) {
 			%> <div class="chimeraField-prefix-intake" data-prefix="{% prefix %}"> <%
 
-
 			if (first_prefix) {
 				first_prefix = false;
 			} else {
 				// Hide the current element
-				$0.style.display = 'none';
+				$0.setAttribute('style', 'display:none;');
 			}
 
 			if (data.value) {

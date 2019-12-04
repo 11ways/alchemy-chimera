@@ -76,6 +76,10 @@ TextChimeraField.setMethod(function initEdit() {
 			ck_options.contentsCss[i] = String(new Blast.Classes.RURL(ck_options.contentsCss[i], window.location));
 		}
 
+		if (!that.input) {
+			throw new Error('Unable to find input element, can not create ckeditor instance');
+		}
+
 		if (!ck_options.height) {
 			if (that.input.clientHeight > 100) {
 				if (that.input.clientHeight > 450) {

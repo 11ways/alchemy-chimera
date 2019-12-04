@@ -333,29 +333,39 @@ ChimeraFieldWrapper.setMethod(function getPrefixFields(prefix) {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.2.0
- * @version  0.2.0
+ * @version  0.6.0
  *
  * @param    {Boolean}   changesOnly
  */
 ChimeraFieldWrapper.setMethod(function getData(changesOnly) {
 
 	var that = this,
-	    result = {};
+	    result = {},
+	    count = 0,
+	    same = 0;
 
 	this.fields.forEach(function eachField(field) {
 
 		var value = field.getData();
 
+		count++;
+
 		if (changesOnly && Object.alike(value, field.originalValue)) {
+			same++;
+
 			// If the field is an array, we will have to return everything
 			// otherwise things can get screwed up
-			if (!that.isArray) {
+			if (!that.isArray && !that.isTranslatable) {
 				return;
 			}
 		}
 
 		Object.setPath(result, field.path, value);
 	});
+
+	if (count > 0 && count == same) {
+		return {};
+	}
 
 	return result;
 });
