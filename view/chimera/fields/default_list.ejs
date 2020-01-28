@@ -7,7 +7,7 @@ if (typeof text_value != 'string') {
 
 if (!text_value) {
 	text_value = createElement('i');
-	text_value.append(__d('chimera', 'empty'));
+	text_value.append(__d('chimera', 'empty').toElement());
 } else {
 	text_value = text_value.stripTags().truncate(100);
 }

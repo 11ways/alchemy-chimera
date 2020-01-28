@@ -37,7 +37,6 @@ TextChimeraField.setMethod(function initEdit() {
 	}
 
 	ck_options = {
-		extraPlugins          : 'sourcedialog',
 		filebrowserBrowseUrl  : '/boeckeditor',
 		allowedContent        : true,
 		toolbarGroups         : [
@@ -48,10 +47,11 @@ TextChimeraField.setMethod(function initEdit() {
 			{"name":"document",    "groups":["mode"]},
 			{"name":"insert",      "groups":["insert"]},
 		],
-		removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar,NewPage,Flash,HorizontalRule,CreateDiv,Smiley,SpecialChar,PageBreak,Iframe'
+		removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar,NewPage,Flash,HorizontalRule,CreateDiv,Smiley,SpecialChar,PageBreak,Iframe,Sourcedialog'
 	};
 
 	ck_options.extraAllowedContent = 'p(*)[*]{*};div(*)[*]{*};li(*)[*]{*};ul(*)[*]{*}';
+	ck_options.pasteFilter = 'h1 h2 p ul ol li; img[!src, alt]; a[!href]';
 	CKEDITOR.dtd.$removeEmpty.i = 0;
 
 	if (field_options.use_br) {
@@ -100,6 +100,11 @@ TextChimeraField.setMethod(function initEdit() {
 	} else {
 		editor = CKEDITOR.inline(that.input, ck_options);
 	}
+
+	editor.on('paste', function(evt) {
+		evt.data.dataValue = evt.data.dataValue
+			.replace(/\&nbsp;/gi, ' ');
+	});
 
 	editor.on('focus', function () {
 		editor.setReadOnly(!!that.readOnly);
