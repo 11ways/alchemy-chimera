@@ -53,7 +53,8 @@ start('chimera-cage') %>
 				</thead>
 				<tbody>
 				<%
-					iterator = records.createIterator();
+					iterator = new Iterator(records);
+
 					while (iterator.hasNext()) {
 						item = iterator.next();
 						record = item.value;

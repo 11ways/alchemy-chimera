@@ -36,6 +36,8 @@ TextChimeraField.setMethod(function initEdit() {
 		field_options = {};
 	}
 
+	ck_options = {};
+
 	ck_options = {
 		filebrowserBrowseUrl  : '/boeckeditor',
 		allowedContent        : true,
@@ -98,6 +100,7 @@ TextChimeraField.setMethod(function initEdit() {
 
 		editor = CKEDITOR.replace(that.input, ck_options);
 	} else {
+		ck_options = {};
 		editor = CKEDITOR.inline(that.input, ck_options);
 	}
 
