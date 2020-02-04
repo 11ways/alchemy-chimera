@@ -640,11 +640,11 @@ Editor.setAction(function saveClose(conduit) {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.5.1
- * @version  0.5.1
+ * @version  0.6.0
  *
  * @param   {Conduit}   conduit
  */
-Editor.setMethod(function save(conduit, go_to_index) {
+Editor.setMethod(async function save(conduit, go_to_index) {
 
 	var that = this,
 	    actionFields,
@@ -655,6 +655,7 @@ Editor.setMethod(function save(conduit, go_to_index) {
 	    record,
 	    model,
 	    data,
+	    doc,
 	    id;
 
 	if (conduit.method != 'post') {
@@ -678,23 +679,24 @@ Editor.setMethod(function save(conduit, go_to_index) {
 	groups = actionFields.groups.clone();
 
 	record = data[modelName.classify()];
-	record._id = alchemy.castObjectId(id);
 
 	options = {};
 
 	// Force create, even though an _id could be given
 	if (conduit.body.create === true) {
+		doc = model.createDocument(record);
 		options.create = true;
+	} else {
+		doc = await model.findById(id);
+		Object.assign(doc, record);
 	}
 
-	model.save(record, options, function afterSave(err, items) {
+	doc.save(null, options, function afterSave(err, result) {
 
 		if (err != null) {
 			conduit.flash('Could not save record: ' + err, {className: 'chimera-fail'});
 			return conduit.error(err);
 		}
-
-		let result = items[0];
 
 		let route_params = Object.assign({}, conduit.params);
 
@@ -710,7 +712,7 @@ Editor.setMethod(function save(conduit, go_to_index) {
 		}
 
 		route_params.action = 'edit';
-		route_params.id = result._id;
+		route_params.id = result.$pk;
 
 		// When creating a new record we need to supply a new url,
 		// because the 'history' will be activated
