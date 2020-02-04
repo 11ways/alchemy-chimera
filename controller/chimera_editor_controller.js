@@ -211,6 +211,8 @@ Editor.setAction(function add(conduit) {
 	// Disable translation behaviour of the model
 	model.disableTranslations();
 
+	this.set('referer', conduit.headers.referer);
+
 	this.setTitle(model_title + ': Add');
 
 	let action_fields = chimera.getActionFields('edit'),
@@ -272,6 +274,8 @@ Editor.setAction(function edit(conduit) {
 	if (model.display_field_select) {
 		find_options.select = model.display_field_select.slice(0);
 	}
+
+	this.set('referer', conduit.headers.referer);
 
 	model.find('first', find_options, function(err, item) {
 

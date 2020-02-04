@@ -162,7 +162,19 @@ function applySave(el, variables) {
 		});
 
 		if (Object.isEmpty(obj.data)) {
-			return chimeraFlash('Save ignored:<br>No modifications were made');
+			chimeraFlash('Save ignored:<br>No modifications were made');
+
+			// Go back to the index page
+			// (unfortunately back to page 1)
+			alchemy.openUrl('chimera@ModelAction', {
+				parameters: {
+					controller : 'editor',
+					subject    : variables.modelName,
+					action     : 'index'
+				}
+			});
+
+			return;
 		}
 
 		var editurl = document.location.href;
