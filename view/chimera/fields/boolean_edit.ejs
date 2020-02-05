@@ -8,10 +8,11 @@
 		<% if (data.value) print('checked') %>
 	>
 
-	<div class="chimeraEditor-boolean-text">
-		<span class="u-yes">Yes</span>
-		<span class="u-no">No</span>
-	</div>
+	<div
+		class="chimeraEditor-boolean-text"
+		data-checked={% __d('Yes') %}
+		data-unchecked={% __d('No') %}
+	></div>
 </label>
 
 <% if (data.field.fieldType.is_array) { %>
