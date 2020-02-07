@@ -118,13 +118,17 @@ function applySave(el, variables) {
 				if (entry.field.fieldType.constructor.type_name == 'schema') {
 
 					if (entry.field.fieldType.isArray) {
-						for (i = 0; i < entry.value.length; i++) {
-							subgroup = entry.value[i];
-							subpath = base_path += '.' + i;
+						if (!entry.value) {
+							// Entry is empty (subschema?)
+						} else {
+							for (i = 0; i < entry.value.length; i++) {
+								subgroup = entry.value[i];
+								subpath = base_path += '.' + i;
 
-							subgroup.fields.forEach(function eachSubField(entry) {
-								return doFieldEntry(entry, subpath);
-							});
+								subgroup.fields.forEach(function eachSubField(entry) {
+									return doFieldEntry(entry, subpath);
+								});
+							}
 						}
 					} else if (entry.value) {
 

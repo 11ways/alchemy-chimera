@@ -12,8 +12,7 @@
 	"repository": "skerit/alchemy-chimera",
 	"dependencies": {
 		"alchemy-ajatar-theme" : "skerit/alchemy-ajatar-theme",
-		"excel-export"         : "0.3.11",
-		"msexcel-builder"      : "0.0.x"
+		"msexcel-builder"      : "skerit/msexcel-builder"
 	},
 	"peerDependencies": {
 		"alchemymvc": "~1.0.6",

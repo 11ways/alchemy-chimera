@@ -1,3 +1,5 @@
+var excel;
+
 /**
  * The Chimera Editor Controller class
  *
@@ -14,7 +16,16 @@ var Editor = Function.inherits('Alchemy.Controller.Chimera', function Editor(con
 	this.addAction('model', 'index', {title: 'Index', icon: '<x-svg data-src="chimera/list"></x-svg>'});
 	this.addAction('model', 'add', {title: 'Add', icon: '<x-svg data-src="chimera/plus"></x-svg>'});
 
-	this.addAction('model-list', 'add', {title: 'Add', icon: '<x-svg data-src="chimera/plus"></x-svg>', route_name: 'ModelAction'});
+	this.addAction('model-list', 'add', {
+		title: 'Add',
+		icon: '<x-svg data-src="chimera/plus"></x-svg>',
+		route_name: 'ModelAction'
+	});
+
+	this.addAction('model-list', 'export', {
+		title: 'Export',
+		route_name: 'ModelAction'
+	});
 
 	this.addAction('draft', 'save', {title: 'Save', icon: '<x-svg data-src="chimera/floppy"></x-svg>', handleManual: true});
 
@@ -40,6 +51,119 @@ var Editor = Function.inherits('Alchemy.Controller.Chimera', function Editor(con
  */
 Editor.setAction(function index(conduit) {
 	return this.doAction('listing', [conduit, 'list', 'index']);
+});
+
+/**
+ * The export action
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.6.0
+ * @version  0.6.0
+ *
+ * @param    {Conduit}   conduit
+ */
+Editor.setAction('export', async function _export(conduit) {
+
+	var that = this,
+	    model_plural,
+	    model_title,
+	    model_name,
+	    chimera,
+	    model;
+
+	// Get the name of the model
+	model_name = conduit.routeParam('subject');
+
+	if (!model_name) {
+		return conduit.error(new Error('No model name was given, nothing to list'));
+	}
+
+	// Get the actual model
+	model = this.getModel(model_name);
+
+	// And get the chimera instance
+	chimera = model.constructor.chimera;
+
+	if (chimera == null) {
+		return conduit.error(new Error('Model "' + model_name + '" has no chimera configuration'));
+	}
+
+	if (!excel) {
+		excel = alchemy.use('msexcel-builder');
+	}
+
+	// Get the model title
+	model_title = model_name.titleize();
+
+	// And the plural form
+	model_plural = model_title.pluralize();
+
+	let action_fields = chimera.getActionFields('list'),
+	    general       = action_fields.getGroup('general'),
+	    fields        = general.getSorted(false),
+	    i;
+
+	let records = await model.find('all');
+
+	if (!records.length) {
+		return conduit.end('No records to export');
+	}
+
+	let filename = model_name + '_' + Date.now() + '.xlsx',
+	    filepath = PATH_TEMP + '/' + filename,
+	    workbook = excel.createWorkbook(PATH_TEMP, filename),
+	    heading  = [],
+	    config,
+	    record,
+	    field,
+	    row = 1,
+	    col = 0,
+	    val;
+
+	let sheet = workbook.createSheet('records', fields.length, records.length + 1);
+
+	for (config of fields) {
+		field = config.fieldType;
+		col++;
+
+		sheet.set(col, row, field.title.trim());
+	}
+
+	for (record of records) {
+		col = 0;
+		row++;
+
+		for (config of fields) {
+			field = config.fieldType;
+			col++;
+			val = Object.path(record, config.path);
+
+			if (val == null) {
+				val = '';
+			}
+
+			if (!Object.isPrimitive(val)) {
+				if (Date.isDate(val)) {
+					val = val.format('Y-m-d H:i:s');
+				} else {
+					val = String(val);
+				}
+			}
+
+			if (typeof val == 'string') {
+				val = val.trim();
+			}
+
+			sheet.set(col, row, val);
+		}
+	}
+
+	workbook.save(function(ok) {
+
+		// Ok is always false, whatever
+		conduit.serveFile(filepath, {filename: filename});
+
+	});
 });
 
 /**
