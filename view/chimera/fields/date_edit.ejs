@@ -1,4 +1,7 @@
 <%
+script('chimera/taildatetime');
+style('tail/datetime-default');
+
 value = data.value;
 
 if (data.value && typeof data.value.format == 'function') {
@@ -6,9 +9,10 @@ if (data.value && typeof data.value.format == 'function') {
 }
 %>
 <input
-	type="date"
-	class="chimeraField-prime"
+	type="text"
+	class="chimeraField-prime form-control"
 	name="data.<%= data.field.path %>"
 	value="<%= value || '' %>"
 	id="field-<%= data.field.path %>"
+	placeholder="yyyy-mm-dd"
 >

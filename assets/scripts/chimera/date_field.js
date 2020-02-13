@@ -64,6 +64,11 @@ DatetimeChimeraField.setMethod(function initEdit(value) {
 
 	// Add change listener
 	if (this.input) {
+
+		tail.DateTime(this.input, {
+			weekStart: 1
+		});
+
 		this.input.addEventListener('change', function onChange() {
 
 			var date;
@@ -121,6 +126,44 @@ DateChimeraField.setMethod(function renderList() {
 
 	html = '<div>' + val + '</div>';
 	this.setMainElement(html);
+});
+
+/**
+ * Initialize the field in the edit action
+ *
+ * @author   Jelle De Loecker   <jelle@develry.be>
+ * @since    0.6.0
+ * @version  0.6.0
+ *
+ * @param    {Mixed}   value   Optional value to override
+ */
+DateChimeraField.setMethod(function initEdit(value) {
+
+	var that = this;
+
+	// Override the value if given
+	if (typeof value !== 'undefined') {
+		this.input.value = value;
+	}
+
+	// Add change listener
+	if (this.input) {
+
+		tail.DateTime(this.input, {
+			weekStart: 1,
+			timeHours: false,
+			timeMinutes: false,
+			timeSeconds: false,
+			timeFormat: ''
+		});
+
+		this.input.addEventListener('change', function onChange() {
+
+			that.setValue(that.input.value);
+		});
+	} else {
+		console.warn('Field', this, 'has no input! Changes will not be saved');
+	}
 });
 
 /**
