@@ -98,8 +98,14 @@ Editor.setAction('export', async function _export(conduit) {
 	// And the plural form
 	model_plural = model_title.pluralize();
 
-	let action_fields = chimera.getActionFields('list'),
-	    general       = action_fields.getGroup('general'),
+	let action_fields = chimera.getActionFields('export');
+
+	// Fallback to the "edit" one
+	if (!action_fields || !(action_fields.length > 0)) {
+		action_fields = chimera.getActionFields('edit');
+	}
+
+	let general       = action_fields.getGroup('general'),
 	    fields        = general.getSorted(false),
 	    i;
 
@@ -134,9 +140,19 @@ Editor.setAction('export', async function _export(conduit) {
 		row++;
 
 		for (config of fields) {
+
 			field = config.fieldType;
 			col++;
-			val = Object.path(record, config.path);
+
+			val = await (new Pledge(function getVal(resolve, reject) {
+				config.actionValue('list', record, function done(err, res) {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(res);
+					}
+				})
+			}));
 
 			if (val == null) {
 				val = '';
