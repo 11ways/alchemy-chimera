@@ -168,6 +168,14 @@ Editor.setAction('export', async function _export(conduit) {
 
 			if (typeof val == 'string') {
 				val = val.trim();
+			} else if (typeof val == 'boolean') {
+				if (val === true) {
+					val = 'Yes';
+				} else if (val === false) {
+					val = 'No';
+				} else {
+					val = '';
+				}
 			}
 
 			sheet.set(col, row, val);
