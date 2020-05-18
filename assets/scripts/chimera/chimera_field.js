@@ -161,6 +161,11 @@ ChimeraField.setProperty(function entry() {
 
 	return this._entry;
 }, function set_entry(val) {
+
+	if (val && val.nodeName == '#text') {
+		throw new Error('A textnode is not a valid ChimeraField#entry element!');
+	}
+
 	this._entry = val;
 	return val;
 });
@@ -373,14 +378,17 @@ ChimeraField.setMethod(function render(callback) {
 				return callback(err);
 			}
 
-			let content = block.toElements();
+			let content = block.toElements(),
+			    node;
 
 			for (let i = 0; i < content.length; i++) {
-				if (typeof content[i] == 'string') {
+				node = content[i];
+
+				if (!node || typeof node == 'string' || (node && node.nodeName == '#text')) {
 					continue;
 				}
 
-				entry_element = content[i];
+				entry_element = node;
 				break;
 			}
 
@@ -408,6 +416,11 @@ ChimeraField.setMethod(function addButtons() {
 	    el;
 
 	if (this.isArray) {
+
+		if (!this.entry) {
+			console.log('ChimeraField', this, 'has no entry!');
+			return;
+		}
 
 		// Get the remove button
 		elements = this.entry.querySelectorAll('.chimeraField-remove-entry');
