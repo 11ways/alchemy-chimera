@@ -416,6 +416,9 @@ Editor.setAction(function edit(conduit) {
 
 	var that = this,
 	    modelName = conduit.routeParam('subject'),
+	    model_name = modelName,
+	    model_plural,
+	    model_title,
 	    model = this.getModel(modelName),
 	    chimera = model.constructor.chimera,
 	    id = conduit.routeParam('id');
@@ -430,6 +433,16 @@ Editor.setAction(function edit(conduit) {
 
 		}
 	};
+
+	if (model.constructor.title) {
+		model_title = model.constructor.title;
+	} else {
+		// Get the model title
+		model_title = modelName.titleize();
+	}
+
+	// And the plural form
+	model_plural = model_title.pluralize();
 
 	find_options.conditions[model.primary_key] = id;
 
@@ -462,6 +475,9 @@ Editor.setAction(function edit(conduit) {
 			that.set('modelName', modelName);
 			that.set('display_field_value', item.getDisplayFieldValue({prefer: 'name'}));
 			that.set('pagetitle', modelName.humanize() + ': Edit');
+			that.set('model_title',        model_title);
+			that.set('model_name',         model_name);
+			that.set('model_plural',       model_plural);
 			that.internal('modelName', modelName);
 			that.internal('recordId', id);
 
