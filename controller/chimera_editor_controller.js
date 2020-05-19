@@ -92,8 +92,12 @@ Editor.setAction('export', async function _export(conduit) {
 		excel = alchemy.use('msexcel-builder');
 	}
 
-	// Get the model title
-	model_title = model_name.titleize();
+	if (model.constructor.title) {
+		model_title = model.constructor.title;
+	} else {
+		// Get the model title
+		model_title = model_name.titleize();
+	}
 
 	// And the plural form
 	model_plural = model_title.pluralize();
@@ -227,8 +231,12 @@ Editor.setAction(function listing(conduit, type, view) {
 		return conduit.error(new Error('Model "' + model_name + '" has no chimera configuration'));
 	}
 
-	// Get the model title
-	model_title = model_name.titleize();
+	if (model.constructor.title) {
+		model_title = model.constructor.title;
+	} else {
+		// Get the model title
+		model_title = model_name.titleize();
+	}
 
 	// And the plural form
 	model_plural = model_title.pluralize();
@@ -287,6 +295,7 @@ Editor.setAction(function listing(conduit, type, view) {
 
 			that.set('model_title',        model_title);
 			that.set('model_name',         model_name);
+			that.set('model_plural',       model_plural);
 			that.internal('model_name',    model_name);
 
 			// Deprecated modelName
@@ -350,8 +359,12 @@ Editor.setAction(function add(conduit) {
 		return conduit.error(new Error('Model "' + model_name + '" has no chimera configuration'));
 	}
 
-	// Get the model title
-	model_title = model_name.titleize();
+	if (model.constructor.title) {
+		model_title = model.constructor.title;
+	} else {
+		// Get the model title
+		model_title = model_name.titleize();
+	}
 
 	// And the plural form
 	model_plural = model_title.pluralize();
@@ -381,6 +394,7 @@ Editor.setAction(function add(conduit) {
 
 		that.set('model_title',        model_title);
 		that.set('model_name',         model_name);
+		that.set('model_plural',       model_plural);
 		that.internal('model_name',    model_name);
 		that.internal('record_id',     id);
 
