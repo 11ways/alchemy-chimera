@@ -429,9 +429,7 @@ Editor.setAction(function edit(conduit) {
 	    groups = actionFields.groups.clone();
 
 	let find_options = {
-		conditions: {
-
-		}
+		conditions: {}
 	};
 
 	if (model.constructor.title) {
