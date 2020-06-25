@@ -199,7 +199,7 @@ Editor.setAction('export', async function _export(conduit) {
  *
  * @author   Jelle De Loecker   <jelle@develry.be>
  * @since    0.1.0
- * @version  0.5.1
+ * @version  0.6.0
  *
  * @param    {Conduit}   conduit
  * @param    {String}    type
@@ -264,7 +264,7 @@ Editor.setAction(function listing(conduit, type, view) {
 
 	let options = {
 		fields    : fields,
-		pageSize  : 10
+		pageSize  : action_fields.options.page_size || alchemy.plugins.chimera.page_size || 10
 	};
 
 	// Hacky way of stopping pagination
