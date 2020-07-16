@@ -36,6 +36,10 @@ TextChimeraField.setMethod(function initEdit() {
 		field_options = {};
 	}
 
+	if (field_options.inline == null) {
+		field_options.inline = false;
+	}
+
 	ck_options = {};
 
 	ck_options = {
