@@ -1,8 +1,8 @@
 {
 	"name": "alchemy-chimera",
 	"description": "Chimera plugin for Alchemy MVC",
-	"version": "0.6.0-alpha",
-	"author": "Jelle De Loecker <jelle@develry.be>",
+	"version": "0.6.0",
+	"author": "Jelle De Loecker <jelle@elevenways.be>",
 	"keywords": [
 		"alchemy",
 		"alchemymvc",
@@ -11,17 +11,18 @@
 	],
 	"repository": "skerit/alchemy-chimera",
 	"dependencies": {
-		"alchemy-ajatar-theme" : "skerit/alchemy-ajatar-theme",
+		"alchemy-ajatar-theme" : "~1.2.0"
+	},
+	"optionalDependencies": {
 		"msexcel-builder"      : "skerit/msexcel-builder"
 	},
 	"peerDependencies": {
-		"alchemymvc": "~1.0.6",
-		"alchemy-acl": "~0.5.4",
-		"alchemy-menu": "~0.5.0"
+		"alchemymvc": "~1.1.0",
+		"alchemy-acl": "~0.6.0",
+		"alchemy-menu": "~0.6.0"
 	},
 	"license": "MIT",
 	"engines": {
-		"node": ">=8.9.0"
-	},
-	"private": true
+		"node": ">=10.21.0"
+	}
 }

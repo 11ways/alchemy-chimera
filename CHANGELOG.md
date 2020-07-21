@@ -1,6 +1,23 @@
-## 0.6.0 (WIP)
+## 0.6.0 (2020-07-21)
 
 * Make compatible with Alchemy v1.1.0
+* If no field title is found, use the name instead
+* Fix "empty" still showing html content on client renders
+* Use `display_field_select` model property when querying for related data
+* Also use `display_field_select` when querying for the actionValue
+* Do not html-encode string input values, hawkejs will do that
+* Use `display_field_select` property when editing a record & in habtm requests
+* Fix client-side renders of schema fields
+* If a change is made to a translatable field, send it entirely to the server, not just the changed prefix
+* Use ckeditor 4.13 from now on + fix pasting styled text
+* Go back to index page when clicking on save&close and nothing has changed
+* The chimera editor now queries the document before saving, this fixed subschema saves
+* Add checkbox toggle-switch stylings + some small ui fixes
+* Use Tail datetime picker
+* Use `export` field group for exports + use formatted action values
+* Get model title from the `title` property of the class
+* Allow setting a default page size in the plugin config or on the model
+* Make sure to translate `BelongsTo#actionValue()` responses
 
 ## 0.5.3 (2018-12-06)
 
