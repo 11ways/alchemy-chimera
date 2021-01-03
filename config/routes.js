@@ -1,8 +1,56 @@
-var chimera_section,
-    chimera_menu;
+// Create a new chimera section.
+// By default this will be /chimera
+let chimera_section = Router.section('chimera', '/' + alchemy.plugins.chimera.base_path);
 
-// Create a new chimera section
-chimera_section = Router.section('chimera', '/' + alchemy.plugins.chimera.routename);
+// Link to the dashboard
+chimera_section.add({
+	title      : __('chimera', 'Dashboard'),
+	name       : 'Dashboard',
+	methods    : 'get',
+	paths      : '/',
+	handler    : 'Chimera.Static#dashboard',
+});
+
+// Editor index action
+chimera_section.add({
+	name       : 'Chimera.Editor#index',
+	methods    : 'get',
+	paths      : '/editor/{model}/index',
+	breadcrumb : 'chimera.editor.{model}.index'
+});
+
+// Editor add action
+chimera_section.add({
+	name       : 'Chimera.Editor#add',
+	methods    : ['get', 'post'],
+	paths      : '/editor/{model}/add',
+	breadcrumb : 'chimera.editor.{model}.add'
+});
+
+// Editor edit action
+chimera_section.add({
+	name       : 'Chimera.Editor#edit',
+	methods    : ['get', 'post'],
+	paths      : '/editor/{model}/edit/{pk}',
+	breadcrumb : 'chimera.editor.{model}.edit.{pk}'
+});
+
+// Editor data action
+chimera_section.add({
+	name       : 'Chimera.Editor#records',
+	methods    : ['post'],
+	paths      : '/api/editor/{model}/records',
+});
+
+// Sidebar
+chimera_section.add({
+	name       : 'Chimera.Static#sidebar',
+	methods    : ['get'],
+	paths      : '/api/content/sidebar',
+});
+
+return
+var chimera_menu;
 
 // Link to the dashboard
 chimera_section.add({

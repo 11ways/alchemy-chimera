@@ -1,0 +1,22 @@
+{% extend "layouts/chimera_base" %}
+
+<% style('chimera/chimera') %>
+
+{% block "base" %}
+<div class="chimera-wrapper">
+	<div class="chimera-sidebar">
+		<div class="chimera-page-header">
+			Test
+		</div>
+		<%= Alchemy.segment('Chimera.Static#sidebar') %>
+	</div>
+	<div class="chimera-content">
+		<div class="chimera-page-header">
+
+		</div>
+		<div data-he-name="main" class="chimera-main">
+
+		</div>
+	</div>
+</div>
+{% /block %}

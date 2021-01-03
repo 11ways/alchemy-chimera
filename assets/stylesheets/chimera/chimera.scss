@@ -1,0 +1,103 @@
+@import "reset.scss";
+
+body {
+	font-family: sans-serif;
+}
+
+.chimera-wrapper {
+	--sidebar-bg-color: #4a4e58;
+	--text-color: #475466;
+	--main-bg-color: #ebedf0;
+	--main-border-color: #dadee0;
+
+	display: flex;
+	min-height: 100vh;
+	width: 100%;
+	color: var(--text-color);
+}
+
+.chimera-sidebar {
+	background-color: var(--sidebar-bg-color);
+	flex: 0 0 14rem;
+	display: flex;
+	flex-flow: column;
+}
+
+.chimera-content {
+	background-color: var(--main-bg-color);
+	flex: 1 0;
+	display: flex;
+	flex-flow: column;
+
+	.chimera-page-header {
+		border-color: var(--main-border-color);
+		border-style: solid;
+		border-width: 0 0 1px;
+		background-color: white;
+	}
+}
+
+.chimera-page-header {
+	height: 4rem;
+}
+
+.chimera-main {
+	flex: 1;
+}
+
+.chimera-editor-widgets {
+	padding: 1rem;
+
+	alchemy-widget[type="alchemy_field"] {
+		margin-bottom: 1rem;
+	}
+
+	.form-field-info label,
+	.form-field-info alchemy-label {
+		display: block;
+		font-size: 1.2rem;
+		margin-bottom: 0.5rem;
+	}
+}
+
+alchemy-widgets-navigation {
+	--border-color: #333333;
+
+	ul {
+		padding-left: 0;
+
+		li {
+			list-style: none;
+			border-bottom: 1px solid var(--border-color);
+		}
+
+		li:first-of-type {
+			border-top: 1px solid var(--border-color);
+		}
+	}
+
+	alchemy-widget[type="link"] {
+		width: 100%;
+		height: 3rem;
+		display: flex;
+
+		a {
+			width: 100%;
+			align-self: stretch;
+			display: flex;
+			align-items: center;
+			padding-left: 1rem;
+			text-decoration: none;
+			color: white;
+
+			&:hover,
+			&.active-link {
+				background-color: rgba(190, 190, 190, 0.5);
+			}
+		}
+	}
+}
+
+.chimera-main[data-he-template="chimera/widgets"] {
+	padding: 1rem;
+}

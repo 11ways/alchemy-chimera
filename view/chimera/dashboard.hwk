@@ -1,0 +1,8 @@
+{% extend "layouts/chimera_body" %}
+
+{% block "main" %}
+Dashboard Widgets:
+<alchemy-widgets>
+
+</alchemy-widgets>
+{% /block %}

@@ -9,7 +9,7 @@
  * @type     {Alchemy.ChimeraConfig}
  */
 Model.prepareStaticProperty(function chimera() {
-	return new Classes.Alchemy.ChimeraConfig(this);
+	return new Classes.Alchemy.Chimera.Config(this);
 });
 
 /**
