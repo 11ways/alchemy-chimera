@@ -1,0 +1,4 @@
+{% extend "layouts/chimera_body" %}
+
+<% console.log('Pagetitle:', page_title) %>
+{% block "page-title" %}{{ page_title }}{% /block %}

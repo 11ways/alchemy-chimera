@@ -5,6 +5,4 @@
 	#context_variables={% context_variables %}
 	#value={% widget_config %}
 ></alchemy-widgets>
-
-<alchemy-table !Route="Chimera.Editor#records"></alchemy-table>
 {% /block %}

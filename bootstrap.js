@@ -1,3 +1,5 @@
+alchemy.requirePlugin('widget');
+
 // Define the default options
 let options = {
 	// The name to use in the routing

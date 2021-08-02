@@ -23,9 +23,12 @@ Editor.setAction(function index(conduit, model_name) {
 
 	let widget_config = model.chimera.getWidgetConfig('index', conduit);
 
+	this.set('page_title', model_name.titleize());
+	this.set('model_name', model_name);
+
 	this.set('widget_config', widget_config);
 
-	this.render('chimera/widgets');
+	this.render('chimera/editor/index');
 });
 
 /**
@@ -165,6 +168,24 @@ Editor.setAction(async function records(conduit, model_name) {
 
 	if (body.sort && body.sort.field && body.sort.dir) {
 		crit.sort([body.sort.field, body.sort.dir]);
+	}
+
+	if (body.filters) {
+		let key,
+		    val;
+
+		for (key in body.filters) {
+			val = body.filters[key];
+
+			// The value should always be a string,
+			// so anything that is falsy can be ignored
+			if (!val) {
+				continue;
+			}
+
+			val = RegExp.interpretWildcard('*' + val + '*');
+			crit.where(key).equals(val);
+		}
 	}
 
 	let records = await model.find('all', crit),

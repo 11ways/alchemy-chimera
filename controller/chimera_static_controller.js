@@ -62,5 +62,5 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 
 	this.set('navigation_widgets', config);
 
-	this.render('chimera/sidebar');
+	this.renderSegment('chimera/sidebar');
 });

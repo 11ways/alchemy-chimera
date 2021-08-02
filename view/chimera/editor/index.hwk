@@ -1,0 +1,20 @@
+{% include "layouts/chimera_basics" %}
+
+{% block "main" %}
+	<alchemy-widgets
+		class="main-widgets"
+		#context_variables={% context_variables %}
+		#value={% widget_config %}
+	></alchemy-widgets>
+{% /block %}
+
+{% block "page-actions" %}
+	<a
+		!Route="Chimera.Editor#add"
+		#model={% model_name %}
+		class="btn"
+	>
+		<al-ico type="plus"></al-ico>
+		{%t "new" model=model_name %}
+	</a>
+{% /block %}
