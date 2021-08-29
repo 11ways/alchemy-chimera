@@ -148,6 +148,19 @@ alchemy-widgets-navigation {
 	padding: 1rem;
 }
 
+.chimera-input-field {
+	padding: 0px 12px;
+	border: 1px solid var(--color-input-border);
+	color: var(--text-color);
+	-webkit-appearance: none;
+	height: 2rem;
+}
+
+alchemy-table .aft-column-filters input {
+	@extend .chimera-input-field;
+	width: 100%;
+}
+
 alchemy-field {
 	border: 1px solid var(--color-box-border);
 	background-color: white;
@@ -209,11 +222,16 @@ alchemy-field {
 		}
 	}
 
-	.field input[type="text"] {
-		padding: 0px 12px;
-		border: 1px solid var(--color-input-border);
-		color: var(--text-color);
-		-webkit-appearance: none;
+	.field input[type="text"],
+	.field input[type="number"],
+	.field input[type="color"] {
+		@extend .chimera-input-field;
 		height: 3rem;
+	}
+
+	.field input[type="color"] {
+		background-color: transparent;
+		border: none;
+		padding: 0;
 	}
 }
