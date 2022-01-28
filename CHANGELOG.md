@@ -1,6 +1,7 @@
 ## 1.0.1 (2022-01-28)
 
 * Allow setting a simple menu sidebar in the config
+* Add simple notification after adding/saving
 
 ## 1.0.0 (2021-09-12)
 

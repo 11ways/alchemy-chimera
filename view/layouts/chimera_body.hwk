@@ -6,13 +6,14 @@
 <div class="chimera-wrapper">
 	<div class="chimera-sidebar">
 		<div class="chimera-page-header">
-			Test
+			
 		</div>
 		<%= Alchemy.segment('Chimera.Static#sidebar') %>
 	</div>
 	<div class="chimera-content">
 		<div class="chimera-page-header">
 			<div class="page-title" data-he-name="page-title"></div>
+			<div class="page-notification" data-he-name="page-notification"></div>
 			<div class="page-actions" data-he-name="page-actions"></div>
 		</div>
 		<div data-he-name="main" class="chimera-main">

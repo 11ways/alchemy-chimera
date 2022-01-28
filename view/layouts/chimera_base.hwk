@@ -3,6 +3,7 @@
 	<head>
 		<!-- This puts in all the required styles, scripts, ... -->
 		<% this.foundation({protoblast: true}) %>
+		<% script('chimera/chimera') %>
 	</head>
 	<body>
 		<!-- This is a block you can assign content to -->

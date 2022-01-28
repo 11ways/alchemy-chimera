@@ -1,5 +1,9 @@
 {% extend "layouts/chimera_body" %}
 
+{% if message %}
+	{% block "page-notification" %}<span class="notification">{{ message }}</span>{% /block %}
+{% /if %}
+
 {% block "main" %}
 <alchemy-widgets
 	#context_variables={% context_variables %}

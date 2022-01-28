@@ -14,6 +14,10 @@ body {
 	--button-bg-hover-color: #e7e9f2;
 	--button-text-color: #3699FF;
 
+	--notification-bg-color: #4a4e58;
+	--notification-text-color: #f4f5f9;
+	--notification-border-color: #dadee0;
+
 	--color-title: #475466;
 	--color-box-border: #DADEE0;
 	--color-active: #3699FF;
@@ -35,6 +39,8 @@ body {
 	text-align: center;
 	border-radius: 2px;
 	font-weight: 500;
+	cursor: pointer;
+	border: 1px solid;
 
 	&:hover {
 		background-color: var(--button-bg-hover-color);
@@ -154,6 +160,21 @@ alchemy-widgets-navigation {
 	color: var(--text-color);
 	-webkit-appearance: none;
 	height: 2rem;
+}
+
+.page-notification {
+	.notification {
+		border: 1px solid var(--notification-border-color);
+		background: var(--notification-bg-color);
+		color: var(--notification-text-color);
+		border-radius: 5px;
+		padding: 0.5rem 0.8rem;
+	}
+}
+
+.removing {
+	transition: opacity 2s;
+	opacity: 0;
 }
 
 alchemy-table .aft-column-filters input {

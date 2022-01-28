@@ -56,7 +56,11 @@ Editor.setAction(async function add(conduit, model_name) {
 		try {
 			await record.save();
 
-			let url = alchemy.routeUrl('Chimera.Editor#edit', {model: model_name, pk: record.$pk});
+			let url = alchemy.routeUrl('Chimera.Editor#edit', {
+				model: model_name,
+				pk: record.$pk,
+				message: 'added'
+			});
 
 			return conduit.redirect(url);
 		} catch (err) {
@@ -87,7 +91,7 @@ Editor.setAction(async function add(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.0
+ * @version  1.0.1
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -100,6 +104,7 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 	model.translateItems = false;
 
 	let record = await model.findByPk(pk_val);
+	let message_type = conduit.param('message');
 
 	this.set('context_variables', {
 		record : record
@@ -109,10 +114,9 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 
 		Object.assign(record, conduit.body[model_name]);
 
-		console.log('Set data record of', record, conduit.body);
-
 		try {
 			await record.save();
+			message_type = 'saved';
 		} catch (err) {
 			// @TODO: set this in the context somehow?
 			this.set('record_violations', err);
@@ -123,6 +127,14 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 
 	if (!widget_config.class_names) {
 		widget_config.class_names = [];
+	}
+
+	if (message_type) {
+		if (message_type == 'added') {
+			this.set('message', 'Record has been added');
+		} else if (message_type == 'saved') {
+			this.set('message', 'Record has been saved');
+		}
 	}
 
 	widget_config.class_names.push('chimera-editor-widgets');

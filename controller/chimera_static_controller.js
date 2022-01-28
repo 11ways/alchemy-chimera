@@ -52,7 +52,7 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 
 			if (!title) {
 				if (model) {
-					title = model.title;
+					title = model.constructor.title;
 				}
 
 				if (!title && entry.href) {
@@ -75,7 +75,7 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 					config : {
 						route : 'Chimera.Editor#index',
 						parameters: [
-							{name: 'model', value: model.type_name},
+							{name: 'model', value: model.constructor.type_name},
 						],
 						content: title
 					}
