@@ -2,6 +2,7 @@
 
 * Allow setting a simple menu sidebar in the config
 * Add simple notification after adding/saving
+* Add page & window titles
 
 ## 1.0.0 (2021-09-12)
 

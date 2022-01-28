@@ -1,4 +1,15 @@
 {% extend "layouts/chimera_body" %}
 
-<% console.log('Pagetitle:', page_title) %>
-{% block "page-title" %}{{ page_title }}{% /block %}
+{% if page_title %}
+	{% block "page-title" %}{{ page_title }}{% /block %}
+{% /if %}
+
+{% if window_title %}
+	<% set_title(window_title) %>
+{% elseif page_title %}
+	<% set_title(page_title) %>
+{% /if %}
+
+{% if message %}
+	{% block "page-notification" %}<span class="notification">{{ message }}</span>{% /block %}
+{% /if %}

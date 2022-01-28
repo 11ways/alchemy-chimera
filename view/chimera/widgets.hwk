@@ -1,8 +1,4 @@
-{% extend "layouts/chimera_body" %}
-
-{% if message %}
-	{% block "page-notification" %}<span class="notification">{{ message }}</span>{% /block %}
-{% /if %}
+{% include "layouts/chimera_basics" %}
 
 {% block "main" %}
 <alchemy-widgets

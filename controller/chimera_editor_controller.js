@@ -8,11 +8,43 @@
 const Editor = Function.inherits('Alchemy.Controller.Chimera', 'Editor');
 
 /**
+ * Set the title
+ *
+ * @author   Jelle De Loecker   <jelle@elevenways.be>
+ * @since    1.0.1
+ * @version  1.0.1
+ *
+ * @param    {String}    title
+ */
+Editor.setMethod(function setTitle(title) {
+
+	let window_title,
+	    page_title;
+
+	if (alchemy.plugins.chimera.title) {
+		window_title = alchemy.plugins.chimera.title || '';
+
+		if (title && window_title) {
+			window_title += ' | ';
+		}
+	}
+
+	if (title) {
+		window_title += title;
+	}
+
+	page_title = title;
+
+	this.set('page_title', page_title);
+	this.set('window_title', window_title || page_title);
+});
+
+/**
  * The index action
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.0
+ * @version  1.0.1
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -23,7 +55,8 @@ Editor.setAction(function index(conduit, model_name) {
 
 	let widget_config = model.chimera.getWidgetConfig('index', conduit);
 
-	this.set('page_title', model_name.titleize());
+	this.setTitle(model_name.titleize());
+
 	this.set('model_name', model_name);
 
 	this.set('widget_config', widget_config);
@@ -36,7 +69,7 @@ Editor.setAction(function index(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.0
+ * @version  1.0.1
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -82,6 +115,7 @@ Editor.setAction(async function add(conduit, model_name) {
 	widget_config.class_names.push('chimera-editor-widgets');
 
 	this.set('widget_config', widget_config);
+	this.setTitle(model.constructor.title + ' Add');
 
 	this.render('chimera/widgets');
 });
@@ -140,6 +174,7 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 	widget_config.class_names.push('chimera-editor-widgets');
 
 	this.set('widget_config', widget_config);
+	this.setTitle(model.constructor.title + ' Edit');
 
 	this.render('chimera/widgets');
 });
