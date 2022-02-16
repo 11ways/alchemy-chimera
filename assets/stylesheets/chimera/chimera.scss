@@ -10,6 +10,7 @@ body {
 	--text-color: #475466;
 	--main-bg-color: #ebedf0;
 	--main-border-color: #dadee0;
+	
 	--button-bg-color: #F4F5F9;
 	--button-bg-hover-color: #e7e9f2;
 	--button-text-color: #3699FF;
@@ -31,20 +32,85 @@ body {
 }
 
 .btn {
+	//--button-bg-color: var(--context-background-color, --button-bg-color);
+	--local-text-color: var(--context-color, var(--button-text-color));
+	--local-border-color: var(--context-border-color, var(--button-border-color));
+
 	background-color: var(--button-bg-color);
+	color: var(--local-text-color);
+	border: 1px solid;
+	border-color: var(--local-border-color);
+
 	text-decoration: none;
-	color: var(--button-text-color);
 	line-height: 2rem;
 	min-width: 10rem;
 	text-align: center;
 	border-radius: 2px;
 	font-weight: 500;
 	cursor: pointer;
-	border: 1px solid;
 
 	&:hover {
 		background-color: var(--button-bg-hover-color);
+		//filter: brightness(1.05);
 	}
+}
+
+.primary {
+	--context-color: #084298;
+	--context-background-color: #cfe2ff;
+	--context-border-color: #b6d4fe;
+}
+
+.secondary {
+	--context-color: #41464b;
+	--context-background-color: #e2e3e5;
+	--context-border-color: #d3d6d8;
+}
+
+.success {
+	--context-color: #0f5132;
+	--context-background-color: #d1e7dd;
+	--context-border-color: #badbcc;
+}
+
+.danger,
+.error {
+	--context-color: #842029;
+	--context-background-color: #f8d7da;
+	--context-border-color: #f5c2c7;
+}
+
+.warning {
+	--context-color: #664d03;
+	--context-background-color: #fff3cd;
+	--context-border-color: #ffecb5;
+}
+
+.info {
+	--context-color: #055160;
+	--context-background-color: #cff4fc;
+	--context-border-color: #b6effb;
+}
+
+.light {
+	--context-color: #636464;
+	--context-background-color: #fefefe;
+	--context-border-color: #fdfdfe;
+}
+
+.dark {
+	--context-color: #141619;
+	--context-background-color: #d3d3d4;
+	--context-border-color: #bcbebf;
+}
+
+.alert-box {
+	color: var(--context-color);
+	background-color: var(--context-background-color);
+	border: 1px solid;
+	border-color: var(--context-border-color);
+	padding: 1rem;
+	margin: 1rem 0 1rem;
 }
 
 .chimera-sidebar {
@@ -92,6 +158,12 @@ body {
 .chimera-main {
 	flex: 1;
 	padding: 0.5rem;
+
+	&[data-he-template="chimera/widgets"] {
+		h1 {
+			padding-top: 0;
+		}
+	}
 }
 
 .main-widgets {
@@ -182,10 +254,20 @@ alchemy-table .aft-column-filters input {
 	width: 100%;
 }
 
+alchemy-form {
+	.error-area:not(:empty) {
+		@extend .error, .alert-box;
+		margin-top: 0;
+	}
+}
+
 alchemy-field {
 	border: 1px solid var(--color-box-border);
 	background-color: white;
 	border-radius: 4px;
+
+	// In case something goes wrong:
+	min-height: 1rem;
 
 	alchemy-label {
 		padding-left: 1rem;
@@ -232,6 +314,7 @@ alchemy-field {
 	.field {
 		display: flex;
 		padding: 1rem;
+		flex: 1;
 
 		> * {
 			flex: 1;
@@ -245,7 +328,9 @@ alchemy-field {
 
 	.field input[type="text"],
 	.field input[type="number"],
-	.field input[type="color"] {
+	.field input[type="color"],
+	.field input[type="datetime-local"],
+	.field input[type="password"] {
 		@extend .chimera-input-field;
 		height: 3rem;
 	}
@@ -254,6 +339,52 @@ alchemy-field {
 		background-color: transparent;
 		border: none;
 		padding: 0;
+	}
+}
+
+alchemy-field-array {
+	.add-entry {
+		@extend .btn;
+		margin: 1rem 0 0 1rem;
+	}
+
+	button.remove {
+		@extend .btn;
+		@extend .danger;
+		min-width: 6rem;
+		margin: 0 1rem 1rem 0;
+	}
+
+	.entries {
+		margin-top: 0.5rem;
+	}
+
+	alchemy-field-array-entry:not(:last-of-type) {
+		//border-bottom: 1px solid gray;
+		position: relative;
+
+		&::after {
+			display: block;
+			content: " ";
+			background-color: lightgray;
+			position: absolute;
+			bottom: 0;
+			height: 1px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 80%;
+		}
+	}
+
+	alchemy-field-array-entry:not(:first-of-type) {
+		margin-top: 1rem;
+	}
+}
+
+alchemy-field-schema {
+	alchemy-field {
+		border: none;
+		margin-bottom: 1rem;
 	}
 }
 
