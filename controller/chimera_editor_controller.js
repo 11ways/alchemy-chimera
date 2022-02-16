@@ -69,7 +69,7 @@ Editor.setAction(function index(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.1
+ * @version  1.0.2
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -97,10 +97,8 @@ Editor.setAction(async function add(conduit, model_name) {
 
 			return conduit.redirect(url);
 		} catch (err) {
-			// @TODO: set this in the context somehow?
-			this.set('record_violations', err);
-
 			this.set('context_variables', {
+				form_violations : err,
 				record : record
 			});
 		}
@@ -125,7 +123,7 @@ Editor.setAction(async function add(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.1
+ * @version  1.0.2
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -140,9 +138,9 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 	let record = await model.findByPk(pk_val);
 	let message_type = conduit.param('message');
 
-	this.set('context_variables', {
-		record : record
-	});
+	let context_variables = {
+		record,
+	};
 
 	if (conduit.method == 'post') {
 
@@ -152,10 +150,11 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 			await record.save();
 			message_type = 'saved';
 		} catch (err) {
-			// @TODO: set this in the context somehow?
-			this.set('record_violations', err);
+			context_variables.form_violations = err;
 		}
 	}
+
+	this.set('context_variables', context_variables);
 
 	let widget_config = model.chimera.getWidgetConfig('edit', conduit);
 

@@ -1,3 +1,7 @@
+## 1.0.2 (WIP)
+
+*
+
 ## 1.0.1 (2022-01-28)
 
 * Allow setting a simple menu sidebar in the config
