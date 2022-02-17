@@ -326,19 +326,27 @@ alchemy-field {
 		}
 	}
 
-	.field input[type="text"],
-	.field input[type="number"],
-	.field input[type="color"],
-	.field input[type="datetime-local"],
-	.field input[type="password"] {
-		@extend .chimera-input-field;
-		height: 3rem;
-	}
+	.field {
+		input[type="text"],
+		input[type="number"],
+		input[type="color"],
+		input[type="datetime-local"],
+		input[type="password"] {
+			@extend .chimera-input-field;
+			height: 3rem;
+		}
 
-	.field input[type="color"] {
-		background-color: transparent;
-		border: none;
-		padding: 0;
+		textarea {
+			@extend .chimera-input-field;
+			min-height: 5rem;
+			padding: 1rem;
+		}
+
+		input[type="color"] {
+			background-color: transparent;
+			border: none;
+			padding: 0;
+		}
 	}
 }
 
@@ -378,6 +386,32 @@ alchemy-field-array {
 
 	alchemy-field-array-entry:not(:first-of-type) {
 		margin-top: 1rem;
+	}
+}
+
+.chimera-editor-widgets {
+	table-of-contents[elements-selector="alchemy-field"] {
+		align-self: start;
+		top: 2rem;
+		position: sticky;
+		ol {
+			list-style: none;
+			margin: 0 2rem;
+			padding: 0;
+			li {
+				a {
+					display: block;
+					line-height: 2rem;
+					border-bottom: 1px solid #aaa;
+					text-decoration: none;
+				}
+			}
+	
+			li a.visible {
+				opacity: 1;
+			}	
+		}
+
 	}
 }
 
