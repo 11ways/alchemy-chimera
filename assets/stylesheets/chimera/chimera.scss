@@ -118,6 +118,11 @@ body {
 	flex: 0 0 14rem;
 	display: flex;
 	flex-flow: column;
+
+	.sidebar-widgets {
+		position: sticky;
+		top: 1rem;
+	}
 }
 
 .chimera-content {
