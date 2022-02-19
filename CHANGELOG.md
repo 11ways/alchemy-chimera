@@ -1,6 +1,8 @@
 ## 1.0.2 (WIP)
 
-*
+* Improve editor styling
+* Put editor errors in the Widget context
+* Add TOC to editor
 
 ## 1.0.1 (2022-01-28)
 

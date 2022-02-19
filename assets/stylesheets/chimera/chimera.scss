@@ -390,28 +390,36 @@ alchemy-field-array {
 }
 
 .chimera-editor-widgets {
+
+	alchemy-widgets-column.toc-col {
+		flex: 1 1;
+	}
+
 	table-of-contents[elements-selector="alchemy-field"] {
 		align-self: start;
 		top: 2rem;
 		position: sticky;
+
 		ol {
 			list-style: none;
-			margin: 0 2rem;
+			margin: 0 0 0 2rem;
 			padding: 0;
+
 			li {
 				a {
 					display: block;
 					line-height: 2rem;
 					border-bottom: 1px solid #aaa;
 					text-decoration: none;
+					opacity: 0.5;
+					color: #0070e4;
 				}
 			}
 	
 			li a.visible {
 				opacity: 1;
-			}	
+			}
 		}
-
 	}
 }
 
