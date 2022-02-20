@@ -1,4 +1,4 @@
-## 1.0.2 (WIP)
+## 1.0.2 (2022-02-20)
 
 * Improve editor styling
 * Put editor errors in the Widget context
