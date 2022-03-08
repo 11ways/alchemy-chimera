@@ -1,7 +1,7 @@
 {
 	"name": "alchemy-chimera",
 	"description": "Chimera plugin for Alchemy MVC",
-	"version": "1.0.2",
+	"version": "1.0.3-alpha",
 	"author": "Jelle De Loecker <jelle@elevenways.be>",
 	"keywords": [
 		"alchemy",

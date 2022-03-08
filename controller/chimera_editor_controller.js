@@ -183,7 +183,7 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.0
- * @version  1.0.0
+ * @version  1.0.3
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -229,7 +229,7 @@ Editor.setAction(async function records(conduit, model_name) {
 				continue;
 			}
 
-			val = RegExp.interpretWildcard('*' + val + '*');
+			val = RegExp.interpretWildcard('*' + val + '*', 'i');
 			crit.where(key).equals(val);
 		}
 	}

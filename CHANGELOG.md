@@ -1,3 +1,7 @@
+## 1.0.3 (WIP)
+
+* Make table filtering case insensitive
+
 ## 1.0.2 (2022-02-20)
 
 * Improve editor styling
