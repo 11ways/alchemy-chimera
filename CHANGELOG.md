@@ -1,4 +1,4 @@
-## 1.0.3 (WIP)
+## 1.0.3 (2022-03-16)
 
 * Make table filtering case insensitive
 
