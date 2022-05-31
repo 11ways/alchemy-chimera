@@ -223,7 +223,7 @@ Editor.setAction(async function trash(conduit, model_name, pk_val) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.0
- * @version  1.0.3
+ * @version  1.0.4
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -281,15 +281,29 @@ Editor.setAction(async function records(conduit, model_name) {
 
 	for (record of records) {
 
-		record.$hold.actions = [
-			{
-				name : 'edit',
-				icon : 'edit',
-				url  : alchemy.routeUrl('Chimera.Editor#edit', {
+		let edit_action = new Classes.Alchemy.Form.Action.Url({
+			name : 'edit',
+			icon : 'edit',
+			placement : ['row', 'context'],
+			url       : alchemy.routeUrl('Chimera.Editor#edit', {
+				model : model_name,
+				pk    : record.$pk,
+			})
+		});
+
+		let trash_action = new Classes.Alchemy.Form.Action.Url({
+			name      : 'trash',
+				icon      : 'trash',
+				placement : ['context'],
+				url       : alchemy.routeUrl('Chimera.Editor#trash', {
 					model : model_name,
 					pk    : record.$pk,
 				})
-			}
+		});
+
+		record.$hold.actions = [
+			edit_action,
+			trash_action,
 		];
 	}
 

@@ -48,8 +48,12 @@ body {
 	border-radius: 2px;
 	font-weight: 500;
 	cursor: pointer;
-	display: inline-block;
 	padding: 0.4rem 0.7rem;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.2rem;
 
 	&:hover {
 		background-color: var(--button-bg-hover-color);
