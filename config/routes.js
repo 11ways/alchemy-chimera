@@ -35,6 +35,14 @@ chimera_section.add({
 	breadcrumb : 'chimera.editor.{model}.edit.{pk}'
 });
 
+// Editor trash action
+chimera_section.add({
+	name       : 'Chimera.Editor#trash',
+	methods    : ['get', 'post'],
+	paths      : '/editor/{model}/trash/{pk}',
+	breadcrumb : 'chimera.editor.{model}.trash.{pk}'
+});
+
 // Editor data action
 chimera_section.add({
 	name       : 'Chimera.Editor#records',

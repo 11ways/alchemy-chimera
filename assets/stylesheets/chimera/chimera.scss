@@ -48,10 +48,16 @@ body {
 	border-radius: 2px;
 	font-weight: 500;
 	cursor: pointer;
+	display: inline-block;
+	padding: 0.4rem 0.7rem;
 
 	&:hover {
 		background-color: var(--button-bg-hover-color);
 		//filter: brightness(1.05);
+	}
+
+	al-ico {
+		margin-right: 4px;
 	}
 }
 
@@ -127,7 +133,7 @@ body {
 
 .chimera-content {
 	background-color: var(--main-bg-color);
-	flex: 1 0;
+	flex: 10 0;
 	display: flex;
 	flex-flow: column;
 
@@ -163,6 +169,8 @@ body {
 .chimera-main {
 	flex: 1;
 	padding: 0.5rem;
+	display: flex;
+	flex-flow: column;
 
 	&[data-he-template="chimera/widgets"] {
 		h1 {
@@ -290,7 +298,7 @@ alchemy-field {
 			display: flex;
 
 			button {
-				flex: 1;
+				flex: 10;
 				font-size: 16px;
 				font-weight: 500;
 				color: var(--button-text-color);
@@ -319,10 +327,10 @@ alchemy-field {
 	.field {
 		display: flex;
 		padding: 1rem;
-		flex: 1;
+		flex: 10;
 
 		> * {
-			flex: 1;
+			flex: 10;
 		}
 
 		> alchemy-widget {
@@ -397,7 +405,7 @@ alchemy-field-array {
 .chimera-editor-widgets {
 
 	alchemy-widgets-column.toc-col {
-		flex: 1 1;
+		flex: 2 2;
 	}
 
 	table-of-contents[elements-selector="alchemy-field"] {
@@ -447,5 +455,19 @@ alchemy-field-schema {
 		&:hover {
 			background-color: var(--button-bg-hover-color);
 		}
+	}
+}
+
+.chimera-confirm-page {
+	flex: 1;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	flex-flow: column;
+	flex-direction: column;
+
+	.action-buttons {
+		display: flex;
+		gap: 1rem;
 	}
 }

@@ -1,0 +1,34 @@
+{% include "layouts/chimera_basics" %}
+
+{% block "main" %}
+	<div class="chimera-confirm-page">
+		<h1>{%t "confirm-delete-title" %}</h1>
+
+		<p>
+			{%t "confirm-delete-text" model=record.$model_name title=record.getDisplayFieldValue() %}
+		</p>
+
+		<br>
+
+		<form class="action-buttons">
+			<a class="btn" href={% back_url %}>
+				{%t "cancel" %}
+			</a>
+			<button class="btn danger">
+				<al-ico type="trash" class="fas fa-trash"></al-ico>
+				{%t "delete" %}
+			</button>
+		</form>
+	</div>
+{% /block %}
+
+{% block "page-actions" %}
+	<a
+		!Route="Chimera.Editor#add"
+		#model={% model_name %}
+		class="btn"
+	>
+		<al-ico type="plus"></al-ico>
+		{%t "new" model=model_name %}
+	</a>
+{% /block %}

@@ -179,6 +179,46 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 });
 
 /**
+ * The trash action
+ *
+ * @author   Jelle De Loecker   <jelle@elevenways.be>
+ * @since    1.0.4
+ * @version  1.0.4
+ *
+ * @param    {Conduit}   conduit
+ * @param    {String}    model_name
+ * @param    {String}    pk_val
+ */
+Editor.setAction(async function trash(conduit, model_name, pk_val) {
+
+	let model = this.getModel(model_name);
+
+	model.translateItems = false;
+
+	let record = await model.findByPk(pk_val);
+
+	if (!record) {
+		return conduit.notFound();
+	}
+
+	let index_url = alchemy.routeUrl('Chimera.Editor#index', {
+		model : model_name
+	});
+
+	if (conduit.method == 'post') {
+		await record.remove();
+		conduit.redirect(index_url);
+		return;
+	}
+
+	let referer = conduit.headers.referer || index_url;
+
+	this.set('back_url', referer);
+	this.set('record', record);
+	this.render('chimera/editor/trash');
+});
+
+/**
  * The records API action
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
