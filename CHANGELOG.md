@@ -1,3 +1,7 @@
+## 1.0.5 (WIP)
+
+* Fix page title containing 'undefined'
+
 ## 1.0.4 (2022-05-31)
 
 * Add delete page

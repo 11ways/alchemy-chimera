@@ -1,4 +1,5 @@
 alchemy.requirePlugin('widget');
+alchemy.requirePlugin('form');
 
 // Define the default options
 let options = {

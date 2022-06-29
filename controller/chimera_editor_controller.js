@@ -12,7 +12,7 @@ const Editor = Function.inherits('Alchemy.Controller.Chimera', 'Editor');
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.1
- * @version  1.0.1
+ * @version  1.0.5
  *
  * @param    {String}    title
  */
@@ -27,6 +27,8 @@ Editor.setMethod(function setTitle(title) {
 		if (title && window_title) {
 			window_title += ' | ';
 		}
+	} else {
+		window_title = '';
 	}
 
 	if (title) {
