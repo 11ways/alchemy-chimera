@@ -125,7 +125,7 @@ Editor.setAction(async function add(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.2
+ * @version  1.0.5
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -139,6 +139,8 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 
 	let record = await model.findByPk(pk_val);
 	let message_type = conduit.param('message');
+
+	record.keepPrivateFields();
 
 	let context_variables = {
 		record,
@@ -225,7 +227,7 @@ Editor.setAction(async function trash(conduit, model_name, pk_val) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.0
- * @version  1.0.4
+ * @version  1.0.5
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -280,6 +282,8 @@ Editor.setAction(async function records(conduit, model_name) {
 	    result = [],
 	    record,
 	    main;
+	
+	records.keepPrivateFields();
 
 	for (record of records) {
 

@@ -2,6 +2,7 @@
 
 * Fix page title containing 'undefined'
 * Update styles
+* Add support for "private" document fields
 
 ## 1.0.4 (2022-05-31)
 
