@@ -266,212 +266,235 @@ alchemy-widgets-navigation {
 	opacity: 0;
 }
 
-alchemy-table .aft-column-filters input {
-	@extend .chimera-input-field;
-	width: 100%;
-}
+.chimera-wrapper {
 
-alchemy-form {
-	.error-area:not(:empty) {
-		@extend .error, .alert-box;
-		margin-top: 0;
-	}
-}
-
-alchemy-field {
-	border: 1px solid var(--color-box-border);
-	background-color: white;
-	border-radius: 4px;
-
-	// In case something goes wrong:
-	min-height: 1rem;
-
-	alchemy-label {
-		padding-left: 1rem;
-		line-height: 3rem;
-		font-size: 16px;
-		font-weight: 500;
-		color: var(--color-title);
-		border-bottom: 1px solid var(--color-box-border);
+	alchemy-table .aft-column-filters input {
+		@extend .chimera-input-field;
+		width: 100%;
 	}
 
-	alchemy-field-translatable {
-		.prefix-buttons {
-			width: 100%;
+	alchemy-form {
+		.error-area:not(:empty) {
+			@extend .error, .alert-box;
+			margin-top: 0;
+		}
+	}
+
+	alchemy-field:not([view-type="view_inline"]):not([view-type="inline"]) {
+		border: 1px solid var(--color-box-border);
+		background-color: white;
+		border-radius: 4px;
+
+		// In case something goes wrong:
+		min-height: 1rem;
+
+		alchemy-label {
+			padding-left: 1rem;
+			line-height: 3rem;
+			font-size: 16px;
+			font-weight: 500;
+			color: var(--color-title);
 			border-bottom: 1px solid var(--color-box-border);
-			display: flex;
+		}
 
-			button {
-				flex: 10;
-				font-size: 16px;
-				font-weight: 500;
-				color: var(--button-text-color);
-				letter-spacing: 0px;
-				background: transparent;
-				border: none;
-				cursor: pointer;
-
-				height: 3rem;
+		alchemy-field-translatable {
+			.prefix-buttons {
+				width: 100%;
+				border-bottom: 1px solid var(--color-box-border);
 				display: flex;
-				flex-flow: column;
-				justify-content: center;
-				align-items: center;
 
-				&.active {
-					box-shadow: inset 0 -2px var(--color-active);
-				}
+				button {
+					flex: 10;
+					font-size: 16px;
+					font-weight: 500;
+					color: var(--button-text-color);
+					letter-spacing: 0px;
+					background: transparent;
+					border: none;
+					cursor: pointer;
 
-				&:hover {
-					background-color: var(--button-bg-hover-color);
+					height: 3rem;
+					display: flex;
+					flex-flow: column;
+					justify-content: center;
+					align-items: center;
+
+					&.active {
+						box-shadow: inset 0 -2px var(--color-active);
+					}
+
+					&:hover {
+						background-color: var(--button-bg-hover-color);
+					}
 				}
 			}
 		}
-	}
 
-	.field {
-		display: flex;
-		padding: 1rem;
-		flex: 10;
-
-		> * {
-			flex: 10;
-		}
-
-		> alchemy-widget {
-			border: 1px solid var(--color-input-border);
-			padding: 0 12px;
-		}
-	}
-
-	.field {
-		input[type="text"],
-		input[type="number"],
-		input[type="color"],
-		input[type="datetime-local"],
-		input[type="password"] {
-			@extend .chimera-input-field;
-			height: 3rem;
-		}
-
-		textarea {
-			@extend .chimera-input-field;
-			min-height: 5rem;
+		.field {
+			display: flex;
 			padding: 1rem;
+			flex: 10;
+
+			> * {
+				flex: 10;
+			}
+
+			> alchemy-widget {
+				border: 1px solid var(--color-input-border);
+				padding: 0 12px;
+			}
 		}
 
-		input[type="color"] {
-			background-color: transparent;
-			border: none;
-			padding: 0;
-		}
-	}
-}
+		.field {
+			input[type="text"],
+			input[type="number"],
+			input[type="color"],
+			input[type="datetime-local"],
+			input[type="password"] {
+				@extend .chimera-input-field;
+				height: 3rem;
+			}
 
-alchemy-field-array {
-	.add-entry {
-		@extend .btn;
-		margin: 1rem 0 0 1rem;
-	}
+			textarea {
+				@extend .chimera-input-field;
+				min-height: 5rem;
+				padding: 1rem;
+			}
 
-	button.remove {
-		@extend .btn;
-		@extend .danger;
-		min-width: 6rem;
-		margin: 0 1rem 1rem 0;
-	}
-
-	.entries {
-		margin-top: 0.5rem;
-	}
-
-	alchemy-field-array-entry:not(:last-of-type) {
-		//border-bottom: 1px solid gray;
-		position: relative;
-
-		&::after {
-			display: block;
-			content: " ";
-			background-color: lightgray;
-			position: absolute;
-			bottom: 0;
-			height: 1px;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 80%;
+			input[type="color"] {
+				background-color: transparent;
+				border: none;
+				padding: 0;
+			}
 		}
 	}
 
-	alchemy-field-array-entry:not(:first-of-type) {
-		margin-top: 1rem;
+	alchemy-field-array {
+		.add-entry {
+			@extend .btn;
+			margin: 1rem 0 0 1rem;
+		}
+
+		button.remove {
+			@extend .btn;
+			@extend .danger;
+			min-width: 6rem;
+			margin: 0 1rem 1rem 0;
+		}
+
+		.entries {
+			margin-top: 0.5rem;
+		}
+
+		alchemy-field-array-entry:not(:last-of-type) {
+			//border-bottom: 1px solid gray;
+			position: relative;
+
+			&::after {
+				display: block;
+				content: " ";
+				background-color: lightgray;
+				position: absolute;
+				bottom: 0;
+				height: 1px;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 80%;
+			}
+		}
+
+		alchemy-field-array-entry:not(:first-of-type) {
+			margin-top: 1rem;
+		}
 	}
-}
 
-.chimera-editor-widgets {
+	.chimera-editor-widgets {
 
-	alchemy-widgets-column.toc-col {
-		flex: 2 2;
-	}
+		alchemy-widgets-column.toc-col {
+			flex: 2 2;
+		}
 
-	table-of-contents[elements-selector="alchemy-field"] {
-		align-self: start;
-		top: 2rem;
-		position: sticky;
+		table-of-contents[elements-selector="alchemy-field"] {
+			align-self: start;
+			top: 2rem;
+			position: sticky;
 
-		ol {
-			list-style: none;
-			margin: 0 0 0 2rem;
-			padding: 0;
+			ol {
+				list-style: none;
+				margin: 0 0 0 2rem;
+				padding: 0;
 
-			li {
-				a {
-					display: block;
-					line-height: 2rem;
-					border-bottom: 1px solid #aaa;
-					text-decoration: none;
-					opacity: 0.5;
-					color: #0070e4;
+				li {
+					a {
+						display: block;
+						line-height: 2rem;
+						border-bottom: 1px solid #aaa;
+						text-decoration: none;
+						opacity: 0.5;
+						color: #0070e4;
+					}
+				}
+		
+				li a.visible {
+					opacity: 1;
 				}
 			}
-	
-			li a.visible {
-				opacity: 1;
+		}
+	}
+
+	alchemy-field-schema {
+		alchemy-field {
+			border: none;
+			margin-bottom: 1rem;
+		}
+	}
+
+	.aft-actions {
+		a {
+			color: var(--button-text-color);
+			background-color: var(--button-bg-color);
+			padding: 0.5rem;
+			border-radius: 6px;
+			margin: 0.2rem;
+			display: inline-block;
+
+			&:hover {
+				background-color: var(--button-bg-hover-color);
 			}
 		}
 	}
-}
 
-alchemy-field-schema {
-	alchemy-field {
-		border: none;
-		margin-bottom: 1rem;
-	}
-}
+	.chimera-confirm-page {
+		flex: 1;
+		justify-content: center;
+		display: flex;
+		align-items: center;
+		flex-flow: column;
+		flex-direction: column;
 
-.aft-actions {
-	a {
-		color: var(--button-text-color);
-		background-color: var(--button-bg-color);
-		padding: 0.5rem;
-		border-radius: 6px;
-		margin: 0.2rem;
-		display: inline-block;
-
-		&:hover {
-			background-color: var(--button-bg-hover-color);
+		.action-buttons {
+			display: flex;
+			gap: 1rem;
 		}
 	}
-}
 
-.chimera-confirm-page {
-	flex: 1;
-	justify-content: center;
-	display: flex;
-	align-items: center;
-	flex-flow: column;
-	flex-direction: column;
+	al-file {
+		button {
+			@extend .btn;
+		}
+	}
 
-	.action-buttons {
-		display: flex;
-		gap: 1rem;
+	alchemy-password-input {
+		label:first-of-type {
+			margin-bottom: 0;
+		}
+
+		.repeat-input-label {
+			margin-top: 1rem;
+		}
+
+		.inputbox {
+			background: initial;
+		}
 	}
 }

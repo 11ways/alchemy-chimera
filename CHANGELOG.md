@@ -1,6 +1,7 @@
 ## 1.0.5 (WIP)
 
 * Fix page title containing 'undefined'
+* Update styles
 
 ## 1.0.4 (2022-05-31)
 
