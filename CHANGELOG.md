@@ -1,4 +1,4 @@
-## 1.1.0 (WIP)
+## 1.1.0 (2022-07-23)
 
 * Upgrade `alchemy-acl` and `alchemy-form`
 
