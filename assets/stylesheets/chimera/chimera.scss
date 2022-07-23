@@ -280,7 +280,19 @@ alchemy-widgets-navigation {
 		}
 	}
 
-	alchemy-field:not([view-type="view_inline"]):not([view-type="inline"]) {
+	alchemy-field {
+		.wrapped-inline {
+			> .field {
+				padding: 0 !important;
+			}
+		}
+	}
+
+	alchemy-field[mode="inline"] {
+		border: none;
+	}
+
+	alchemy-field:not([mode="inline"]) {
 		border: 1px solid var(--color-box-border);
 		background-color: white;
 		border-radius: 4px;

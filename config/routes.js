@@ -2,6 +2,8 @@
 // By default this will be /chimera
 let chimera_section = Router.section('chimera', '/' + alchemy.plugins.chimera.base_path);
 
+chimera_section.requirePermission('chimera');
+
 // Link to the dashboard
 chimera_section.add({
 	title      : __('chimera', 'Dashboard'),
