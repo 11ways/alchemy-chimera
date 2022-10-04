@@ -5,6 +5,7 @@ body {
 	font-family: 'Roboto', sans-serif;
 }
 
+.default-form-editor,
 .chimera-wrapper {
 	--sidebar-bg-color: #4a4e58;
 	--text-color: #475466;
@@ -24,7 +25,9 @@ body {
 	--color-active: #3699FF;
 	--color-text: #475466;
 	--color-input-border: #CCD7E6;
+}
 
+.chimera-wrapper {
 	display: flex;
 	min-height: 100vh;
 	width: 100%;
@@ -266,6 +269,7 @@ alchemy-widgets-navigation {
 	opacity: 0;
 }
 
+.default-form-editor,
 .chimera-wrapper {
 
 	alchemy-table .aft-column-filters input {
