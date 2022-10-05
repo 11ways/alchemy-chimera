@@ -269,6 +269,70 @@ alchemy-widgets-navigation {
 	opacity: 0;
 }
 
+.alchemy-field-enum.alchemy-field-value {
+	margin: auto;
+	background: #777;
+	display: inline-block;
+	padding: 6px;
+	border-radius: 7px;
+	color: white;
+}
+
+alchemy-field-translatable {
+	.prefix-buttons {
+		width: 100%;
+		border-bottom: 1px solid var(--color-box-border);
+		display: flex;
+
+		button {
+			flex: 10;
+			font-size: 16px;
+			font-weight: 500;
+			color: var(--button-text-color);
+			letter-spacing: 0px;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+
+			height: 3rem;
+			display: flex;
+			flex-flow: column;
+			justify-content: center;
+			align-items: center;
+
+			&.active {
+				box-shadow: inset 0 -2px var(--color-active);
+			}
+
+			&:hover {
+				background-color: var(--button-bg-hover-color);
+			}
+		}
+	}
+}
+
+alchemy-field[mode="inline"] {
+	alchemy-field-translatable {
+		.prefix-buttons {
+			button {
+				height: 2rem;
+				font-size: 14px;
+			}
+		}
+
+		.entries {
+
+		}
+	}
+
+	alchemy-field-translatable-entry {
+		display: block;
+		padding: 9px;
+		background: rgba(190,190,190,0.1);
+		min-height: 37px;
+	}
+}
+
 .default-form-editor,
 .chimera-wrapper {
 
@@ -311,39 +375,6 @@ alchemy-widgets-navigation {
 			font-weight: 500;
 			color: var(--color-title);
 			border-bottom: 1px solid var(--color-box-border);
-		}
-
-		alchemy-field-translatable {
-			.prefix-buttons {
-				width: 100%;
-				border-bottom: 1px solid var(--color-box-border);
-				display: flex;
-
-				button {
-					flex: 10;
-					font-size: 16px;
-					font-weight: 500;
-					color: var(--button-text-color);
-					letter-spacing: 0px;
-					background: transparent;
-					border: none;
-					cursor: pointer;
-
-					height: 3rem;
-					display: flex;
-					flex-flow: column;
-					justify-content: center;
-					align-items: center;
-
-					&.active {
-						box-shadow: inset 0 -2px var(--color-active);
-					}
-
-					&:hover {
-						background-color: var(--button-bg-hover-color);
-					}
-				}
-			}
 		}
 
 		.field {

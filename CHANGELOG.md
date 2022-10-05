@@ -2,6 +2,8 @@
 
 * Add more alchemy-field options
 * Disable translations when getting records from the chimera api
+* Style inline translatable fields
+* Style inline enum field view
 
 ## 1.1.0 (2022-07-23)
 
