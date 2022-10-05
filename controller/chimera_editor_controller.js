@@ -227,7 +227,7 @@ Editor.setAction(async function trash(conduit, model_name, pk_val) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.0
- * @version  1.1.0
+ * @version  1.1.1
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -237,6 +237,8 @@ Editor.setAction(async function records(conduit, model_name) {
 	let body = conduit.body,
 	    model = this.getModel(model_name),
 	    crit = model.find();
+	
+	model.disableTranslations();
 
 	let page_size = body.page_size,
 	    fields = body.fields,
