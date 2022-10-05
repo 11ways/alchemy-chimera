@@ -1,3 +1,7 @@
+## 1.1.1 (WIP)
+
+* Add more alchemy-field options
+
 ## 1.1.0 (2022-07-23)
 
 * Upgrade `alchemy-acl` and `alchemy-form`
