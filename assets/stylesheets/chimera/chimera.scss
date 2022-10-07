@@ -235,7 +235,8 @@ alchemy-widgets-navigation {
 			color: white;
 
 			&:hover,
-			&.active-link {
+			&.active-link,
+			&.active-sublink {
 				background-color: rgba(190, 190, 190, 0.5);
 			}
 		}

@@ -4,6 +4,7 @@
 * Disable translations when getting records from the chimera api
 * Style inline translatable fields
 * Style inline enum field view
+* Fix sidebar routes not being marked as active
 
 ## 1.1.0 (2022-07-23)
 

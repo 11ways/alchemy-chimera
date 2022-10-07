@@ -18,7 +18,7 @@ chimera_section.add({
 	name       : 'Chimera.Editor#index',
 	methods    : 'get',
 	paths      : '/editor/{model}/index',
-	breadcrumb : 'chimera.editor.{model}.index'
+	breadcrumb : 'chimera.editor.{model}'
 });
 
 // Editor add action
