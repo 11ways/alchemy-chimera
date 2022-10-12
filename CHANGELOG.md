@@ -1,4 +1,4 @@
-## 1.1.1 (WIP)
+## 1.1.1 (2022-10-12)
 
 * Add more alchemy-field options
 * Disable translations when getting records from the chimera api
