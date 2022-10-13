@@ -12,7 +12,6 @@ chimera_section.add({
 	paths      : '/',
 	handler    : 'Chimera.Static#dashboard',
 });
-
 // Editor index action
 chimera_section.add({
 	name       : 'Chimera.Editor#index',

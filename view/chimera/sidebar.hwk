@@ -1,4 +1,4 @@
-<alchemy-widgets
+<al-widgets
 	class="sidebar-widgets"
 	#value=<% navigation_widgets %>
-></alchemy-widgets>
+></al-widgets>

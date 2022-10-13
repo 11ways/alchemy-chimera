@@ -1,3 +1,7 @@
+## 1.2.0 (WIP)
+
+* Update to `alchemy-form` v0.2.0
+
 ## 1.1.1 (2022-10-12)
 
 * Add more alchemy-field options
