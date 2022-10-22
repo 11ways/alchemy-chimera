@@ -15,7 +15,10 @@
 				{%t "cancel" %}
 			</a>
 			<button class="btn danger">
-				<al-ico type="trash" class="fas fa-trash"></al-ico>
+				<al-icon
+					icon-name="trash"
+					icon-style="duotone"
+				></al-icon>
 				{%t "delete" %}
 			</button>
 		</form>
@@ -28,7 +31,7 @@
 		#model={% model_name %}
 		class="btn"
 	>
-		<al-ico type="plus"></al-ico>
+		<al-icon icon-name="plus"></al-icon>
 		{%t "new" model=model_name %}
 	</a>
 {% /block %}

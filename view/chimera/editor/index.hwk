@@ -14,7 +14,7 @@
 		#model={% model_name %}
 		class="btn"
 	>
-		<al-ico type="plus"></al-ico>
+		<al-icon icon-name="plus"></al-icon>
 		{%t "new" model=model_name %}
 	</a>
 {% /block %}
