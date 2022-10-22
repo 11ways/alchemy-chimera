@@ -25,6 +25,9 @@ body {
 	--color-active: #3699FF;
 	--color-text: #475466;
 	--color-input-border: #CCD7E6;
+
+	--alchemy-tab-button-border: var(--color-box-border);
+	--alchemy-tab-panel-border: var(--color-box-border);
 }
 
 .chimera-wrapper {
@@ -498,13 +501,14 @@ al-field[mode="inline"] {
 	}
 
 	.aft-actions {
+		al-button,
 		a {
 			color: var(--button-text-color);
 			background-color: var(--button-bg-color);
 			padding: 0.5rem;
 			border-radius: 6px;
 			margin: 0.2rem;
-			display: inline-block;
+			display: inline-flex;
 
 			&:hover {
 				background-color: var(--button-bg-hover-color);
