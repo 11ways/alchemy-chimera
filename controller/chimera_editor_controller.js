@@ -227,7 +227,7 @@ Editor.setAction(async function trash(conduit, model_name, pk_val) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.0
- * @version  1.1.1
+ * @version  1.2.0
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -252,6 +252,10 @@ Editor.setAction(async function records(conduit, model_name) {
 		}
 
 		crit.select(fields);
+	}
+
+	if (page_size && !page) {
+		page = 1;
 	}
 
 	if (page) {
