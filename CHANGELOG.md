@@ -1,4 +1,4 @@
-## 1.2.0 (WIP)
+## 1.2.0 (2022-11-02)
 
 * Update to `alchemy-form` v0.2.0
 
