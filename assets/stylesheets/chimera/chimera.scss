@@ -379,6 +379,18 @@ al-field[mode="inline"] {
 			font-weight: 500;
 			color: var(--color-title);
 			border-bottom: 1px solid var(--color-box-border);
+			display: flex;
+			flex-flow: column;
+
+			[data-he-name="field-description"] {
+				line-height: 1;
+				margin-bottom: 1rem;
+				color:gray;
+
+				&:empty {
+					display: none;
+				}
+			}
 		}
 
 		.field {

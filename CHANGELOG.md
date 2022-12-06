@@ -1,3 +1,7 @@
+## 1.2.1 (WIP)
+
+* Show field descriptions under the field title
+
 ## 1.2.0 (2022-11-02)
 
 * Update to `alchemy-form` v0.2.0
