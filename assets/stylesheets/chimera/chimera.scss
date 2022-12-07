@@ -562,3 +562,12 @@ al-field[mode="inline"] {
 		}
 	}
 }
+
+al-field {
+	// Don't let images in widgets take up more then 1/4th of the screen height
+	al-widget {
+		img {
+			max-height: 25vh;
+		}
+	}
+}

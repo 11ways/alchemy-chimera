@@ -1,6 +1,7 @@
 ## 1.2.1 (WIP)
 
 * Show field descriptions under the field title
+* Prevent images inside al-field widget editor from being too tall
 
 ## 1.2.0 (2022-11-02)
 
