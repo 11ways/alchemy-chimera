@@ -1,7 +1,8 @@
-## 1.2.1 (WIP)
+## 1.2.1 (2022-12-23)
 
 * Show field descriptions under the field title
 * Prevent images inside al-field widget editor from being too tall
+* Use `al-button` & `hawkejs_template` for the save button
 
 ## 1.2.0 (2022-11-02)
 
