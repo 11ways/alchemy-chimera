@@ -1,3 +1,7 @@
+## 1.2.2 (WIP)
+
+* Fix default menu items not being rendered properly
+
 ## 1.2.1 (2022-12-23)
 
 * Show field descriptions under the field title

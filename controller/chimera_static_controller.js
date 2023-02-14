@@ -26,7 +26,7 @@ ChimeraStatic.setAction(function dashboard(conduit) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.0
- * @version  1.2.1
+ * @version  1.2.2
  *
  * @param    {Conduit}   conduit
  */
@@ -95,16 +95,23 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 		models.sortByPath(1, 'model_name');
 
 		for (let model of models) {
-			widgets.push({
+			let entry = {
 				type   : 'link',
 				config : {
-					route : 'Chimera.Editor#index',
-					parameters: [
-						{name: 'model', value: model.type_name},
-					],
-					content: model.title
+					link_type: 'route',
+					link_settings: {
+						route : 'Chimera.Editor#index',
+						parameters: [
+							{name: 'model', value: model.type_name},
+						],
+					},
+					text: model.title
 				}
-			});
+			};
+
+			console.log(entry)
+
+			widgets.push(entry);
 		}
 	}
 
