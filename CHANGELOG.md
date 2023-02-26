@@ -1,4 +1,4 @@
-## 1.2.2 (WIP)
+## 1.2.2 (2023-02-26)
 
 * Fix default menu items not being rendered properly
 
