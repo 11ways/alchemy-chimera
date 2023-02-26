@@ -125,7 +125,7 @@ Editor.setAction(async function add(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.5
+ * @version  1.2.2
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -138,6 +138,11 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 	model.translateItems = false;
 
 	let record = await model.findByPk(pk_val);
+
+	if (!record) {
+		return conduit.notFound('Unable to find record with primary key "' + pk_val + '"');
+	}
+
 	let message_type = conduit.param('message');
 
 	record.keepPrivateFields();
