@@ -58,6 +58,26 @@ chimera_section.add({
 	paths      : '/api/content/sidebar',
 });
 
+alchemy.sputnik.after('base_app', () => {
+
+	let prefixes = Prefix.all();
+	let preview_paths = {
+		'': '/editor/{model}/preview/{pk}',
+	};
+
+	for (let prefix in prefixes) {
+		preview_paths[prefix] = '/editor/{model}/preview/{pk}';
+	}
+
+	// Preview action
+	chimera_section.add({
+		name       : 'Chimera.Editor#preview',
+		methods    : ['get', 'post'],
+		paths      : preview_paths,
+		breadcrumb : 'chimera.editor.{model}.preview.{pk}'
+	});
+});
+
 return
 var chimera_menu;
 

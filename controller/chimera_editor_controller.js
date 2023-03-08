@@ -125,7 +125,7 @@ Editor.setAction(async function add(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.2.2
+ * @version  1.2.3
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -181,10 +181,55 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 
 	widget_config.class_names.push('chimera-editor-widgets');
 
+	if (model.chimera.record_preview) {
+		this.set('add_preview_button', true);
+	}
+
+	this.set('record_pk', record.$pk);
+	this.set('model_name', model.model_name);
 	this.set('widget_config', widget_config);
 	this.setTitle(model.constructor.title + ' Edit');
 
-	this.render('chimera/widgets');
+	this.render('chimera/editor/edit');
+});
+
+/**
+ * The preview action
+ *
+ * @author   Jelle De Loecker   <jelle@elevenways.be>
+ * @since    1.2.3
+ * @version  1.2.3
+ *
+ * @param    {Conduit}   conduit
+ * @param    {String}    model_name
+ * @param    {String}    pk_val
+ */
+Editor.setAction(async function preview(conduit, model_name, pk_val) {
+
+	let model = this.getModel(model_name);
+	const action_name = model?.chimera?.record_preview_action;
+
+	if (!action_name) {
+		return conduit.notFound();
+	}
+
+	let record = await model.findByPk(pk_val);
+
+	if (!record) {
+		return conduit.notFound();
+	}
+
+	const controller = Controller.get(model.chimera.record_preview_controller, conduit);
+
+	console.log(conduit.view_render.variables);
+
+	if (!controller) {
+		return conduit.notFound();
+	}
+
+	console.log('URLPARAMS:', controller.view_render?.variables?.__urlparams)
+
+	controller.doAction(action_name, [conduit, record]);
 });
 
 /**

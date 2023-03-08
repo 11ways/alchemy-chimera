@@ -1,3 +1,7 @@
+## 1.2.3 (WIP)
+
+* Add support for setting a record preview action per model
+
 ## 1.2.2 (2023-02-26)
 
 * Fix default menu items not being rendered properly
