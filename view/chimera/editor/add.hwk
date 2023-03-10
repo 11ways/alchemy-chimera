@@ -1,0 +1,12 @@
+{% include "layouts/chimera_basics" %}
+
+{% block "page-actions" %}
+	
+{% /block %}
+
+{% block "main" %}
+	<al-widgets
+		#context_variables={% context_variables %}
+		#value={% widget_config %}
+	></al-widgets>
+{% /block %}

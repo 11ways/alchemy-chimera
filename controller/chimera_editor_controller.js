@@ -117,7 +117,7 @@ Editor.setAction(async function add(conduit, model_name) {
 	this.set('widget_config', widget_config);
 	this.setTitle(model.constructor.title + ' Add');
 
-	this.render('chimera/widgets');
+	this.render('chimera/editor/add');
 });
 
 /**
@@ -186,7 +186,7 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 	}
 
 	this.set('record_pk', record.$pk);
-	this.set('model_name', model.model_name);
+	this.set('model_name', model.model_name.toLowerCase());
 	this.set('widget_config', widget_config);
 	this.setTitle(model.constructor.title + ' Edit');
 
