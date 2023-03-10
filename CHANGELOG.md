@@ -1,4 +1,4 @@
-## 1.2.3 (WIP)
+## 1.2.3 (2023-03-10)
 
 * Add support for setting a record preview action per model
 * Fix layout of page actions
