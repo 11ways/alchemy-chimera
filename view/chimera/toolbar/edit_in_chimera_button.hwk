@@ -1,0 +1,10 @@
+<a
+	!Route="Chimera.Editor#edit"
+	+model={% model_name %}
+	+pk={% record_pk %}
+	class="btn"
+	target="_blank"
+>
+	<al-icon icon-name="pencil"></al-icon>
+	{%t "edit" model=model_name in="backend" %}
+</a>

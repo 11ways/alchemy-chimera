@@ -12,9 +12,39 @@
 	</div>
 	<div class="chimera-content">
 		<div class="chimera-page-header">
-			<div class="page-title" data-he-name="page-title"></div>
-			<div class="page-notification" data-he-name="page-notification"></div>
-			<div class="page-actions" data-he-name="page-actions"></div>
+			<div hidden>
+				<div class="page-title" data-he-name="page-title"></div>
+				<div class="page-notification" data-he-name="page-notification"></div>
+				<div class="page-actions" data-he-name="page-actions"></div>
+			</div>
+
+			<al-editor-toolbar
+				#toolbar_manager={% toolbar_manager %}
+			>
+				<div slot="left">
+					<div class="page-title">
+						<span data-toolbar="title"></span>
+					</div>
+				</div>
+
+				<div slot="center">
+					<al-user-avatar-group
+						class="watchers"
+					></al-user-avatar-group>
+				</div>
+
+				<div slot="right">
+					<div data-area="buttons">
+
+					</div>
+				</div>
+			</al-editor-toolbar>
+
+			{#
+				<al-user-avatar
+					#user={% Acl.data %}
+				></al-user-avatar>
+			#}
 		</div>
 		<div data-he-name="main" class="chimera-main">
 

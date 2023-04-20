@@ -12,7 +12,7 @@ const Editor = Function.inherits('Alchemy.Controller.Chimera', 'Editor');
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.1
- * @version  1.0.5
+ * @version  1.2.4
  *
  * @param    {String}    title
  */
@@ -39,6 +39,22 @@ Editor.setMethod(function setTitle(title) {
 
 	this.set('page_title', page_title);
 	this.set('window_title', window_title || page_title);
+	this.toolbar_manager.title = page_title;
+});
+
+/**
+ * Set the context document
+ *
+ * @author   Jelle De Loecker   <jelle@elevenways.be>
+ * @since    1.2.4
+ * @version  1.2.4
+ *
+ * @param    {Document}    doc
+ */
+Editor.setMethod(function setContextDocument(doc) {
+	let document_watcher = this.toolbar_manager.setDocument(doc);
+	this.toolbar_manager.setModel(doc.$model_name);
+	document_watcher.addWatcher(this.conduit);
 });
 
 /**
@@ -125,7 +141,7 @@ Editor.setAction(async function add(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.2.3
+ * @version  1.2.4
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -184,6 +200,8 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 	if (model.chimera.record_preview) {
 		this.set('add_preview_button', true);
 	}
+
+	this.setContextDocument(record);
 
 	this.set('record_pk', record.$pk);
 	this.set('model_name', model.model_name.toLowerCase());

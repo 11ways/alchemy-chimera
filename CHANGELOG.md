@@ -1,3 +1,7 @@
+## 1.2.4 (WIP)
+
+* Add document watcher & toolbar manager support
+
 ## 1.2.3 (2023-03-10)
 
 * Add support for setting a record preview action per model

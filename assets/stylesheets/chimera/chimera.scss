@@ -210,6 +210,10 @@ body {
 		display: block;
 		font-size: 1.2rem;
 	}
+
+	> al-widgets-column > [type="header"] h1 {
+		padding-top: 0;
+	}
 }
 
 al-widgets-navigation {
@@ -563,6 +567,17 @@ al-field[mode="inline"] {
 
 		.inputbox {
 			background: initial;
+		}
+	}
+
+	al-editor-toolbar {
+		width: 100%;
+		align-items: center;
+		justify-content: space-between;
+
+		[data-area="buttons"] {
+			display: flex;
+			gap: 1rem;
 		}
 	}
 }
