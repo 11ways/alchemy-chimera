@@ -1,4 +1,4 @@
-## 1.2.4 (WIP)
+## 1.2.4 (2023-04-20)
 
 * Add document watcher & toolbar manager support
 
