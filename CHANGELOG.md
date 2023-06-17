@@ -1,3 +1,7 @@
+## 1.2.5 (2023-06-17)
+
+* Improve stylings
+
 ## 1.2.4 (2023-04-20)
 
 * Add document watcher & toolbar manager support
