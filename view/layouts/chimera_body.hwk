@@ -25,6 +25,7 @@
 					<div class="page-title">
 						<span data-toolbar="title"></span>
 					</div>
+					<div data-area="left-content"></div>
 				</div>
 
 				<div slot="center">
