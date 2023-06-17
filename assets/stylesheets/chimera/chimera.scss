@@ -536,20 +536,6 @@ al-field[mode="inline"] {
 		}
 	}
 
-	.chimera-confirm-page {
-		flex: 1;
-		justify-content: center;
-		display: flex;
-		align-items: center;
-		flex-flow: column;
-		flex-direction: column;
-
-		.action-buttons {
-			display: flex;
-			gap: 1rem;
-		}
-	}
-
 	al-file {
 		button {
 			@extend .btn;
@@ -579,6 +565,21 @@ al-field[mode="inline"] {
 			display: flex;
 			gap: 1rem;
 		}
+	}
+}
+
+.chimera-centered-page,
+.chimera-confirm-page {
+	flex: 1;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	flex-flow: column;
+	flex-direction: column;
+
+	.action-buttons {
+		display: flex;
+		gap: 1rem;
 	}
 }
 
