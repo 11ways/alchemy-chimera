@@ -35,6 +35,11 @@ ChimeraController.setMethod(function beforeAction() {
 		return;
 	}
 
+	// Ignore loopback conduits
+	if (this.conduit instanceof Classes.Alchemy.Conduit.Loopback) {
+		return;
+	}
+
 	this.toolbar_manager.queueModelFallback(model);
 });
 
