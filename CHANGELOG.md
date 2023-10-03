@@ -1,3 +1,7 @@
+## 1.2.6 (WIP)
+
+* Do not queue a toolbar_manager model fallback on system routes without a model
+
 ## 1.2.5 (2023-06-17)
 
 * Improve stylings

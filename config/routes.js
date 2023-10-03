@@ -46,16 +46,18 @@ chimera_section.add({
 
 // Editor data action
 chimera_section.add({
-	name       : 'Chimera.Editor#records',
-	methods    : ['post'],
-	paths      : '/api/editor/{model}/records',
+	name            : 'Chimera.Editor#records',
+	methods         : ['post'],
+	paths           : '/api/editor/{model}/records',
+	is_system_route : true,
 });
 
 // Sidebar
 chimera_section.add({
-	name       : 'Chimera.Static#sidebar',
-	methods    : ['get'],
-	paths      : '/api/content/sidebar',
+	name            : 'Chimera.Static#sidebar',
+	methods         : ['get'],
+	paths           : '/api/content/sidebar',
+	is_system_route : true,
 });
 
 alchemy.sputnik.after('base_app', () => {

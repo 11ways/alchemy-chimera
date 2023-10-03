@@ -109,8 +109,6 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 				}
 			};
 
-			console.log(entry)
-
 			widgets.push(entry);
 		}
 	}

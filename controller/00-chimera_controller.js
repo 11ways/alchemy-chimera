@@ -20,11 +20,22 @@ let ChimeraController = Function.inherits('Alchemy.Controller', 'Alchemy.Control
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.2.4
- * @version  1.2.4
+ * @version  1.2.6
  */
 ChimeraController.setMethod(function beforeAction() {
+
+	const model = this.conduit.params.model,
+	      is_system_route = this.conduit.route.is_system_route;
+
 	this.set('toolbar_manager', this.toolbar_manager);
-	this.toolbar_manager.queueModelFallback(this.conduit.params.model);
+	
+	// If this is not a system route and no model is defined in the parameters,
+	// do not queue a model fallback
+	if (is_system_route && !model) {
+		return;
+	}
+
+	this.toolbar_manager.queueModelFallback(model);
 });
 
 /**
