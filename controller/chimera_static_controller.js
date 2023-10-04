@@ -26,7 +26,7 @@ ChimeraStatic.setAction(function dashboard(conduit) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.0
- * @version  1.2.2
+ * @version  1.2.6
  *
  * @param    {Conduit}   conduit
  */
@@ -95,6 +95,12 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 		models.sortByPath(1, 'model_name');
 
 		for (let model of models) {
+
+			// Skip abstract classes (like `App`)
+			if (model.is_abstract) {
+				continue;
+			}
+
 			let entry = {
 				type   : 'link',
 				config : {
