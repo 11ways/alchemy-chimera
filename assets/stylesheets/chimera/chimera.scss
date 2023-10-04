@@ -343,6 +343,30 @@ al-field[mode="inline"] {
 		background: rgba(190,190,190,0.1);
 		min-height: 37px;
 	}
+
+	.field {
+		input[type="text"],
+		input[type="number"],
+		input[type="color"],
+		input[type="datetime-local"],
+		input[type="date"],
+		input[type="password"] {
+			@extend .chimera-input-field;
+			height: 3rem;
+		}
+
+		textarea {
+			@extend .chimera-input-field;
+			min-height: 5rem;
+			padding: 1rem;
+		}
+
+		input[type="color"] {
+			background-color: transparent;
+			border: none;
+			padding: 0;
+		}
+	}
 }
 
 .default-form-editor,
@@ -410,6 +434,10 @@ al-field[mode="inline"] {
 				flex: 10;
 			}
 
+			> .does-not-expand {
+				flex: 0 1 auto;
+			}
+
 			> al-widget {
 				border: 1px solid var(--color-input-border);
 				padding: 0 12px;
@@ -421,6 +449,7 @@ al-field[mode="inline"] {
 			input[type="number"],
 			input[type="color"],
 			input[type="datetime-local"],
+			input[type="date"],
 			input[type="password"] {
 				@extend .chimera-input-field;
 				height: 3rem;
@@ -438,6 +467,10 @@ al-field[mode="inline"] {
 				padding: 0;
 			}
 		}
+	}
+
+	.field {
+		justify-content: flex-start;
 	}
 
 	al-field-array {
