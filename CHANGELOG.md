@@ -3,6 +3,7 @@
 * Do not queue a toolbar_manager model fallback on system routes without a model
 * Fix the toolbar not having an `add` button on non-ajax pageviews
 * Fix abstract model classes from showing up in the default chimera sidebar
+* Don't show models without a valid chimera configuration in the sidebar
 
 ## 1.2.5 (2023-06-17)
 

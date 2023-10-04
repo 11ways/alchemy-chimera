@@ -97,7 +97,8 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 		for (let model of models) {
 
 			// Skip abstract classes (like `App`)
-			if (model.is_abstract) {
+			// or models without any chimera configuration
+			if (model.is_abstract || !model.chimera.has_configuration) {
 				continue;
 			}
 
