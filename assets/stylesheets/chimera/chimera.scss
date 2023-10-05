@@ -3,6 +3,10 @@
 
 body {
 	font-family: 'Roboto', sans-serif;
+
+	.he-context-contents {
+		overflow: auto;
+	}
 }
 
 .default-form-editor,
