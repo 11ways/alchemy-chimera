@@ -1,4 +1,4 @@
-## 1.2.6 (WIP)
+## 1.2.6 (2023-10-05)
 
 * Do not queue a toolbar_manager model fallback on system routes without a model
 * Fix the toolbar not having an `add` button on non-ajax pageviews
