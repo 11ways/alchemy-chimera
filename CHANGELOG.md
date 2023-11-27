@@ -1,3 +1,7 @@
+## 1.2.7 (WIP)
+
+* Fix expecting underscored model names
+
 ## 1.2.6 (2023-10-05)
 
 * Do not queue a toolbar_manager model fallback on system routes without a model

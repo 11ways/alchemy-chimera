@@ -87,7 +87,7 @@ Editor.setAction(function index(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.2
+ * @version  1.2.7
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -102,7 +102,7 @@ Editor.setAction(async function add(conduit, model_name) {
 
 		let record = model.createDocument();
 
-		record.setDataRecord(conduit.body[model_name]);
+		record.setDataRecord(conduit.body);
 
 		try {
 			await record.save();
@@ -141,7 +141,7 @@ Editor.setAction(async function add(conduit, model_name) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.2.4
+ * @version  1.2.7
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -169,7 +169,7 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 
 	if (conduit.method == 'post') {
 
-		Object.assign(record, conduit.body[model_name]);
+		Object.assign(record, conduit.body);
 
 		try {
 			await record.save();
