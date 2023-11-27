@@ -1,4 +1,4 @@
-## 1.2.7 (WIP)
+## 1.2.7 (2023-11-27)
 
 * Fix expecting underscored model names
 
