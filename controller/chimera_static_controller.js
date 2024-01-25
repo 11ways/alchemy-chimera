@@ -94,6 +94,17 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 		let models = Model.getAllChildren();
 		models.sortByPath(1, 'model_name');
 
+		widgets.push({
+			type   : 'link',
+				config : {
+					link_type: 'route',
+					link_settings: {
+						route : 'Chimera.Settings#editor',
+					},
+					text: new Classes.Alchemy.Microcopy('alchemy.settings'),
+				}
+		});
+
 		for (let model of models) {
 
 			// Skip abstract classes (like `App`)

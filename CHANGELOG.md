@@ -1,3 +1,7 @@
+## 1.3.0 (WIP)
+
+* Upgrade to Alchemy v1.4.0
+
 ## 1.2.7 (2023-11-27)
 
 * Fix expecting underscored model names

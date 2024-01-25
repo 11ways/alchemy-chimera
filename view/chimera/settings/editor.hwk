@@ -1,0 +1,12 @@
+{% include "layouts/chimera_basics" %}
+
+{% block "page-actions" %}
+	
+{% /block %}
+
+{% block "main" %}
+	<al-settings-editor
+		!Route="Chimera.Settings#editor"
+		#settings_config={% settings_config %}
+	></al-settings-editor>
+{% /block %}
