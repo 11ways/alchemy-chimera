@@ -426,6 +426,10 @@ al-field[mode="inline"] {
 				&:empty {
 					display: none;
 				}
+
+				&:has(> micro-copy:empty) {
+					display: none;
+				}
 			}
 		}
 
@@ -469,6 +473,21 @@ al-field[mode="inline"] {
 				background-color: transparent;
 				border: none;
 				padding: 0;
+			}
+
+			textarea,
+			input[type=text],
+			input[type=number],
+			input[type=color],
+			input[type=datetime-local],
+			input[type=date],
+			input[type=password],
+			select {
+				&:disabled {
+					background-color: rgb(223 223 223 / 30%);
+					color: rgb(84, 84, 84);
+					border-color: rgba(118, 118, 118, 0.3);
+				}
 			}
 		}
 	}
