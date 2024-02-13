@@ -204,7 +204,7 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 	this.setContextDocument(record);
 
 	this.set('record_pk', record.$pk);
-	this.set('model_name', model.model_name.toLowerCase());
+	this.set('model_name', model.model_name);
 	this.set('widget_config', widget_config);
 	this.setTitle(model.constructor.title + ' Edit');
 
@@ -239,13 +239,9 @@ Editor.setAction(async function preview(conduit, model_name, pk_val) {
 
 	const controller = Controller.get(model.chimera.record_preview_controller, conduit);
 
-	console.log(conduit.view_render.variables);
-
 	if (!controller) {
 		return conduit.notFound();
 	}
-
-	console.log('URLPARAMS:', controller.view_render?.variables?.__urlparams)
 
 	controller.doAction(action_name, [conduit, record]);
 });

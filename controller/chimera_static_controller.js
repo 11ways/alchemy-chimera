@@ -80,7 +80,10 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 						link_settings: {
 							route : 'Chimera.Editor#index',
 							parameters: [
-								{name: 'model', value: model.constructor.type_name},
+								{
+									name: 'model',
+									value: Plugin.modelNameToUrl(model.constructor.model_name),
+								},
 							],
 						},
 						text: title
@@ -120,7 +123,10 @@ ChimeraStatic.setAction(function sidebar(conduit) {
 					link_settings: {
 						route : 'Chimera.Editor#index',
 						parameters: [
-							{name: 'model', value: model.type_name},
+							{
+								name: 'model',
+								value: Plugin.modelNameToUrl(model.model_name),
+							},
 						],
 					},
 					text: model.title
