@@ -1,4 +1,4 @@
-## 1.3.0 (WIP)
+## 1.3.0-alpha.1 (2024-02-15)
 
 * Upgrade to Alchemy v1.4.0
 

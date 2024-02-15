@@ -1,7 +1,7 @@
 {
 	"name": "alchemy-chimera",
 	"description": "Chimera plugin for Alchemy MVC",
-	"version": "1.3.0-alpha",
+	"version": "1.3.0-alpha.1",
 	"author": "Jelle De Loecker <jelle@elevenways.be>",
 	"keywords": [
 		"alchemy",
@@ -11,10 +11,10 @@
 	],
 	"repository": "11ways/alchemy-chimera",
 	"peerDependencies": {
-		"alchemy-acl"    : "~0.8.4",
-		"alchemymvc"     : ">=1.4.0",
-		"alchemy-form"   : "~0.2.7",
-		"alchemy-widget" : "~0.2.1"
+		"alchemy-acl"    : "~0.9.0||~0.9.0-alpha",
+		"alchemymvc"     : ">=1.4.0||>=1.4.0-alpha",
+		"alchemy-form"   : "~0.3.0||~0.3.0-alpha",
+		"alchemy-widget" : "~0.3.0||~0.3.0-alpha"
 	},
 	"license": "MIT",
 	"engines": {
