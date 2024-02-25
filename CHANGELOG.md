@@ -1,3 +1,7 @@
+## 1.3.0-alpha.2 (2024-02-25)
+
+* Begin implementing the Styleboost SCSS framework
+
 ## 1.3.0-alpha.1 (2024-02-15)
 
 * Upgrade to Alchemy v1.4.0
