@@ -11,10 +11,11 @@
 	],
 	"repository": "11ways/alchemy-chimera",
 	"peerDependencies": {
-		"alchemy-acl"    : "~0.9.0||~0.9.0-alpha",
-		"alchemymvc"     : ">=1.4.0||>=1.4.0-alpha",
-		"alchemy-form"   : "~0.3.0||~0.3.0-alpha",
-		"alchemy-widget" : "~0.3.0||~0.3.0-alpha"
+		"alchemy-acl"        : "~0.9.0||~0.9.0-alpha",
+		"alchemymvc"         : ">=1.4.0||>=1.4.0-alpha",
+		"alchemy-form"       : "~0.3.0||~0.3.0-alpha",
+		"alchemy-widget"     : "~0.3.0||~0.3.0-alpha",
+		"alchemy-styleboost" : ">=0.5.0||>=0.5.0-alpha"
 	},
 	"license": "MIT",
 	"engines": {

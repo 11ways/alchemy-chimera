@@ -1,5 +1,7 @@
-@import "reset.scss";
-@import "fonts/roboto.scss";
+@use "styleboost";
+@use "alchemy";
+@import "fonts/roboto";
+@import "/overrides/chimera_extra";
 
 body {
 	font-family: 'Roboto', sans-serif;
@@ -284,15 +286,6 @@ al-widgets-navigation {
 .removing {
 	transition: opacity 2s;
 	opacity: 0;
-}
-
-.alchemy-field-enum.alchemy-field-value {
-	margin: auto;
-	background: #777;
-	display: inline-block;
-	padding: 6px;
-	border-radius: 7px;
-	color: white;
 }
 
 al-field-translatable {
