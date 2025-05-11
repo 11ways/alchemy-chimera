@@ -26,9 +26,7 @@ SettingsController.setAction(async function editor(conduit) {
 			return conduit.end();
 		}
 
-		const AlchemySetting = this.getModel('AlchemySetting');
-
-		console.log('Changes:', changes);
+		const AlchemySetting = this.getModel('System.Setting');
 
 		await AlchemySetting.saveChanges(changes, conduit);
 

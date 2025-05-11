@@ -1,3 +1,7 @@
+## 1.3.0-alpha.3 (2025-05-11)
+
+* Fix error when saving Alchemy settings from Chimera
+
 ## 1.3.0-alpha.2 (2024-02-25)
 
 * Begin implementing the Styleboost SCSS framework
