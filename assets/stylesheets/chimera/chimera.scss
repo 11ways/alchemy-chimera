@@ -661,7 +661,13 @@ al-table {
 
 	table tbody tr:hover {
 		td, th {
-			background-color: #eaeaea;
+			background-color: #edf0f5;
+		}
+	}
+
+	table tbody tr.aft-selected {
+		td, th {
+			background-color: #edeff5;
 		}
 	}
 }
