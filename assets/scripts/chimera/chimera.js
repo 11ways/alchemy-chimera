@@ -17,3 +17,15 @@ hawkejs.scene.after({
 		}, 2500);
 	}, 4 * 1000);
 });
+
+hawkejs.scene.on('rendered', function onRendered(vars, renderer) {
+
+	let manager = vars.get('toolbar_manager');
+
+	if (!manager) {
+		return;
+	}
+
+	let toolbar = document.querySelector('al-editor-toolbar');
+	toolbar.toolbar_manager = manager;
+});
