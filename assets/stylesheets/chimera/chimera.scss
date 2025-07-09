@@ -640,3 +640,28 @@ al-field {
 		}
 	}
 }
+
+al-table {
+	display: block;
+	background-color: white;
+	border: 1px solid #dadee0;
+
+	table thead {
+		td, th {
+			background-color: #F4F5F9;
+			input {
+				background-color: white;
+			}
+		}
+	}
+
+	footer {
+		background-color: #F4F5F9;
+	}
+
+	table tbody tr:hover {
+		td, th {
+			background-color: #eaeaea;
+		}
+	}
+}
