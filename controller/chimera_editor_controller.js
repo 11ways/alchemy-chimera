@@ -343,8 +343,7 @@ Editor.setAction(async function records(conduit, model_name) {
 				continue;
 			}
 
-			val = RegExp.interpretWildcard('*' + val + '*', 'i');
-			crit.where(key).equals(val);
+			crit.where(key).matchesFilter(val);
 		}
 	}
 

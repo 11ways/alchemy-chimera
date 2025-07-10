@@ -1,6 +1,7 @@
 ## 1.3.0-alpha.4 (WIP)
 
 * Always set a new toolbar_manager received from the server
+* Use the new `matchesFilter` feature to improve filtering in tables
 
 ## 1.3.0-alpha.3 (2025-05-11)
 
