@@ -3,14 +3,14 @@
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    0.1.0
- * @version  1.0.0
+ * @version  1.3.0
  */
 let ChimeraController = Function.inherits('Alchemy.Controller', 'Alchemy.Controller.Chimera', function Chimera(conduit, options) {
 
 	Chimera.super.call(this, conduit, options);
 
-	// Set the theme
-	if (alchemy.plugins.chimera.theme) {
+	// Set the theme (only for HTTP conduits, not WebSocket connections)
+	if (alchemy.plugins.chimera.theme && !conduit.websocket) {
 		this.view_render.setTheme(alchemy.plugins.chimera.theme);
 	}
 });
@@ -20,15 +20,20 @@ let ChimeraController = Function.inherits('Alchemy.Controller', 'Alchemy.Control
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.2.4
- * @version  1.2.6
+ * @version  1.3.0
  */
 ChimeraController.setMethod(function beforeAction() {
+
+	// Skip for WebSocket linkup connections - they don't have routes or params
+	if (this.conduit.websocket) {
+		return;
+	}
 
 	const model = this.conduit.params.model,
 	      is_system_route = this.conduit.route.is_system_route;
 
 	this.set('toolbar_manager', this.toolbar_manager);
-	
+
 	// If this is not a system route and no model is defined in the parameters,
 	// do not queue a model fallback
 	if (is_system_route && !model) {
