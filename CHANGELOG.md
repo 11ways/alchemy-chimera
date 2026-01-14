@@ -1,3 +1,7 @@
+## 1.3.0-alpha.5 (WIP)
+
+* Add `addRowAction()` to ChimeraConfig for model-defined row actions
+
 ## 1.3.0-alpha.4 (2025-07-10)
 
 * Always set a new toolbar_manager received from the server

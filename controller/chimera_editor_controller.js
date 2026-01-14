@@ -291,7 +291,7 @@ Editor.setAction(async function trash(conduit, model_name, pk_val) {
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>
  * @since    1.0.0
- * @version  1.2.0
+ * @version  1.3.0
  *
  * @param    {Conduit}   conduit
  * @param    {String}    model_name
@@ -348,9 +348,7 @@ Editor.setAction(async function records(conduit, model_name) {
 	}
 
 	let records = await model.find('all', crit),
-	    result = [],
-	    record,
-	    main;
+	    record;
 	
 	records.keepPrivateFields();
 
@@ -376,7 +374,11 @@ Editor.setAction(async function records(conduit, model_name) {
 			})
 		});
 
+		// Get any custom row actions defined on the model
+		let custom_actions = model.chimera.getRowActionsFor(record);
+
 		record.$hold.actions = [
+			...custom_actions,
 			edit_action,
 			trash_action,
 		];
