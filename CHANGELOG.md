@@ -2,6 +2,8 @@
 
 * Add `addRowAction()` to ChimeraConfig for model-defined row actions
 * Fix WebSocket compatibility in ChimeraController (skip theme/beforeAction for WS connections)
+* Add live task monitoring UI with WebSocket support
+* Add "Monitor" button to TaskHistory index and edit pages
 
 ## 1.3.0-alpha.4 (2025-07-10)
 

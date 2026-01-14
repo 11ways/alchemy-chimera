@@ -1,0 +1,8 @@
+<a
+	class="btn btn-monitor"
+	!Route="Chimera.Editor#taskMonitor"
+	+task_history_id={% record_pk %}
+>
+	<al-icon icon-name="chart-line"></al-icon>
+	{%t "monitor" %}
+</a>

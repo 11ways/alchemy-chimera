@@ -1,0 +1,32 @@
+{% include "layouts/chimera_basics" %}
+
+{% block "page-actions" %}
+	{% if system_task %}
+		<a
+			!Route="Chimera.Editor#edit"
+			+model="System_Task"
+			+pk={% system_task.$pk %}
+			class="btn"
+		>
+			<al-icon icon-name="pencil"></al-icon>
+			{%t "edit-task" %}
+		</a>
+	{% /if %}
+
+	<a
+		!Route="Chimera.Editor#index"
+		+model="System_TaskHistory"
+		class="btn"
+	>
+		<al-icon icon-name="list"></al-icon>
+		{%t "task-history" %}
+	</a>
+{% /block %}
+
+{% block "main" %}
+	<chimera-task-monitor
+		task-history-id={% task_history_id %}
+		#history_doc={% history_doc %}
+		#system_task={% system_task %}
+	></chimera-task-monitor>
+{% /block %}

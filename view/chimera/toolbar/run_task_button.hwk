@@ -1,0 +1,25 @@
+<chimera-run-task-button
+	class="btn btn-run-task"
+	task-id={% record_pk %}
+	state="default"
+>
+	<al-state state-name="default">
+		<al-icon icon-style="duotone" icon-name="play"></al-icon>
+		{%t "run-task" %}
+	</al-state>
+
+	<al-state state-name="busy">
+		<al-icon icon-style="duotone" icon-name="spinner" icon-flags="spin"></al-icon>
+		{%t "starting" %}
+	</al-state>
+
+	<al-state state-name="done">
+		<al-icon icon-style="duotone" icon-name="badge-check" icon-flags="beat"></al-icon>
+		{%t "started" %}
+	</al-state>
+
+	<al-state state-name="error">
+		<al-icon icon-style="duotone" icon-name="skull" icon-flags="shake"></al-icon>
+		{%t "error" %}
+	</al-state>
+</chimera-run-task-button>

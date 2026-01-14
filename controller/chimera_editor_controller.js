@@ -287,6 +287,41 @@ Editor.setAction(async function trash(conduit, model_name, pk_val) {
 });
 
 /**
+ * The task monitor action - shows live progress of a running task
+ *
+ * @author   Jelle De Loecker   <jelle@elevenways.be>
+ * @since    1.3.0
+ * @version  1.3.0
+ *
+ * @param    {Conduit}   conduit
+ * @param    {String}    task_history_id
+ */
+Editor.setAction(async function taskMonitor(conduit, task_history_id) {
+
+	let TaskHistory = this.getModel('System.TaskHistory');
+	let history_doc = await TaskHistory.findByPk(task_history_id);
+
+	if (!history_doc) {
+		return conduit.notFound('Task history record not found');
+	}
+
+	// Get the associated System.Task document if available
+	let system_task = null;
+	if (history_doc.system_task_id) {
+		let SystemTask = this.getModel('System.Task');
+		system_task = await SystemTask.findByPk(history_doc.system_task_id);
+	}
+
+	this.setTitle('Task Monitor: ' + (system_task?.title || history_doc.type));
+
+	this.set('task_history_id', task_history_id);
+	this.set('history_doc', history_doc);
+	this.set('system_task', system_task);
+
+	this.render('chimera/editor/task_monitor');
+});
+
+/**
  * The records API action
  *
  * @author   Jelle De Loecker   <jelle@elevenways.be>

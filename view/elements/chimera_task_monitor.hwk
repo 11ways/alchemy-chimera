@@ -1,0 +1,80 @@
+<div class="task-monitor-container">
+	<div class="task-monitor-header">
+		<div class="task-info">
+			<h2 class="task-title">
+				{% if self.system_task %}
+					{{ self.system_task.title || self.history_doc.type }}
+				{% else %}
+					{{ self.history_doc.type }}
+				{% /if %}
+			</h2>
+			<div class="task-type">{{ self.history_doc.type }}</div>
+		</div>
+
+		<div class="task-meta">
+			<div class="meta-item">
+				<span class="meta-label">{%t "status" %}</span>
+				<span class="task-status status-pending">{%t "task-status-pending" %}</span>
+			</div>
+			<div class="meta-item">
+				<span class="meta-label">{%t "elapsed" %}</span>
+				<span class="elapsed-time">-</span>
+			</div>
+			<div class="meta-item">
+				<span class="meta-label">{%t "progress" %}</span>
+				<span class="progress-text">-</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="task-error" style="display: none;"></div>
+
+	<div class="progress-container">
+		<div class="progress-track">
+			<div class="progress-bar" style="width: 0%;"></div>
+		</div>
+	</div>
+
+	<div class="task-controls">
+		<button class="btn btn-pause" type="button" style="display: none;">
+			<al-icon icon-name="pause"></al-icon>
+			{%t "pause" %}
+		</button>
+		<button class="btn btn-resume" type="button" style="display: none;">
+			<al-icon icon-name="play"></al-icon>
+			{%t "resume" %}
+		</button>
+		<button class="btn btn-stop btn-danger" type="button" style="display: none;">
+			<al-icon icon-name="stop"></al-icon>
+			{%t "stop" %}
+		</button>
+	</div>
+
+	<div class="task-logs">
+		<h3 class="logs-title">{%t "output" %}</h3>
+		<div class="log-output"></div>
+	</div>
+
+	<div class="task-timestamps">
+		<div class="timestamp-item">
+			<span class="timestamp-label">{%t "started-at" %}</span>
+			<span class="timestamp-value">
+				{% if self.history_doc.started_at %}
+					{{ self.history_doc.started_at.format('Y-m-d H:i:s') }}
+				{% else %}
+					-
+				{% /if %}
+			</span>
+		</div>
+		<div class="timestamp-item">
+			<span class="timestamp-label">{%t "ended-at" %}</span>
+			<span class="timestamp-value ended-at-value">
+				{% if self.history_doc.ended_at %}
+					{{ self.history_doc.ended_at.format('Y-m-d H:i:s') }}
+				{% else %}
+					-
+				{% /if %}
+			</span>
+		</div>
+	</div>
+</div>

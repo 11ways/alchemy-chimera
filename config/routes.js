@@ -52,6 +52,14 @@ chimera_section.add({
 	breadcrumb : 'chimera.editor.{model}.trash.{pk}'
 });
 
+// Task monitor page - shows live progress of a running task
+chimera_section.add({
+	name       : 'Chimera.Editor#taskMonitor',
+	methods    : ['get'],
+	paths      : '/task-monitor/{task_history_id}',
+	breadcrumb : 'chimera.task-monitor'
+});
+
 // Editor data action
 chimera_section.add({
 	name            : 'Chimera.Editor#records',
@@ -67,6 +75,20 @@ chimera_section.add({
 	paths           : '/api/content/sidebar',
 	is_system_route : true,
 });
+
+// System Task run action - starts a task manually
+chimera_section.add({
+	name            : 'Chimera.SystemTask#run',
+	paths           : '/api/system/task/{[System.Task]_id}/run',
+	methods         : ['post'],
+	is_system_route : true,
+});
+
+// Linkup route for live task monitoring via WebSocket
+// Permission is inherited from chimera_section.requirePermission('chimera')
+// Note: eventname is 'taskmonitor' (not 'chimera@taskmonitor') because the section prefix
+// is handled by the router lookup, not stored in the key
+chimera_section.linkup('Chimera.SystemTask#monitor', 'taskmonitor', 'Chimera.SystemTask#monitor');
 
 alchemy.sputnik.after('base_app', () => {
 
