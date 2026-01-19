@@ -51,10 +51,10 @@ Editor.setMethod(function setTitle(title) {
  *
  * @param    {Document}    doc
  */
-Editor.setMethod(function setContextDocument(doc) {
+Editor.setMethod(async function setContextDocument(doc) {
 	let document_watcher = this.toolbar_manager.setDocument(doc);
 	this.toolbar_manager.setModel(doc.$model_name);
-	document_watcher.addWatcher(this.conduit);
+	await document_watcher.addWatcher(this.conduit);
 });
 
 /**
@@ -79,6 +79,7 @@ Editor.setAction(function index(conduit, model_name) {
 
 	this.set('widget_config', widget_config);
 
+	this.setToolbarManagerVariable();
 	this.render('chimera/editor/index');
 });
 
@@ -133,6 +134,7 @@ Editor.setAction(async function add(conduit, model_name) {
 	this.set('widget_config', widget_config);
 	this.setTitle(model.constructor.title + ' Add');
 
+	this.setToolbarManagerVariable();
 	this.render('chimera/editor/add');
 });
 
@@ -201,12 +203,16 @@ Editor.setAction(async function edit(conduit, model_name, pk_val) {
 		this.set('add_preview_button', true);
 	}
 
-	this.setContextDocument(record);
+	await this.setContextDocument(record);
 
 	this.set('record_pk', record.$pk);
 	this.set('model_name', model.model_name);
 	this.set('widget_config', widget_config);
 	this.setTitle(model.constructor.title + ' Edit');
+
+	// Set toolbar_manager AFTER document context is set up
+	// Pass has_document: true since we have a document context
+	this.setToolbarManagerVariable({has_document: true});
 
 	this.render('chimera/editor/edit');
 });
@@ -283,6 +289,7 @@ Editor.setAction(async function trash(conduit, model_name, pk_val) {
 
 	this.set('back_url', referer);
 	this.set('record', record);
+	this.setToolbarManagerVariable();
 	this.render('chimera/editor/trash');
 });
 
@@ -318,6 +325,7 @@ Editor.setAction(async function taskMonitor(conduit, task_history_id) {
 	this.set('history_doc', history_doc);
 	this.set('system_task', system_task);
 
+	this.setToolbarManagerVariable();
 	this.render('chimera/editor/task_monitor');
 });
 

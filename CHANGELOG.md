@@ -4,6 +4,9 @@
 * Fix WebSocket compatibility in ChimeraController (skip theme/beforeAction for WS connections)
 * Add live task monitoring UI with WebSocket support
 * Add "Monitor" button to TaskHistory index and edit pages
+* Add widgets to dashboard
+* Move `setToolbarManagerVariable()` call to end of actions (after document context setup) to ensure proper serialization of document watcher state
+* Fix `setToolbarManagerVariable()` to clear document watcher synchronously for non-document actions, preventing avatar from persisting on list pages
 
 ## 1.3.0-alpha.4 (2025-07-10)
 

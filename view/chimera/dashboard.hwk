@@ -1,7 +1,8 @@
 {% extend "layouts/chimera_body" %}
 
 {% block "main" %}
-<al-widgets>
-
-</al-widgets>
+<al-widgets
+	#record={% dashboard_config %}
+	#field="widgets"
+></al-widgets>
 {% /block %}

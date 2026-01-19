@@ -13,6 +13,22 @@ chimera_section.add({
 	handler    : 'Chimera.Static#dashboard',
 });
 
+// Customize dashboard - create a user-specific copy
+chimera_section.add({
+	name            : 'Chimera.Static#customizeDashboard',
+	methods         : 'post',
+	paths           : '/api/dashboard/customize',
+	is_system_route : true,
+});
+
+// Reset dashboard - remove user-specific copy, revert to default
+chimera_section.add({
+	name            : 'Chimera.Static#resetDashboard',
+	methods         : 'post',
+	paths           : '/api/dashboard/reset',
+	is_system_route : true,
+});
+
 // Settings editor
 chimera_section.add({
 	name            : 'Chimera.Settings#editor',

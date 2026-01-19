@@ -32,8 +32,6 @@ ChimeraController.setMethod(function beforeAction() {
 	const model = this.conduit.params.model,
 	      is_system_route = this.conduit.route.is_system_route;
 
-	this.set('toolbar_manager', this.toolbar_manager);
-
 	// If this is not a system route and no model is defined in the parameters,
 	// do not queue a model fallback
 	if (is_system_route && !model) {
@@ -65,4 +63,31 @@ ChimeraController.enforceProperty(function toolbar_manager(new_value) {
 	}
 
 	return new_value;
+});
+
+/**
+ * Set the toolbar manager as a template variable.
+ * This must be called at the END of each action, after the document context
+ * has been set up. Calling it too early (like in beforeAction) causes the
+ * manager to be serialized before the document_watcher is set.
+ *
+ * For actions that don't call setContextDocument(), this will clear the
+ * document_watcher to ensure the avatar doesn't persist from previous pages.
+ *
+ * @author   Jelle De Loecker   <jelle@elevenways.be>
+ * @since    1.3.0
+ * @version  1.3.0
+ *
+ * @param    {Object}   options
+ * @param    {Boolean}  options.has_document   Whether this action has a document context
+ */
+ChimeraController.setMethod(function setToolbarManagerVariable(options) {
+
+	// If no document context was set for this action, clear the document watcher
+	// This ensures the avatar doesn't persist when navigating from edit to list pages
+	if (!options?.has_document) {
+		this.toolbar_manager.setDocument(null);
+	}
+
+	this.set('toolbar_manager', this.toolbar_manager);
 });

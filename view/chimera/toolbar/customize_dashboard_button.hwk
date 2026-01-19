@@ -1,0 +1,26 @@
+<chimera-dashboard-button
+	class="btn btn-toolbar"
+	action="customize"
+	title="Create your personal dashboard"
+	state="default"
+>
+	<al-state state-name="default">
+		<al-icon icon-name="user-pen"></al-icon>
+		{%t "customize" %}
+	</al-state>
+
+	<al-state state-name="busy">
+		<al-icon icon-name="spinner" icon-flags="spin"></al-icon>
+		{%t "working" %}
+	</al-state>
+
+	<al-state state-name="done">
+		<al-icon icon-name="badge-check" icon-flags="beat"></al-icon>
+		{%t "done" %}
+	</al-state>
+
+	<al-state state-name="error">
+		<al-icon icon-name="skull" icon-flags="shake"></al-icon>
+		{%t "error" %}
+	</al-state>
+</chimera-dashboard-button>

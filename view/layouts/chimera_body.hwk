@@ -34,11 +34,53 @@
 					></al-user-avatar-group>
 				</div>
 
-				<div slot="right">
-					<div data-area="buttons">
+			<div slot="right">
+				<al-button class="start-edit" state="ready">
+					<al-icon icon-name="pencil"></al-icon>
+					{%t "start-editing" %}
+				</al-button>
 
-					</div>
-				</div>
+				<al-button class="stop-and-save" state="ready">
+					<al-state state-name="saving">
+						<al-icon icon-name="spinner" icon-flags="spin"></al-icon>
+						{%t "saving" %}
+					</al-state>
+					<al-state state-name="saving-before-stop">
+						<al-icon icon-name="spinner" icon-flags="spin"></al-icon>
+						{%t "saving" %}
+					</al-state>
+					<al-state state-name="saved">
+						<al-icon icon-name="badge-check" icon-flags="beat"></al-icon>
+						{%t "saved" %}
+					</al-state>
+					<al-state state-name="ready">
+						<al-icon icon-name="floppy-disk-circle-arrow-right"></al-icon>
+						{%t "save-and-stop-editing" %}
+					</al-state>
+				</al-button>
+
+				<al-button class="stop-edit" state="ready">
+					<al-icon icon-name="pencil-slash"></al-icon>
+					{%t "stop-editing" %}
+				</al-button>
+
+				<al-button class="save-all" state="ready">
+					<al-state state-name="saving">
+						<al-icon icon-name="spinner" icon-flags="spin"></al-icon>
+						{%t "saving" %}
+					</al-state>
+					<al-state state-name="saved">
+						<al-icon icon-name="badge-check" icon-flags="beat"></al-icon>
+						{%t "saved" %}
+					</al-state>
+					<al-state state-name="ready">
+						<al-icon icon-name="floppy-disk"></al-icon>
+						{%t "save-all" %}
+					</al-state>
+				</al-button>
+
+				<div data-area="buttons"></div>
+			</div>
 			</al-editor-toolbar>
 
 			{#

@@ -614,6 +614,56 @@ al-field[mode="inline"] {
 			display: flex;
 			gap: 1rem;
 		}
+
+		[data-he-slot="right"] {
+			display: flex;
+			gap: 1rem;
+			align-items: center;
+		}
+
+		// Button visibility based on toolbar state
+		&[state="editing"] {
+			.start-edit {
+				display: none;
+			}
+		}
+
+		&[state="default"],
+		&[state="ready"] {
+			.stop-and-save,
+			.stop-edit,
+			.save-all,
+			chimera-dashboard-button[action="reset"] {
+				display: none;
+			}
+		}
+
+		&[state="saving"],
+		&[state="saving-before-stop"] {
+			.start-edit,
+			.stop-edit {
+				display: none;
+			}
+		}
+
+		&[state="saving"] {
+			.stop-and-save {
+				display: none;
+			}
+		}
+
+		&[state="saving-before-stop"] {
+			.save-all {
+				display: none;
+			}
+		}
+
+		// Save button styling
+		.stop-and-save,
+		.save-all {
+			--al-button-bg-color: green;
+			--al-button-bg-color-hover: rgb(55, 155, 55);
+		}
 	}
 }
 

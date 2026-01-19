@@ -37,5 +37,6 @@ SettingsController.setAction(async function editor(conduit) {
 
 	this.set('settings_config', settings_config);
 
+	this.setToolbarManagerVariable();
 	this.render('chimera/settings/editor');
 });
