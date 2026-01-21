@@ -1,4 +1,4 @@
-## 1.3.0-alpha.5 (WIP)
+## 1.3.0 (2026-01-21)
 
 * Add `addRowAction()` to ChimeraConfig for model-defined row actions
 * Fix WebSocket compatibility in ChimeraController (skip theme/beforeAction for WS connections)
